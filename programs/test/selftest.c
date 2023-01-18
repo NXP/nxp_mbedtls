@@ -47,6 +47,17 @@
 #include "mbedtls/memory_buffer_alloc.h"
 #endif
 
+/* NXP change */
+#if defined(MCUX_MBEDTLS)
+
+#include "app.h"
+#include "board.h"
+
+#include "fsl_debug_console.h"
+#define printf PRINTF
+
+#endif
+
 
 #if defined MBEDTLS_SELF_TEST
 /* Sanity check for malloc. This is not expected to fail, and is rather
@@ -381,6 +392,10 @@ int main(int argc, char *argv[])
 #endif
     void *pointer;
 
+#if defined(MCUX_MBEDTLS)
+    BOARD_InitHardware();                       // NXP
+#endif
+    
     /*
      * Check some basic platform requirements as specified in README.md
      */
@@ -498,9 +513,12 @@ int main(int argc, char *argv[])
         mbedtls_exit(MBEDTLS_EXIT_FAILURE);
     }
 
-    for (argp = argv + (argc >= 1 ? 1 : argc); *argp != NULL; ++argp) {
-        if (strcmp(*argp, "--quiet") == 0 ||
-            strcmp(*argp, "-q") == 0) {
+    /* NXP - Additional check added for argc */
+    for( argp = argv + ( argc >= 1 ? 1 : argc ); (argc != 0 && *argp != NULL); ++argp )
+    {
+        if( strcmp( *argp, "--quiet" ) == 0 ||
+            strcmp( *argp, "-q" ) == 0 )
+        {
             v = 0;
         } else if (strcmp(*argp, "--exclude") == 0 ||
                    strcmp(*argp, "-x") == 0) {
@@ -520,7 +538,9 @@ int main(int argc, char *argv[])
     mbedtls_memory_buffer_alloc_init(buf, sizeof(buf));
 #endif
 
-    if (*argp != NULL && exclude_mode == 0) {
+    /* NXP - Additional check added for argc */
+    if(argc && *argp != NULL && exclude_mode == 0 )
+    {
         /* Run the specified tests */
         for (; *argp != NULL; argp++) {
             for (test = selftests; test->name != NULL; test++) {
