@@ -230,3 +230,53 @@ psa_crypto_examples:
   section-type: application
   __requires__:
   - middleware.mbedtls3x
+mbedtls3x_psatest:
+  configuration:
+    tools:
+      __common__:
+        config:
+          __common__:
+            cc-define:
+              MBEDTLS_CONFIG_FILE: '"mcux_mbedtls_config.h"'
+    document:
+      name: mbedtls3x_psatest
+      readme:
+      - boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/board.readme
+      - boards/src/mbedtls3x_examples/mbedtls3x_psatest/psa_crypto_examples.readme
+      category: mbedtls3x_examples
+      brief: TBD.
+    outdir: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
+  modules:
+    demo:
+      required: true
+      cc-include:
+      - path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest
+        package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
+        project_path: board
+      files:
+      - source: middleware/tfm/psa-arch-tests/api-tests/platform/targets/tgt_dev_apis_nxp/nspe/main.c
+        merge-to-main: main
+        package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
+        project_path: source
+      - source: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/pin_mux.c
+        package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
+        project_path: board
+      - source: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/pin_mux.h
+        package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
+        project_path: board
+    pinset:
+      required: true
+      cc-include:
+      - path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
+        project_path: "${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}"
+      files:
+      - source: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}/hardware_init.c
+        merge-to-main: sub
+        project_path: "${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}"
+      - source: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}/app.h
+        merge-to-main: sub
+        project_path: "${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}"
+  section-type: application
+  __requires__:
+  - middleware.mbedtls3x.crypto middleware.psatest.ns
+    middleware.psatest.ns.crypto(middleware.psatest.ns.crypto.profile_medium)
