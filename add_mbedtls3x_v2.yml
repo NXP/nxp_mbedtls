@@ -55,7 +55,7 @@ middleware.mbedtls3x.template:
 middleware.mbedtls3x.port.config:
   section-type: component
   __requires__:
-  - middleware.mbedtls3x.ui_control middleware.mbedtls3x 
+  - middleware.mbedtls3x.ui_control
   contents:
     repo_base_path: middleware/mbedtls3x
     project_base_path: mbedtls3x
@@ -106,7 +106,7 @@ middleware.mbedtls3x.port.rng:
 middleware.mbedtls3x.port.ele_s400:
   section-type: component
   __requires__:
-  - middleware.mbedtls3x.ui_control middleware.mbedtls3x middleware.mbedtls3x.port.config driver.s3mu component.ele_crypto 
+  - middleware.mbedtls3x.ui_control middleware.mbedtls3x.port.config driver.s3mu component.ele_crypto 
   configuration:
     tools:
       __common__:
