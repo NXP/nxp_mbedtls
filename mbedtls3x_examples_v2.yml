@@ -95,7 +95,6 @@ mbedtls3x_selftest:
         project_path: board
       files:
       - source: middleware/mbedtls3x/programs/test/selftest.c
-        merge-to-main: main
         package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_selftest/${multicore_foldername}
         project_path: source
       - source: boards/${board}/mbedtls3x_examples/mbedtls3x_selftest/pin_mux.c
@@ -111,10 +110,8 @@ mbedtls3x_selftest:
         project_path: "${board}/mbedtls3x_examples/mbedtls3x_selftest/${multicore_foldername}"
       files:
       - source: boards/${board}/mbedtls3x_examples/mbedtls3x_selftest/${multicore_foldername}/hardware_init.c
-        merge-to-main: sub
         project_path: "${board}/mbedtls3x_examples/mbedtls3x_selftest/${multicore_foldername}"
       - source: boards/${board}/mbedtls3x_examples/mbedtls3x_selftest/${multicore_foldername}/app.h
-        merge-to-main: sub
         project_path: "${board}/mbedtls3x_examples/mbedtls3x_selftest/${multicore_foldername}"
   section-type: application
   __requires__:
@@ -157,7 +154,6 @@ mbedtls3x_benchmark:
         project_path: board
       files:
       - source: boards/src/mbedtls3x_examples/mbedtls3x_benchmark/benchmark.c
-        merge-to-main: main
         package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_benchmark/${multicore_foldername}
         project_path: source
       - source: boards/${board}/mbedtls3x_examples/mbedtls3x_benchmark/pin_mux.c
@@ -173,10 +169,8 @@ mbedtls3x_benchmark:
         project_path: "${board}/mbedtls3x_examples/mbedtls3x_benchmark/${multicore_foldername}"
       files:
       - source: boards/${board}/mbedtls3x_examples/mbedtls3x_benchmark/${multicore_foldername}/hardware_init.c
-        merge-to-main: sub
         project_path: "${board}/mbedtls3x_examples/mbedtls3x_benchmark/${multicore_foldername}"
       - source: boards/${board}/mbedtls3x_examples/mbedtls3x_benchmark/${multicore_foldername}/app.h
-        merge-to-main: sub
         project_path: "${board}/mbedtls3x_examples/mbedtls3x_benchmark/${multicore_foldername}"
   section-type: application
   __requires__:
@@ -206,7 +200,6 @@ psa_crypto_examples:
         project_path: board
       files:
       - source: middleware/mbedtls3x/programs/psa/crypto_examples.c
-        merge-to-main: main
         package_path: boards/${board}/mbedtls3x_examples/psa_crypto_examples/${multicore_foldername}
         project_path: source
       - source: boards/${board}/mbedtls3x_examples/psa_crypto_examples/pin_mux.c
@@ -222,10 +215,8 @@ psa_crypto_examples:
         project_path: "${board}/mbedtls3x_examples/psa_crypto_examples/${multicore_foldername}"
       files:
       - source: boards/${board}/mbedtls3x_examples/psa_crypto_examples/${multicore_foldername}/hardware_init.c
-        merge-to-main: sub
         project_path: "${board}/mbedtls3x_examples/psa_crypto_examples/${multicore_foldername}"
       - source: boards/${board}/mbedtls3x_examples/psa_crypto_examples/${multicore_foldername}/app.h
-        merge-to-main: sub
         project_path: "${board}/mbedtls3x_examples/psa_crypto_examples/${multicore_foldername}"
   section-type: application
   __requires__:
@@ -254,7 +245,6 @@ mbedtls3x_psatest:
         project_path: board
       files:
       - source: middleware/tfm/psa-arch-tests/api-tests/platform/targets/tgt_dev_apis_nxp/nspe/main.c
-        merge-to-main: main
         package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
         project_path: source
       - source: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/pin_mux.c
@@ -270,10 +260,8 @@ mbedtls3x_psatest:
         project_path: "${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}"
       files:
       - source: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}/hardware_init.c
-        merge-to-main: sub
         project_path: "${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}"
       - source: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}/app.h
-        merge-to-main: sub
         project_path: "${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}"
   section-type: application
   __requires__:
