@@ -20,7 +20,7 @@ middleware.mbedtls3x.ui_control:
       component_set_path:
         repo_base_path: "${mbedtls3x_dir}"
 
-middleware.mbedcrypto.support:
+middleware.mbedtls3x.support:
   section-type: component_support
   __requires__:
   - board.lpcxpresso55s16
@@ -48,7 +48,7 @@ middleware.mbedtls3x.template:
       full_name: mbedTLS Template
       change_log: "./ChangeLogKSDK.txt"
       user_visible: false
-      manifest_name: mbedtls_template
+      manifest_name: mbedtls3x_template
     cmsis_pack:
       sub: template
 
@@ -72,7 +72,7 @@ middleware.mbedtls3x.port.config:
       change_log: "./ChangeLogKSDK.txt"
       component_bundle: bundles.mbedtls3x
       user_visible: true
-      manifest_name: mbedtls_ksdk
+      manifest_name: mbedtls3x_ksdk
       full_name: MbedTLS MCUX SDK port config layer
 
 middleware.mbedtls3x.port.rng:
@@ -181,6 +181,7 @@ middleware.mbedtls3x.crypto:
     - source: include/mbedtls/gcm.h
     - source: include/mbedtls/hkdf.h
     - source: include/mbedtls/hmac_drbg.h
+    - source: include/mbedtls/legacy_or_psa.h
     - source: include/mbedtls/mbedtls_config.h
     - source: include/mbedtls/md.h
     - source: include/mbedtls/md5.h
