@@ -81,7 +81,7 @@ mbedtls3x_selftest:
       name: mbedtls3x_selftest
       readme:
       - boards/${board}/mbedtls3x_examples/mbedtls3x_selftest/board.readme
-      - boards/src/mbedtls3x_examples/mbedtls3x_selftest/mbedtls3x_selftest.readme
+      - middleware/mbedtls3x/example/mbedtls3x_selftest/mbedtls3x_selftest.readme
       category: mbedtls3x_examples
       brief: The Mbedtls Crypto SelfTest program performs cryptographic algorithm testing
         and prints results to the terminal.
@@ -140,7 +140,7 @@ mbedtls3x_benchmark:
       name: mbedtls3x_benchmark
       readme:
       - boards/${board}/mbedtls3x_examples/mbedtls3x_benchmark/board.readme
-      - boards/src/mbedtls3x_examples/mbedtls3x_benchmark/mbedtls3x_benchmark.readme
+      - middleware/mbedtls3x/example/mbedtls3x_benchmark/mbedtls3x_benchmark.readme
       category: mbedtls3x_examples
       brief: The mbedTLS Benchmark demo application performs cryptographic algorithm
         benchmarking and prints results to the terminal.
@@ -153,7 +153,7 @@ mbedtls3x_benchmark:
         package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_benchmark/${multicore_foldername}
         project_path: board
       files:
-      - source: boards/src/mbedtls3x_examples/mbedtls3x_benchmark/benchmark.c
+      - source: middleware/mbedtls3x/example/mbedtls3x_benchmark/benchmark.c
         package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_benchmark/${multicore_foldername}
         project_path: source
       - source: boards/${board}/mbedtls3x_examples/mbedtls3x_benchmark/pin_mux.c
@@ -187,7 +187,7 @@ psa_crypto_examples:
       name: psa_crypto_examples
       readme:
       - boards/${board}/mbedtls3x_examples/psa_crypto_examples/board.readme
-      - boards/src/mbedtls3x_examples/psa_crypto_examples/psa_crypto_examples.readme
+      - middleware/mbedtls3x/example/psa_crypto_examples/psa_crypto_examples.readme
       category: mbedtls3x_examples
       brief: TBD.
     outdir: boards/${board}/mbedtls3x_examples/psa_crypto_examples/${multicore_foldername}
@@ -228,7 +228,7 @@ mbedtls3x_psatest:
         config:
           __common__:
             cc-define:
-              MBEDTLS_CONFIG_FILE: '"mcux_mbedtls_config.h"'
+              MBEDTLS_CONFIG_FILE: '"mcux_mbedtls_psatest_config.h"'
     document:
       name: mbedtls3x_psatest
       readme:
@@ -243,6 +243,12 @@ mbedtls3x_psatest:
       - path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest
         package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
         project_path: board
+      - path: middleware/mbedtls3x/example/mbedtls3x_psatest
+        package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
+        project_path: board
+      - path: middleware/mbedtls3x/port
+        package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
+        project_path: board
       files:
       - source: middleware/tfm/psa-arch-tests/api-tests/platform/targets/tgt_dev_apis_nxp/nspe/main.c
         package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
@@ -251,6 +257,9 @@ mbedtls3x_psatest:
         package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
         project_path: board
       - source: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/pin_mux.h
+        package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
+        project_path: board
+      - source: middleware/mbedtls3x/example/mbedtls3x_psatest/mcux_mbedtls_psatest_config.h
         package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
         project_path: board
     pinset:
