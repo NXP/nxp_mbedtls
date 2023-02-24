@@ -138,7 +138,7 @@ middleware.mbedtls3x.port.ele_s400:
 middleware.mbedtls3x.crypto:
   section-type: component
   __requires__:
-  - middleware.mbedtls3x.ui_control middleware.mbedtls3x.default_heap_stack
+  - middleware.mbedtls3x.ui_control
   configuration:
     tools:
       __common__:
@@ -350,7 +350,7 @@ middleware.mbedtls3x.crypto:
 middleware.mbedtls3x.x509:
   section-type: component
   __requires__:
-  - middleware.mbedtls3x.ui_control middleware.mbedtls3x.default_heap_stack
+  - middleware.mbedtls3x.ui_control
   configuration:
     tools:
       __common__:
@@ -390,7 +390,7 @@ middleware.mbedtls3x.x509:
 middleware.mbedtls3x.ssl:
   section-type: component
   __requires__:
-  - middleware.mbedtls3x.ui_control middleware.mbedtls3x.default_heap_stack middleware.mbedtls3x.crypto middleware.mbedtls3x.x509
+  - middleware.mbedtls3x.ui_control middleware.mbedtls3x.crypto middleware.mbedtls3x.x509
   configuration:
     tools:
       __common__:
@@ -449,7 +449,7 @@ middleware.mbedtls3x.ssl:
 middleware.mbedtls3x:
   section-type: component
   __requires__:
-  - middleware.mbedtls3x.ui_control middleware.mbedtls3x.template middleware.mbedtls3x.default_heap_stack
+  - middleware.mbedtls3x.ui_control middleware.mbedtls3x.template
     utility.debug_console middleware.mbedtls3x.crypto middleware.mbedtls3x.ssl middleware.mbedtls3x.x509
   configuration:
     tools:

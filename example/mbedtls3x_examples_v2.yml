@@ -115,7 +115,7 @@ mbedtls3x_selftest:
         project_path: "${board}/mbedtls3x_examples/mbedtls3x_selftest/${multicore_foldername}"
   section-type: application
   __requires__:
-  - middleware.mbedtls3x 
+  - middleware.mbedtls3x middleware.mbedtls3x.default_heap_stack
 mbedtls3x_benchmark:
   configuration:
     tools:
@@ -174,7 +174,7 @@ mbedtls3x_benchmark:
         project_path: "${board}/mbedtls3x_examples/mbedtls3x_benchmark/${multicore_foldername}"
   section-type: application
   __requires__:
-  - middleware.mbedtls3x
+  - middleware.mbedtls3x middleware.mbedtls3x.default_heap_stack
 psa_crypto_examples:
   configuration:
     tools:
@@ -220,7 +220,7 @@ psa_crypto_examples:
         project_path: "${board}/mbedtls3x_examples/psa_crypto_examples/${multicore_foldername}"
   section-type: application
   __requires__:
-  - middleware.mbedtls3x
+  - middleware.mbedtls3x middleware.mbedtls3x.default_heap_stack
 mbedtls3x_psatest:
   configuration:
     tools:
@@ -274,5 +274,5 @@ mbedtls3x_psatest:
         project_path: "${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}"
   section-type: application
   __requires__:
-  - middleware.mbedtls3x.crypto middleware.psatest.ns
+  - middleware.mbedtls3x.crypto middleware.psatest.ns middleware.mbedtls3x.default_heap_stack
     middleware.psatest.ns.crypto(middleware.psatest.ns.crypto.profile_medium)
