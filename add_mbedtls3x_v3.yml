@@ -76,7 +76,17 @@ middleware.mbedtls3x.port.rng:
     display_name: mbedtls3x_port_mcux_rng
   dependency:
     allOf:
-    - middleware.mbedtls3x.port.config
+      - allOf:
+        - middleware.mbedtls3x
+        - middleware.mbedtls3x.port.config
+      - anyOf:
+        - allOf:
+          - driver.rng_1
+          - device:
+            - LPC55S16
+        - not:
+            device:
+              - LPC55S16
 
 middleware.mbedtls3x.port.ele_s400:
   section-type: component
