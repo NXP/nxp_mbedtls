@@ -1,6 +1,6 @@
 ---
 __variable__:
-  mbedtls3x_version: 3.3.0
+  mbedtls3x_version: 3.4.0
   mbedtls3x_dir: middleware/mbedtls3x
 middleware.mbedtls3x.ui_control:
   section-type: component_support
@@ -182,6 +182,7 @@ middleware.mbedtls3x.crypto:
     - source: include/mbedtls/hkdf.h
     - source: include/mbedtls/hmac_drbg.h
     - source: include/mbedtls/legacy_or_psa.h
+    - source: include/mbedtls/lms.h
     - source: include/mbedtls/mbedtls_config.h
     - source: include/mbedtls/md.h
     - source: include/mbedtls/md5.h
@@ -228,6 +229,8 @@ middleware.mbedtls3x.crypto:
     - source: library/aes.c
     - source: library/aesni.c
     - source: library/aesni.h
+    - source: library/aesce.c
+    - source: library/aesce.h
     - source: library/aria.c
     - source: library/asn1parse.c
     - source: library/asn1write.c   
@@ -325,6 +328,7 @@ middleware.mbedtls3x.crypto:
     - source: library/psa_crypto_storage.c
     - source: library/psa_crypto_storage.h
     - source: library/psa_its_file.c
+    - source: library/psa_util.c
     - source: library/ripemd160.c
     - source: library/rsa.c
     - source: library/rsa_alt_helpers.c
@@ -638,7 +642,7 @@ middleware.mbedtls3x.unused_files:
     - source: tests/suites/*.*
       hidden: true
       exclude: true
-    - source: visualc/VS2010/*.*
+    - source: visualc/VS2013/*.*
       hidden: true
       exclude: true
     - source: "*.*"
