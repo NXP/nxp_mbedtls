@@ -84,9 +84,14 @@ middleware.mbedtls3x.port.rng:
           - driver.rng_1
           - device:
             - LPC55S16
+        - allOf:
+          - driver.trng
+          - device:
+            - MIMXRT685S
         - not:
             device:
               - LPC55S16
+              - MIMXRT685S
 
 middleware.mbedtls3x.port.ele_s400:
   section-type: component
@@ -668,6 +673,8 @@ set.middleware.mbedtls3x:
     - board:
       - lpcxpresso55s16
       - evkmimxrt1180
+      - evkmimxrt685
+      - mimxrt685audevk
 
 license.mbedtls3x_license:
   section-type: license
