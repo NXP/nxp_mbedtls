@@ -229,6 +229,7 @@ middleware.mbedtls3x.crypto:
     - source: library/aes.c
     - source: library/aesni.c
     - source: library/aesni.h
+    - source: library/alignment.h
     - source: library/aesce.c
     - source: library/aesce.h
     - source: library/aria.c
