@@ -432,7 +432,7 @@ middleware.mbedtls3x:
     - repo_relative_path: library
   belong_to: set.middleware.mbedtls3x
   section_info:
-    description: mbedTLS library
+    description: mbedTLS library v3.x
     type: middleware
     version: "${mbedtls3x_version}"
     user_visible: always
@@ -665,7 +665,7 @@ set.middleware.mbedtls3x:
     component_taxonomy:
       mbedtls3x:
         cclass: Security
-        cgroup: mbedTLS library
+        cgroup: mbedTLS library v3.x
         cbundle: Mbed_TLS
         cbundle_version: "${mbedtls3x_version}"
   dependency:
