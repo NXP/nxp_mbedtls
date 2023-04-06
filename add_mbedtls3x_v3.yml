@@ -76,9 +76,8 @@ middleware.mbedtls3x.port.rng:
     display_name: mbedtls3x_port_mcux_rng
   dependency:
     allOf:
-      - allOf:
-        - middleware.mbedtls3x
-        - middleware.mbedtls3x.port.config
+      - middleware.mbedtls3x
+      - middleware.mbedtls3x.port.config
       - anyOf:
         - allOf:
           - driver.rng_1
@@ -107,7 +106,7 @@ middleware.mbedtls3x.port.ele_s400:
     - source: port/ele_s400/psa_ele_entropy.c
     configuration:
       cc-define:
-        MBEDTLS_MCUX_ELE_S400_API: 
+        MBEDTLS_MCUX_ELE_S400_API:
   belong_to: set.middleware.mbedtls3x
   section_info:
     description: mbedTLS port library for ELE S40x
