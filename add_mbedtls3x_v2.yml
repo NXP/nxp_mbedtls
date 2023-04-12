@@ -244,6 +244,7 @@ middleware.mbedtls3x.crypto:
     - source: library/bignum_mod.h
     - source: library/bignum_mod_raw.c
     - source: library/bignum_mod_raw.h
+    - source: library/bignum_mod_raw_invasive.h
     - source: library/bn_mul.h
     - source: library/camellia.c
     - source: library/ccm.c
@@ -318,6 +319,7 @@ middleware.mbedtls3x.crypto:
     - source: library/psa_crypto_its.h
     - source: library/psa_crypto_mac.c
     - source: library/psa_crypto_mac.h
+    - source: library/psa_crypto_pake.h
     - source: library/psa_crypto_pake.c
     - source: library/psa_crypto_random_impl.h
     - source: library/psa_crypto_rsa.c
