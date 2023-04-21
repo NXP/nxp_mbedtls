@@ -5,18 +5,16 @@
 
 #include "psa/crypto.h"
 #include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 /* NXP change */
+/* KSDK */
 #if defined(MCUX_MBEDTLS)
-
 #include "app.h"
-#include "board.h"
-
 #include "fsl_debug_console.h"
 #define printf PRINTF
-
+#else
+#include <stdio.h>
 #endif
 
 #define ASSERT( predicate )                                                   \

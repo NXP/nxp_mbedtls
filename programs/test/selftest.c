@@ -41,21 +41,26 @@
 #include <limits.h>
 #include <string.h>
 
+/* NXP change */
+/* KSDK */
+#include "app.h"
+
+#if defined(MBEDTLS_PLATFORM_C)
 #include "mbedtls/platform.h"
+#else
+#include <stdio.h>
+#include <stdlib.h>
+#define mbedtls_printf     printf
+#define mbedtls_snprintf   snprintf
+#define mbedtls_exit       exit
+#define MBEDTLS_EXIT_SUCCESS EXIT_SUCCESS
+#define MBEDTLS_EXIT_FAILURE EXIT_FAILURE
+#endif
+
+/* NXP change --end -- */
 
 #if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C)
 #include "mbedtls/memory_buffer_alloc.h"
-#endif
-
-/* NXP change */
-#if defined(MCUX_MBEDTLS)
-
-#include "app.h"
-#include "board.h"
-
-#include "fsl_debug_console.h"
-#define printf PRINTF
-
 #endif
 
 #if defined MBEDTLS_SELF_TEST
