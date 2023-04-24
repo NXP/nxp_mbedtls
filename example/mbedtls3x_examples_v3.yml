@@ -286,6 +286,11 @@ mbedtls3x_psatest:
             __common__:
               cx-flags:
               - "--diag_suppress Pe546,Pe188,Pe111,Pa084,Pe068,Pe177,Pe223"
+        armgcc:
+          config:
+            __common__:
+              cc-flags:
+              - "-Wno-unused-variable"
     modules:
       demo:
         required: true
