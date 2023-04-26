@@ -265,8 +265,9 @@ mbedtls3x_psatest:
       name: mbedtls3x_psatest
       readme:
       - boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/board.readme
+      - middleware/mbedtls3x/example/mbedtls3x_psatest/mbedtls3x_psatest.readme
       category: mbedtls3x_examples
-      brief: The Mbed-Crypto PSA Dev API test application provides verification that
+      brief: The Mbed-TLS PSA Dev API test application provides verification that
         the crypto API behaviours are implemented correctly.
     project-root-path: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}
     configuration:

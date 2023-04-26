@@ -1,6 +1,6 @@
 Overview
 ========
-The mbedTLS SelfTest program performs cryptographic algorithm testing and prints results to the
+The mbedTLS PSA Crypto example program performs PSA API testing and prints results to the
 terminal.
 
 Prepare the Demo
