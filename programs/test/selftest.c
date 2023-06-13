@@ -399,6 +399,7 @@ int main(int argc, char *argv[])
     void *pointer;
 
 #if defined(MCUX_MBEDTLS)
+    argc = 0;					// Some debuggers pass junk in argc. Force 0 to avoid that
     BOARD_InitHardware();                       // NXP
 #endif
     
