@@ -47,7 +47,7 @@ middleware.mbedtls3x.port.config:
     description: mbedTLS port library common files for MCUX
     type: middleware
     version: "${mbedtls3x_version}"
-    user_visible: always
+    user_visible: never
     full_name: MbedTLS MCUX SDK port config layer
     taxonomy:
       csub: config
@@ -325,12 +325,12 @@ middleware.mbedtls3x.crypto:
     description: mbedTLS crypto library
     type: middleware
     version: "${mbedtls3x_version}"
-    user_visible: always
+    user_visible: never
     full_name: MbedTLS open source Crypto library
     taxonomy:
       csub: crypto
       belong_to: mbedtls3x
-    display_name: mbedtls_crypto
+    display_name: mbedtls3x_crypto
 
 middleware.mbedtls3x.x509:
   section-type: component
@@ -359,12 +359,12 @@ middleware.mbedtls3x.x509:
     description: mbedTLS X.509 library
     type: middleware
     version: "${mbedtls3x_version}"
-    user_visible: always
+    user_visible: never
     full_name: MbedTLS open source X.509 library
     taxonomy:
       csub: x509
       belong_to: mbedtls3x
-    display_name: mbedtls_x509
+    display_name: mbedtls3x_x509
 
 middleware.mbedtls3x.ssl:
   section-type: component
@@ -412,12 +412,12 @@ middleware.mbedtls3x.ssl:
     description: mbedTLS SSL library
     type: middleware
     version: "${mbedtls3x_version}"
-    user_visible: always
+    user_visible: never
     full_name: MbedTLS open source SSL library
     taxonomy:
       csub: ssl
       belong_to: mbedtls3x
-    display_name: mbedtls_ssl
+    display_name: mbedtls3x_ssl
   dependency:
     allOf:
     - middleware.mbedtls3x.crypto
@@ -441,7 +441,7 @@ middleware.mbedtls3x:
     taxonomy:
       csub: mbedtls3x
       belong_to: mbedtls3x
-    display_name: mbedtls
+    display_name: mbedtls3x
   dependency:
     allOf:
     - middleware.mbedtls3x.template
