@@ -37,6 +37,10 @@
 #include <libtestdriver1/include/psa/crypto.h>
 #endif
 
+#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
+#include "ele_s4xx_crypto_primitives.h"
+#endif
+
 #if defined(PSA_CRYPTO_DRIVER_TEST)
 
 #if defined(MBEDTLS_TEST_LIBTESTDRIVER1) && \
@@ -71,6 +75,7 @@ typedef mbedtls_psa_hash_operation_t
 #endif /* MBEDTLS_TEST_LIBTESTDRIVER1 &&
           LIBTESTDRIVER1_MBEDTLS_PSA_BUILTIN_HASH */
 
+
 typedef struct {
     unsigned int initialised : 1;
     mbedtls_transparent_test_driver_cipher_operation_t ctx;
@@ -96,6 +101,9 @@ typedef union {
 #endif
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
     cc3xx_hash_operation_t cc3xx_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
+    ele_s4xx_hash_operation_t ele_driver_ctx;
 #endif
 } psa_driver_hash_context_t;
 
