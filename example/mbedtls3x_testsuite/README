@@ -1,0 +1,39 @@
+- This is an internal only testsuite meant for unit testing support of crypto operations
+
+- Requirements
+SD Card with FATFS File System
+
+- How are test and data files generated
+We are reusing files from mbedtls-testsuite over here. 
+For every new version update these files should be updated.
+
+Steps to generate files:
+1. cd mbedtls3x/example/mbedtls3x_testsuite
+2. Generate the required files. { Keep adding in the list as you add more generated files from mbedtls3x/tests/suites over here }
+
+You can use the command below:
+
+python ../../tests/scripts/generate_test_code.py -f ../../tests/suites/test_suite_psa_crypto.function -d ../../tests/suites/test_suite_psa_crypto.data -t ../../tests/suites/main_test.function -p ../../port/tests_fatfs/host_test.function -s ../../tests/suites   --helpers-file ../../tests/suites/helpers.function -o tests/
+
+python ../../tests/scripts/generate_test_code.py -f ../../tests/suites/test_suite_psa_crypto_init.function -d ../../tests/suites/test_suite_psa_crypto_init.data -t ../../tests/suites/main_test.function -p ../../port/tests_fatfs/host_test.function -s ../../tests/suites   --helpers-file ../../tests/suites/helpers.function -o tests/
+
+python ../../tests/scripts/generate_test_code.py -f ../../tests/suites/test_suite_psa_crypto_entropy.function -d ../../tests/suites/test_suite_psa_crypto_entropy.data -t ../../tests/suites/main_test.function -p ../../port/tests_fatfs/host_test.function -s ../../tests/suites   --helpers-file ../../tests/suites/helpers.function -o tests/
+
+python ../../tests/scripts/generate_test_code.py -f ../../tests/suites/test_suite_psa_crypto_hash.function -d ../../tests/suites/test_suite_psa_crypto_hash.data -t ../../tests/suites/main_test.function -p ../../port/tests_fatfs/host_test.function -s ../../tests/suites   --helpers-file ../../tests/suites/helpers.function -o tests/
+
+3. In the .c files replace "#line" with "// #line". This is done for ease of debugging. Add a 
+#if 0 at start of file and #endif at end of file. { All tehse files contain main() function. For now we are not creating separate projects for each testing. We will enable which file we want to test by changing "#if 0" to "#if 1". We could also improve this by craeting multiple projects.
+
+
+How to run the testcases
+
+1.Following filesare geenrated in mbedtls3x/example/mbedtls3x_testsuite/tests folder
+- test_suite_psa_crypto (.c and .datax)
+- test_suite_psa_hasha(.c and .datax) 
+- test_suite_psa_init (.c and .datax)
+- test_suite_psa_entropy (.c and .datax)
+
+2. On SD Card , create a folder tests. Copy the *.datax files to tests folder.
+3. Compile and load the project.
+4. Before compiling, change "#if 0" at the top of .c file in source folder to "#if 1"
+5. Compile and run the desired test

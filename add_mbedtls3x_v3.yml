@@ -124,6 +124,49 @@ middleware.mbedtls3x.port.ele_s400:
     - driver.s3mu
     - component.ele_crypto
 
+middleware.mbedtls3x.tests:
+  section-type: component
+  contents:
+    repo_base_path: middleware/mbedtls3x
+    project_base_path: mbedtls3x
+    cc-include:
+    - repo_relative_path: tests/include/test
+    - repo_relative_path: tests/include
+    files:
+    - source: tests/src/asn1_helpers.c
+    - source: tests/src/bignum_helpers.c
+    - source: tests/src/certs.c
+    - source: tests/src/helpers.c
+    - source: tests/src/psa_crypto_helpers.c
+    - source: tests/src/psa_exercise_key.c
+    - source: tests/src/random.c
+    - source: tests/src/threading_helpers.c
+    - source: tests/src/fake_external_rng_for_test.c
+    - source: tests/src/test_helpers/ssl_helpers.c
+    - source: tests/include/test/asn1_helpers.h
+    - source: tests/include/test/bignum_helpers.h
+    - source: tests/include/test/certs.h
+    - source: tests/include/test/constant_flow.h
+    - source: tests/include/test/fake_external_rng_for_test.h
+    - source: tests/include/test/helpers.h
+    - source: tests/include/test/macros.h
+    - source: tests/include/test/psa_crypto_helpers.h
+    - source: tests/include/test/psa_exercise_key.h
+    - source: tests/include/test/psa_helpers.h
+    - source: tests/include/test/random.h
+    - source: tests/include/test/ssl_helpers.h
+  belong_to: set.middleware.mbedtls3x
+  section_info:
+    description: mbedTLS test suite
+    type: middleware
+    version: "${mbedtls3x_version}"
+    user_visible: never
+    full_name: MbedTLS open source Crypto library
+    taxonomy:
+      csub: crypto
+      belong_to: mbedtls3x
+    display_name: mbedtls3x_ele_testsuite
+
 middleware.mbedtls3x.crypto:
   section-type: component
   contents:
@@ -445,7 +488,6 @@ middleware.mbedtls3x:
   dependency:
     allOf:
     - middleware.mbedtls3x.template
-    - utility.debug_console
     - middleware.mbedtls3x.crypto
     - middleware.mbedtls3x.ssl
     - middleware.mbedtls3x.x509

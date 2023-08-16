@@ -73,4 +73,9 @@
 #define MBEDTLS_PLATFORM_PRINTF_MACRO PRINTF /* Default printf macro to use, can be undefined */
 #endif
 
+#if !defined(MBEDTLS_PLATFORM_FPRINTF_ALT) && !defined(MBEDTLS_PLATFORM_FPRINTF_MACRO)
+#include "fsl_debug_console.h"
+#define MBEDTLS_PLATFORM_FPRINTF_MACRO PRINTF /* Default printf macro to use, can be undefined */
+#endif
+
 #endif /* MCUX_MBEDTLS_ACCELERATOR_CONFIG_H */

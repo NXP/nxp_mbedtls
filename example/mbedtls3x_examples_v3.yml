@@ -329,3 +329,117 @@ mbedtls3x_psatest:
           project_path: "${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}"
         - source: boards/${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}/app.h
           project_path: "${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}"
+mbedtls3x_testsuite:
+  section-type: application
+  belong_to: set.board.${board}
+  dependency:
+  - middleware.mbedtls3x
+  - middleware.mbedtls3x.tests
+  - middleware.fatfs(middleware.fatfs.sd)
+  - middleware.fatfs.sd
+  contents:
+    document:
+      name: mbedtls3x_testsuite
+      readme:
+      - boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/board.readme
+      category: mbedtls3x_examples
+      brief: The Mbed-Crypto PSA Dev API test application provides verification that
+        the crypto API behaviours are implemented correctly.
+    project-root-path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+    configuration:
+      tools:
+        __common__:
+          config:
+            __common__:
+              cc-define:
+                MBEDTLS_CONFIG_FILE: '"mcux_mbedtls_testsuite_config.h"'
+        mdk:
+          config:
+            __common__:
+              ad-flags:
+              - --predefine="-D__stack_size__=0x10000"
+              - --predefine="-D__heap_size__=0xc000
+              cc-define:
+                MULADDC_CANNOT_USE_R7: 
+        iar:
+          config:
+            __common__:
+              ad-flags:
+              - __stack_size__=0x10000
+              - __heap_size__=0xc000
+              cx-flags:
+              - "--diag_suppress Pe546,Pe188,Pe111,Pa084,Pe068,Pe177,Pe223"
+        armgcc:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x10000"
+              - "-Xlinker --defsym=__heap_size__=0xc000"
+        mcux:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x10000"
+              - "-Xlinker --defsym=__heap_size__=0xc000"
+    modules:
+      demo:
+        required: true
+        cc-include:
+        - path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: board
+        - path: middleware/mbedtls3x/example/mbedtls3x_testsuite
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: board
+        - path: middleware/mbedtls3x/port
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: board
+        files:
+        - source: middleware/mbedtls3x/example/mbedtls3x_testsuite/tests/test_suite_psa_crypto_hash.c 
+          merge-to-main: main
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: source
+        - source: middleware/mbedtls3x/example/mbedtls3x_testsuite/tests/test_suite_psa_crypto_init.c 
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: source
+        - source: middleware/mbedtls3x/example/mbedtls3x_testsuite/tests/test_suite_psa_crypto.c 
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: source
+        - source: middleware/mbedtls3x/example/mbedtls3x_testsuite/tests/test_suite_psa_crypto_entropy.c 
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: source
+        - source: middleware/mbedtls3x/example/mbedtls3x_testsuite/platform_alt.h
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: source
+        - source: middleware/mbedtls3x/example/mbedtls3x_testsuite/platform_alt.c
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: source
+
+        - source: middleware/mbedtls3x/example/mbedtls3x_testsuite/ffconf.h
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/pin_mux.c
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/pin_mux.h
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: board
+        - source: middleware/mbedtls3x/example/mbedtls3x_testsuite/mcux_mbedtls_testsuite_config.h
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/sdmmc_config.c
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/sdmmc_config.h
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: board
+      pinset:
+        required: true
+        cc-include:
+        - path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}
+          project_path: "${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}"
+        files:
+        - source: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}/hardware_init.c
+          project_path: "${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}"
+        - source: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}/app.h
+          project_path: "${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}"
