@@ -1,0 +1,54 @@
+Card inserted.
+
+
+
+Create directory......
+
+Directory exists.
+
+PSA encrypt: RSA OAEP-SHA-256, 2K key, good ....................... PASS
+PSA encrypt: RSA OAEP-SHA-256, 2K, good, with label ............... PASS
+PSA encrypt: RSA OAEP-SHA-384, 2k input at limit (158 bytes) ...... PASS
+PSA encrypt: RSA OAEP-SHA-384, 2k input at limit with label (158 bytes)  PASS
+PSA encrypt: RSA OAEP-SHA-384, 3K, good ........................... PASS
+PSA encrypt: RSA OAEP-SHA-384, 3K  good, with label ............... PASS
+PSA encrypt: RSA OAEP-SHA-512, 4K key pair ........................ PASS
+PSA encrypt: RSA PKCS#1 v1.5, 2K key pair, 0 bytes input .......... PASS
+PSA encrypt: RSA PKCS#1 v1.5, 2k, input at limit (245 bytes) ...... PASS
+PSA encrypt: RSA PKCS#1 v1.5, 4K key pair ......................... PASS
+PSA encrypt: RSA PKCS#1 v1.5, 2k, input too large (246 bytes) ..... PASS
+PSA encrypt: RSA PKCS#1 v1.5: 2k, salt not allowed ................ PASS
+PSA encrypt: RSA OAEP-SHA-384, 2k input too large (159 bytes) ..... PASS
+PSA encrypt: 2k invalid algorithm ................................. PASS
+PSA encrypt: RSA PKCS#1 v1.5: invalid key type .................... PASS
+PSA encrypt-decrypt: RSA 2K PKCS#1 v1.5 vector #1 ................. PASS
+PSA encrypt-decrypt: RSA 3K PKCS#1 v1.5 vector #2 ................. PASS
+PSA encrypt-decrypt: RSA 4K PKCS#1 v1.5 vector #3 ................. PASS
+PSA encrypt-decrypt: RSA 2K PKCS#1 v1.5 vector #4 (245 bytes message)  PASS
+PSA encrypt-decrypt: 2k RSA OAEP-SHA-256 .......................... PASS
+PSA encrypt-decrypt: 3K RSA OAEP-SHA-256, with label .............. PASS
+PSA encrypt-decrypt: 3K RSA OAEP-SHA-512, with label .............. PASS
+PSA encrypt-decrypt: 4K RSA OAEP-SHA-384 .......................... PASS
+PSA decrypt: RSA PKCS#1 v1.5 2k: good #1 .......................... PASS
+PSA decrypt: RSA PKCS#1 v1.5 2k, 0 bytes, good .................... PASS
+PSA decrypt: RSA PKCS#1 v1.5 2k, 0 bytes, output too small ........ PASS
+PSA decrypt: RSA OAEP-SHA-384, 128 bytes .......................... PASS
+PSA decrypt: RSA OAEP-SHA-384, 128 bytes, with label .............. PASS
+PSA decrypt: RSA OAEP-SHA-384, 128 bytes, wrong label (should be empty)  PASS
+PSA decrypt: RSA OAEP-SHA-384, 128 bytes, wrong label (empty) ..... PASS
+PSA decrypt: RSA OAEP-SHA-384, 128 bytes, wrong label (same length)  PASS
+PSA decrypt: RSA PKCS#1 v1.5: salt not allowed .................... PASS
+PSA decrypt: invalid algorithm .................................... PASS
+PSA decrypt: RSA PKCS#1 v1.5, invalid key type (RSA public key) ... PASS
+PSA decrypt: RSA OAEP, invalid key type (RSA public key) .......... PASS
+PSA decrypt: RSA PKCS#1 v1.5: invalid key type (AES) .............. PASS
+PSA decrypt: RSA PKCS#1 v1.5, input too small ..................... PASS
+PSA decrypt: RSA PKCS#1 v1.5, input too large ..................... PASS
+PSA decrypt: RSA OAEP-SHA-256, input too small .................... PASS
+PSA decrypt: RSA OAEP-SHA-256, input too large .................... PASS
+
+----------------------------------------------------------------------------
+
+PASSED (40 / 40 tests (0 skipped))
+
+

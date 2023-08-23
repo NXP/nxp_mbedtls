@@ -1,0 +1,38 @@
+
+Card inserted.
+
+
+
+Create directory......
+
+Directory exists.
+
+PSA sign/verify hash: RSA PKCS#1 v1.5 SHA-256 2048 bit key ........ PASS
+PSA sign/verify hash: RSA PSS SHA-256, 32 bytes (hash size) 2048 bit key  PASS
+PSA sign/verify hash: RSA PKCS#1 v1.5 SHA-224 2048 bit key ........ PASS
+PSA sign/verify hash: RSA PSS SHA-224, 32 bytes (hash size) 2048 bit key  PASS
+PSA sign/verify hash: RSA PKCS#1 v1.5 SHA-384 2048 bit key ........ PASS
+PSA sign/verify hash: RSA PSS SHA-384, 48 bytes (hash size) 2048 bit key  PASS
+PSA sign/verify hash: RSA PKCS#1 v1.5 SHA-512 3072 bit key ........ PASS
+PSA sign/verify hash: RSA PSS SHA-512, 64 bytes (hash size) 3072 bit key  PASS
+PSA sign/verify hash: RSA PKCS#1 v1.5 SHA-512 4096 bit key ........ PASS
+PSA sign/verify hash: RSA PSS SHA-512, 64 bytes (hash size) 4096 bit key  PASS
+PSA sign/verify message: RSA PKCS#1 v1.5 SHA-256 2048 bit key ..... PASS
+PSA sign/verify message: RSA PSS SHA-256 2048 bit key ............. PASS
+PSA sign/verify message: RSA PSS SHA-256, 0 bytes 2048 bit key .... PASS
+PSA sign/verify message: RSA PSS SHA-256, 32 bytes 2048 bit key ... PASS
+PSA sign/verify message: RSA PSS SHA-256, 256 bytes 2048 bit key .. PASS
+PSA sign/verify message: RSA PSS SHA-256, 257 bytes 2048 bit key .. PASS
+PSA sign/verify message: RSA PKCS#1 v1.5 SHA-384 3K bit key ....... PASS
+PSA sign hash: RSA PKCS#1 v1.5 SHA-256, output buffer too small ... PASS
+PSA sign hash: RSA PSS SHA-256, wrong hash length (0 bytes) ....... PASS
+PSA sign hash: RSA PSS SHA-256, wrong hash length (129 bytes) ..... PASS
+PSA sign hash: RSA PKCS#1 v1.5 SHA-256, empty output buffer ....... PASS
+PSA sign message: RSA PKCS#1 v1.5, invalid hash (wildcard) ........ PASS
+PSA sign message: RSA PKCS#1 v1.5, invalid hash algorithm (0) ..... PASS
+PSA sign message: RSA PKCS#1 v1.5 SHA-256, output buffer too small  PASS
+PSA sign message: RSA PKCS#1 v1.5 SHA-256, empty output buffer .... PASS
+PSA sign message: RSA PKCS#1 v1.5 SHA-256, invalid key type ....... ----
+
+----------------------------------------------------------------------------
+PASSED (26 / 26 tests (1 skipped))

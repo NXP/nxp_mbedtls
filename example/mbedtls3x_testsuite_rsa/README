@@ -1,0 +1,33 @@
+
+- This is an internal only testsuite meant for unit testing support of RSA sign/verify and encrypt/decrypt operations.
+These testcases are for 2k, 2k, 4k sizes keys which was missing in original mbedtls crypto testsuite.
+
+- Requirements
+SD Card with FATFS File System
+
+How to run the testcases
+
+1. On SD Card , create a folder tests. Copy the *.datax files to tests folder.
+2. Generate and load the project.
+3. Compile and run the desired test. BY default encrypt test cases would run. To test RSA sign/verify, in project options, disable compile flag PSA_TEST_ELE_ENCRYPT_DECRYPT. Recompile and run
+
+
+Process of generation of files in this folder.
+
+1. The RSA encrypt/decrypt, sing/verify related functions have been copied from mbedtls3x/tests/suites/test_psa_crypto.function to a new file in mbedtls3x/examples/mbedtls_testuite_rsa/tests called test_psa_crypto_rsa.function and corresponding .c and .datax files were generated. Steps mentioned below.
+
+2. Any new testcase required should be added to <>.function file in this test folder.
+
+The steps need to be done only if there is a change in .function file
+
+Steps to generate files: { Since the .c and .data files used here are custom, these files needn't be updated with mbedtls version change)
+1. cd mbedtls3x/example/mbedtls3x_testsuite_rsa
+2. Generate the required files. { Keep adding in the list as you add more generated files from mbedtls3x/tests/suites over here }
+
+You can use the command below:
+python ../../tests/scripts/generate_test_code.py -f ../../tests/suites/test_suite_psa_crypto.function -d tests/test_suite_psa_crypto_rsa.data -t ../../tests/suites/main_test.function -p ../../port/tests_fatfs/host_test.function -s ../../tests/suites   --helpers-file ../../tests/suites/helpers.function -o tests/
+
+3. In the .c files replace "#line" with "// #line". This is done for ease of debugging.
+4. Due to the lack of heap size on RT1180, sign/verify and encrypt/decrypt cases can't run together. Hence manually create a file test_suite+psa_crypto_sign.datax. Move cases from the generated test_suite_ps_crypto_rsa.datax related to sign/verify in the new file.
+ 
+
