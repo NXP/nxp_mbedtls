@@ -480,8 +480,8 @@ mbedtls3x_testsuite_rsa:
           config:
             __common__:
               ad-flags:
-              - __stack_size__=0x10000
-              - __heap_size__=0xc000
+              - __stack_size__=0x18000
+              - __heap_size__=0x4000
               cx-flags:
               - "--diag_suppress Pe546,Pe188,Pe111,Pa084,Pe068,Pe177,Pe223"
         armgcc:
