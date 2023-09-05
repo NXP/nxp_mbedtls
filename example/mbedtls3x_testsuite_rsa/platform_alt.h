@@ -16,5 +16,7 @@ typedef struct mbedtls_platform_context {
 }
 mbedtls_platform_context;
 
-
+#ifdef __cplusplus
+}
+#endif
 #endif /* platform.h */
