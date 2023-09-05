@@ -1,0 +1,36 @@
+
+- This is an internal only testsuite meant for unit testing support of Key generation.
+
+- Requirements
+SD Card with FATFS File System
+
+How to run the testcases
+
+1. On SD Card , create a folder tests. Copy the *.datax files to tests folder.
+2. In the .c file add your driver and key location you want to test.
+eg.
+#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
+#include "ele_s4xx.h"
+#define KEY_LOCATION		PSA_CRYPTO_ELE_S4XX_LOCATION
+#endif
+{ Make this change in .function file aslo, so that if you re-generate the .c file the change gets in it }
+
+3. Generate and load the project.
+4. Compile and run the desired test.
+
+Process of generation of files in this folder.
+
+1. Any new testcase required should be added to <>.function file in this test folder. .c and .datax files need to be generated again if any changes made in .function or .data file. Steps mentioned below.
+
+The steps need to be done only if there is a change in .function file
+
+Steps to generate files: { Since the .c and .data files used here are custom, these files needn't be updated with mbedtls version change)
+1. cd mbedtls3x/example/mbedtls3x_testsuite_generate
+2. Generate the required files. { Keep adding in the list as you add more generated files from mbedtls3x/tests/suites over here }
+
+You can use the command below:
+python ../../tests/scripts/generate_test_code.py -f  tests/test_suite_psa_crypto_generate.function -d tests/test_suite_psa_crypto_generate.data -t ../../tests/suites/main_test.function -p ../../port/tests_fatfs/host_test.function -s ../../tests/suites   --helpers-file ../../tests/suites/helpers.function -o tests/
+
+3. In the .c files replace "#line" with "// #line". This is done for ease of debugging.
+ 
+

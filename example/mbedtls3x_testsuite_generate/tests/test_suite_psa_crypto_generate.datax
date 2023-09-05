@@ -1,0 +1,78 @@
+PSA ECC_KEY_PAIR(SECP_R1) 224-bit, SIGN_HASH -> SIGN_HASH+MESSAGE
+0:exp:0:int:224:exp:1:exp:2:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 256-bit, SIGN_HASH -> SIGN_HASH+MESSAGE
+0:exp:0:int:256:exp:1:exp:4:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 384-bit, SIGN_HASH -> SIGN_HASH+MESSAGE
+0:exp:0:int:384:exp:1:exp:5:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 521-bit, SIGN_HASH -> SIGN_HASH+MESSAGE
+0:exp:0:int:521:exp:1:exp:6:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 224-bit, SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{HASH,MESSAGE}
+0:exp:0:int:224:exp:7:exp:2:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 256-bit, SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{HASH,MESSAGE}
+0:exp:0:int:256:exp:7:exp:4:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 384-bit, SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{HASH,MESSAGE}
+0:exp:0:int:384:exp:7:exp:5:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 521-bit, SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{HASH,MESSAGE}
+0:exp:0:int:521:exp:7:exp:6:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 224-bit, {SIGN,VERIFY}_{HASH,MESSAGE}
+0:exp:8:int:224:exp:9:exp:2:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 256-bit, {SIGN,VERIFY}_{HASH,MESSAGE}
+0:exp:8:int:256:exp:9:exp:4:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 384-bit, {SIGN,VERIFY}_{HASH,MESSAGE}
+0:exp:8:int:384:exp:9:exp:5:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 521-bit, {SIGN,VERIFY}_{HASH,MESSAGE}
+0:exp:8:int:521:exp:9:exp:6:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 224-bit, SIGN_MESSAGE
+0:exp:8:int:224:exp:10:exp:2:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 256-bit, SIGN_MESSAGE
+0:exp:8:int:256:exp:10:exp:4:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 384-bit, SIGN_MESSAGE
+0:exp:8:int:384:exp:10:exp:5:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 521-bit, SIGN_MESSAGE
+0:exp:8:int:521:exp:10:exp:6:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 224-bit, SIGN+VERIFY_MESSAGE
+0:exp:8:int:224:exp:11:exp:2:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 256-bit, SIGN+VERIFY_MESSAGE
+0:exp:8:int:256:exp:11:exp:4:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 384-bit, SIGN+VERIFY_MESSAGE
+0:exp:8:int:384:exp:11:exp:5:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 521-bit, SIGN+VERIFY_MESSAGE
+0:exp:8:int:521:exp:11:exp:6:exp:3
+
+PSA ECC_KEY_PAIR(SECP_R1) 224-bit, ALG: ECDSA_ANY
+0:exp:0:int:256:exp:1:exp:12:exp:13
+
+PSA ECC_KEY_PAIR(SECP_R1) 256-bit, ALG: ECDSA_ANY
+0:exp:0:int:256:exp:1:exp:12:exp:13
+
+PSA ECC_PUBLIC_KEY(SECP_R1) 225-bit
+0:exp:14:int:225:exp:1:exp:4:exp:15
+
+PSA ECC_PUBLIC_KEY(SECP_R1) 256-bit
+0:exp:14:int:256:exp:1:exp:4:exp:15
+
+PSA ECC_PUBLIC_KEY(SECP_R1) 384-bit
+0:exp:14:int:384:exp:1:exp:5:exp:15
+
+PSA ECC_PUBLIC_KEY(SECP_R1) 521-bit
+0:exp:14:int:521:exp:1:exp:6:exp:15
+

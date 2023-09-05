@@ -548,3 +548,108 @@ mbedtls3x_testsuite_rsa:
           project_path: "${board}/mbedtls3x_examples/mbedtls3x_testsuite_rsa/${multicore_foldername}"
         - source: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_rsa/${multicore_foldername}/app.h
           project_path: "${board}/mbedtls3x_examples/mbedtls3x_testsuite_rsa/${multicore_foldername}"
+mbedtls3x_testsuite_generate:
+  section-type: application
+  belong_to: set.board.${board}
+  dependency:
+  - middleware.mbedtls3x
+  - middleware.mbedtls3x.tests
+  - middleware.fatfs
+  - middleware.fatfs.sd
+  contents:
+    document:
+      name: mbedtls3x_testsuite_generate
+      readme:
+      - boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/board.readme
+      category: mbedtls3x_examples
+      brief: The Mbed-Crypto PSA Dev API test application provides verification that
+        the crypto API behaviours are implemented correctly for RSA keys of sizes 2k, 3k and 4k.
+    project-root-path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+    configuration:
+      tools:
+        __common__:
+          config:
+            __common__:
+              cc-define:
+                MBEDTLS_CONFIG_FILE: '"mcux_mbedtls_testsuite_config.h"'
+                PSA_ELE_RSA_SIGN_VERIFY: 0
+        mdk:
+          config:
+            __common__:
+              ad-flags:
+              - --predefine="-D__stack_size__=0x18000"
+              - --predefine="-D__heap_size__=0x4000
+              cc-define:
+                MULADDC_CANNOT_USE_R7: 
+        iar:
+          config:
+            __common__:
+              ad-flags:
+              - __stack_size__=0x18000
+              - __heap_size__=0x4000
+              cx-flags:
+              - "--diag_suppress Pe546,Pe188,Pe111,Pa084,Pe068,Pe177,Pe223"
+        armgcc:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x18000"
+              - "-Xlinker --defsym=__heap_size__=0x4000"
+        mcux:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x18000"
+              - "-Xlinker --defsym=__heap_size__=0x4000"
+    modules:
+      demo:
+        required: true
+        cc-include:
+        - path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+          project_path: board
+        - path: middleware/mbedtls3x/example/mbedtls3x_testsuite_generate
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+          project_path: board
+        - path: middleware/mbedtls3x/port
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+          project_path: board
+        files:
+        - source: middleware/mbedtls3x/example/mbedtls3x_testsuite_generate/tests/test_suite_psa_crypto_generate.c 
+          merge-to-main: main
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+          project_path: source
+        - source: middleware/mbedtls3x/example/mbedtls3x_testsuite_generate/platform_alt.h
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+          project_path: source
+        - source: middleware/mbedtls3x/example/mbedtls3x_testsuite_generate/platform_alt.c
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+          project_path: source
+        - source: middleware/mbedtls3x/example/mbedtls3x_testsuite_generate/ffconf.h
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/pin_mux.c
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/pin_mux.h
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+          project_path: board
+        - source: middleware/mbedtls3x/example/mbedtls3x_testsuite_generate/mcux_mbedtls_testsuite_config.h
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/sdmmc_config.c
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/sdmmc_config.h
+          package_path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+          project_path: board
+      pinset:
+        required: true
+        cc-include:
+        - path: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}
+          project_path: "${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}"
+        files:
+        - source: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}/hardware_init.c
+          project_path: "${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}"
+        - source: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}/app.h
+          project_path: "${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}"

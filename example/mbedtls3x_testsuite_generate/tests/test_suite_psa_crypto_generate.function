@@ -1,0 +1,295 @@
+/* BEGIN_HEADER */
+
+#include "psa/crypto.h"
+#include "test/psa_crypto_helpers.h"
+
+#include "mbedtls/asn1.h"
+#include "mbedtls/asn1write.h"
+
+#define INVALID_KEY_ID mbedtls_svc_key_id_make(0, 0xfedcba98)
+
+#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
+#include "ele_s4xx.h"
+#define KEY_LOCATION		PSA_CRYPTO_ELE_S4XX_LOCATION
+#endif
+
+/* END_HEADER */
+
+/* BEGIN_DEPENDENCIES
+ * depends_on:MBEDTLS_PSA_CRYPTO_C
+ * END_DEPENDENCIES
+ */
+
+/* BEGIN_CASE */
+void generate_opaque_key(int key_type_arg, int bits_arg, 
+				  int usage_arg, int alg_arg,
+                  int expected_status_arg)
+{
+    psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
+    mbedtls_svc_key_id_t key_id = INVALID_KEY_ID;
+    psa_key_lifetime_t lifetime =
+            PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION( \
+            PSA_KEY_LIFETIME_VOLATILE, KEY_LOCATION);
+    psa_algorithm_t alg = alg_arg;
+    psa_key_usage_t usage = usage_arg;
+    psa_key_usage_t expected_usage = mbedtls_test_update_key_usage_flags(usage_arg);
+
+    // key lifetime, usage flags, algorithm are irrelevant for this test
+    psa_key_type_t key_type = key_type_arg;
+    size_t bits = bits_arg;
+    psa_status_t expected_status = expected_status_arg;
+
+    PSA_ASSERT(psa_crypto_init());
+    
+    psa_set_key_usage_flags(&attributes, usage);
+    psa_set_key_algorithm(&attributes, alg);
+    psa_set_key_type(&attributes, key_type);
+    psa_set_key_bits(&attributes, bits);
+    psa_set_key_lifetime(&attributes, lifetime);
+    TEST_EQUAL(psa_generate_key(&attributes, &key_id),
+               expected_status);
+
+    // Verify attributes of the created key on success
+    if (expected_status == PSA_SUCCESS) {
+        psa_reset_key_attributes(&attributes);
+        PSA_ASSERT(psa_get_key_attributes(key_id, &attributes));
+        TEST_EQUAL(psa_get_key_lifetime(&attributes), lifetime);
+        TEST_EQUAL(psa_get_key_usage_flags(&attributes), expected_usage);
+        TEST_EQUAL(psa_get_key_algorithm(&attributes), alg);
+        TEST_EQUAL(psa_get_key_type(&attributes), key_type);
+        TEST_EQUAL(psa_get_key_bits(&attributes), bits);
+   
+        /* Do something with the key according to its type and permitted usage. */ 
+        if (!mbedtls_test_psa_exercise_key(key_id, usage, alg)) {
+            goto exit;
+        }
+    }
+
+exit:
+    psa_reset_key_attributes(&attributes);
+    psa_destroy_key(key_id);
+    PSA_DONE();
+}
+/* END_CASE */
+
+/* BEGIN_CASE */
+void generate_persistent_key(int key_type_arg, int bits_arg, 
+							 int usage_arg, int alg_arg,
+							 int owner_id_arg,
+							 int id_arg,
+							 int expected_status_arg)
+{
+    psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
+    mbedtls_svc_key_id_t id = mbedtls_svc_key_id_make(owner_id_arg, id_arg);
+    psa_key_lifetime_t lifetime =
+            PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION( \
+            PSA_KEY_LIFETIME_PERSISTENT, KEY_LOCATION);
+    psa_algorithm_t alg = alg_arg;
+    psa_key_usage_t usage = usage_arg;
+    psa_key_usage_t expected_usage = mbedtls_test_update_key_usage_flags(usage_arg);
+    mbedtls_svc_key_id_t key_id = MBEDTLS_SVC_KEY_ID_INIT;
+
+
+    // key lifetime, usage flags, algorithm are irrelevant for this test
+    psa_key_type_t key_type = key_type_arg;
+    size_t bits = bits_arg;
+    psa_status_t expected_status = expected_status_arg;
+
+    PSA_ASSERT(psa_crypto_init());
+    
+	psa_set_key_id(&attributes, id);
+    psa_set_key_usage_flags(&attributes, usage);
+    psa_set_key_algorithm(&attributes, alg);
+    psa_set_key_type(&attributes, key_type);
+    psa_set_key_bits(&attributes, bits);
+    psa_set_key_lifetime(&attributes, lifetime);
+    TEST_EQUAL(psa_generate_key(&attributes, &key_id),
+               expected_status);
+
+    // Verify attributes of the created key on success
+    if (expected_status == PSA_SUCCESS) {
+        psa_reset_key_attributes(&attributes);
+        PSA_ASSERT(psa_get_key_attributes(key_id, &attributes));
+        TEST_EQUAL(psa_get_key_lifetime(&attributes), lifetime);
+        TEST_EQUAL(psa_get_key_usage_flags(&attributes), expected_usage);
+        TEST_EQUAL(psa_get_key_algorithm(&attributes), alg);
+        TEST_EQUAL(psa_get_key_type(&attributes), key_type);
+        TEST_EQUAL(psa_get_key_bits(&attributes), bits);
+   
+        /* Do something with the key according to its type and permitted usage. */ 
+        if (!mbedtls_test_psa_exercise_key(key_id, usage, alg)) {
+            goto exit;
+        }
+    }
+
+exit:
+    psa_reset_key_attributes(&attributes);
+    psa_destroy_key(key_id);
+    PSA_DONE();
+}
+/* END_CASE */
+
+/* BEGIN_CASE */
+void generate_key(int type_arg,
+                  int bits_arg,
+                  int usage_arg,
+                  int alg_arg,
+                  int expected_status_arg,
+                  int is_large_key)
+{
+    mbedtls_svc_key_id_t key = MBEDTLS_SVC_KEY_ID_INIT;
+    psa_key_type_t type = type_arg;
+    psa_key_usage_t usage = usage_arg;
+    size_t bits = bits_arg;
+    psa_algorithm_t alg = alg_arg;
+    psa_status_t expected_status = expected_status_arg;
+    psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
+    psa_key_attributes_t got_attributes = PSA_KEY_ATTRIBUTES_INIT;
+
+    PSA_ASSERT(psa_crypto_init());
+
+    psa_set_key_usage_flags(&attributes, usage);
+    psa_set_key_algorithm(&attributes, alg);
+    psa_set_key_type(&attributes, type);
+    psa_set_key_bits(&attributes, bits);
+
+    /* Generate a key */
+    psa_status_t status = psa_generate_key(&attributes, &key);
+
+    if (is_large_key > 0) {
+        TEST_ASSUME(status != PSA_ERROR_INSUFFICIENT_MEMORY);
+    }
+    TEST_EQUAL(status, expected_status);
+    if (expected_status != PSA_SUCCESS) {
+        goto exit;
+    }
+
+    /* Test the key information */
+    PSA_ASSERT(psa_get_key_attributes(key, &got_attributes));
+    TEST_EQUAL(psa_get_key_type(&got_attributes), type);
+    TEST_EQUAL(psa_get_key_bits(&got_attributes), bits);
+
+    /* Do something with the key according to its type and permitted usage. */
+    if (!mbedtls_test_psa_exercise_key(key, usage, alg)) {
+        goto exit;
+    }
+
+exit:
+    /*
+     * Key attributes may have been returned by psa_get_key_attributes()
+     * thus reset them as required.
+     */
+    psa_reset_key_attributes(&got_attributes);
+
+    psa_destroy_key(key);
+    PSA_DONE();
+}
+/* END_CASE */
+
+/* BEGIN_CASE depends_on:PSA_WANT_KEY_TYPE_RSA_KEY_PAIR:PSA_WANT_ALG_RSA_PKCS1V15_CRYPT:PSA_WANT_ALG_RSA_PKCS1V15_SIGN:MBEDTLS_GENPRIME */
+void generate_key_rsa(int bits_arg,
+                      data_t *e_arg,
+                      int expected_status_arg)
+{
+    mbedtls_svc_key_id_t key = MBEDTLS_SVC_KEY_ID_INIT;
+    psa_key_type_t type = PSA_KEY_TYPE_RSA_KEY_PAIR;
+    size_t bits = bits_arg;
+    psa_key_usage_t usage = PSA_KEY_USAGE_ENCRYPT | PSA_KEY_USAGE_DECRYPT;
+    psa_algorithm_t alg = PSA_ALG_RSA_PKCS1V15_SIGN_RAW;
+    psa_status_t expected_status = expected_status_arg;
+    psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
+    uint8_t *exported = NULL;
+    size_t exported_size =
+        PSA_EXPORT_KEY_OUTPUT_SIZE(PSA_KEY_TYPE_RSA_PUBLIC_KEY, bits);
+    size_t exported_length = SIZE_MAX;
+    uint8_t *e_read_buffer = NULL;
+    int is_default_public_exponent = 0;
+    size_t e_read_size = PSA_KEY_DOMAIN_PARAMETERS_SIZE(type, bits);
+    size_t e_read_length = SIZE_MAX;
+
+    if (e_arg->len == 0 ||
+        (e_arg->len == 3 &&
+         e_arg->x[0] == 1 && e_arg->x[1] == 0 && e_arg->x[2] == 1)) {
+        is_default_public_exponent = 1;
+        e_read_size = 0;
+    }
+    ASSERT_ALLOC(e_read_buffer, e_read_size);
+    ASSERT_ALLOC(exported, exported_size);
+
+    PSA_ASSERT(psa_crypto_init());
+
+    psa_set_key_usage_flags(&attributes, usage);
+    psa_set_key_algorithm(&attributes, alg);
+    PSA_ASSERT(psa_set_key_domain_parameters(&attributes, type,
+                                             e_arg->x, e_arg->len));
+    psa_set_key_bits(&attributes, bits);
+
+    /* Generate a key */
+    TEST_EQUAL(psa_generate_key(&attributes, &key), expected_status);
+    if (expected_status != PSA_SUCCESS) {
+        goto exit;
+    }
+
+    /* Test the key information */
+    PSA_ASSERT(psa_get_key_attributes(key, &attributes));
+    TEST_EQUAL(psa_get_key_type(&attributes), type);
+    TEST_EQUAL(psa_get_key_bits(&attributes), bits);
+    PSA_ASSERT(psa_get_key_domain_parameters(&attributes,
+                                             e_read_buffer, e_read_size,
+                                             &e_read_length));
+    if (is_default_public_exponent) {
+        TEST_EQUAL(e_read_length, 0);
+    } else {
+        ASSERT_COMPARE(e_read_buffer, e_read_length, e_arg->x, e_arg->len);
+    }
+
+    /* Do something with the key according to its type and permitted usage. */
+    if (!mbedtls_test_psa_exercise_key(key, usage, alg)) {
+        goto exit;
+    }
+
+    /* Export the key and check the public exponent. */
+    PSA_ASSERT(psa_export_public_key(key,
+                                     exported, exported_size,
+                                     &exported_length));
+    {
+        uint8_t *p = exported;
+        uint8_t *end = exported + exported_length;
+        size_t len;
+        /*   RSAPublicKey ::= SEQUENCE {
+         *      modulus            INTEGER,    -- n
+         *      publicExponent     INTEGER  }  -- e
+         */
+        TEST_EQUAL(0, mbedtls_asn1_get_tag(&p, end, &len,
+                                           MBEDTLS_ASN1_SEQUENCE |
+                                           MBEDTLS_ASN1_CONSTRUCTED));
+        TEST_ASSERT(mbedtls_test_asn1_skip_integer(&p, end, bits, bits, 1));
+        TEST_EQUAL(0, mbedtls_asn1_get_tag(&p, end, &len,
+                                           MBEDTLS_ASN1_INTEGER));
+        if (len >= 1 && p[0] == 0) {
+            ++p;
+            --len;
+        }
+        if (e_arg->len == 0) {
+            TEST_EQUAL(len, 3);
+            TEST_EQUAL(p[0], 1);
+            TEST_EQUAL(p[1], 0);
+            TEST_EQUAL(p[2], 1);
+        } else {
+            ASSERT_COMPARE(p, len, e_arg->x, e_arg->len);
+        }
+    }
+
+exit:
+    /*
+     * Key attributes may have been returned by psa_get_key_attributes() or
+     * set by psa_set_key_domain_parameters() thus reset them as required.
+     */
+    psa_reset_key_attributes(&attributes);
+
+    psa_destroy_key(key);
+    PSA_DONE();
+    mbedtls_free(e_read_buffer);
+    mbedtls_free(exported);
+}
+/* END_CASE */
