@@ -989,7 +989,7 @@
  */
 //#define MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG
 
-// #define MBEDTLS_PSA_CRYPTO_STORAGE_C				// NXP
+#define MBEDTLS_PSA_CRYPTO_STORAGE_C				// NXP
 
 /**
  * \def MBEDTLS_PSA_CRYPTO_SPM
@@ -2066,7 +2066,7 @@
  *           either MBEDTLS_PSA_ITS_FILE_C or a native implementation of
  *           the PSA ITS interface
  */
-// #define MBEDTLS_PSA_CRYPTO_STORAGE_C				// NXP
+#define MBEDTLS_PSA_CRYPTO_STORAGE_C				// NXP
 
 /**
  * \def MBEDTLS_PSA_ITS_FILE_C

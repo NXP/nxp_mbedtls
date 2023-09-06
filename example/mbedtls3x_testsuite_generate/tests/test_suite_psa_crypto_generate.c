@@ -247,8 +247,7 @@ void test_generate_opaque_key_wrapper( void ** params )
 void test_generate_persistent_key(int key_type_arg, int bits_arg,
 							 int usage_arg, int alg_arg,
 							 int owner_id_arg,
-							 int id_arg,
-							 int expected_status_arg)
+							 int id_arg)
 {
     psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
     mbedtls_svc_key_id_t id = mbedtls_svc_key_id_make(owner_id_arg, id_arg);
@@ -264,21 +263,30 @@ void test_generate_persistent_key(int key_type_arg, int bits_arg,
     // key lifetime, usage flags, algorithm are irrelevant for this test
     psa_key_type_t key_type = key_type_arg;
     size_t bits = bits_arg;
-    psa_status_t expected_status = expected_status_arg;
+    psa_status_t status;
 
     PSA_ASSERT(psa_crypto_init());
 
-	psa_set_key_id(&attributes, id);
+    psa_set_key_id(&attributes, id);
     psa_set_key_usage_flags(&attributes, usage);
     psa_set_key_algorithm(&attributes, alg);
     psa_set_key_type(&attributes, key_type);
     psa_set_key_bits(&attributes, bits);
     psa_set_key_lifetime(&attributes, lifetime);
-    TEST_EQUAL(psa_generate_key(&attributes, &key_id),
-               expected_status);
+    status = psa_generate_key(&attributes, &key_id);
+
+    // For persistent key same id should be returned back
+    if (status == PSA_SUCCESS) {
+      TEST_EQUAL(key_id, id);
+    }
+
+    // Use already passed id if key already exists
+    if (status == PSA_ERROR_ALREADY_EXISTS) {
+      key_id = id;
+    }
 
     // Verify attributes of the created key on success
-    if (expected_status == PSA_SUCCESS) {
+    if (status == PSA_SUCCESS || status == PSA_ERROR_ALREADY_EXISTS ) {
         psa_reset_key_attributes(&attributes);
         PSA_ASSERT(psa_get_key_attributes(key_id, &attributes));
         TEST_EQUAL(psa_get_key_lifetime(&attributes), lifetime);
@@ -293,18 +301,23 @@ void test_generate_persistent_key(int key_type_arg, int bits_arg,
         }
     }
 
+
 exit:
     psa_reset_key_attributes(&attributes);
-    psa_destroy_key(key_id);
-    PSA_DONE();
+    // To test persistent keys, destroying it if we have tested that it already exists.
+    // So this test basically needs to be run twice
+    if (status == PSA_ERROR_ALREADY_EXISTS) {
+        psa_destroy_key(key_id);
+        PSA_DONE();
+    }
 }
 
 void test_generate_persistent_key_wrapper( void ** params )
 {
 
-    test_generate_persistent_key( *( (int *) params[0] ), *( (int *) params[1] ), *( (int *) params[2] ), *( (int *) params[3] ), *( (int *) params[4] ), *( (int *) params[5] ), *( (int *) params[6] ) );
+    test_generate_persistent_key( *( (int *) params[0] ), *( (int *) params[1] ), *( (int *) params[2] ), *( (int *) params[3] ), *( (int *) params[4] ), *( (int *) params[5] ) );
 }
-#line 133 "tests/test_suite_psa_crypto_generate.function"
+#line 146 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_key(int type_arg,
                   int bits_arg,
                   int usage_arg,
@@ -369,7 +382,7 @@ void test_generate_key_wrapper( void ** params )
 #if defined(PSA_WANT_ALG_RSA_PKCS1V15_CRYPT)
 #if defined(PSA_WANT_ALG_RSA_PKCS1V15_SIGN)
 #if defined(MBEDTLS_GENPRIME)
-#line 190 "tests/test_suite_psa_crypto_generate.function"
+#line 203 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_key_rsa(int bits_arg,
                       data_t *e_arg,
                       int expected_status_arg)
