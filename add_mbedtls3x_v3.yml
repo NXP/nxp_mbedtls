@@ -188,6 +188,7 @@ middleware.mbedtls3x.crypto_storage_default:
     taxonomy:
       csub: crypto
       belong_to: mbedtls3x
+    display_name: mbedtls3x_crypto_storage_simulator
   dependency:
     allOf:
     - middleware.mbedtls3x.crypto
@@ -216,6 +217,7 @@ middleware.mbedtls3x.crypto_storage_fatfs:
     taxonomy:
       csub: crypto
       belong_to: mbedtls3x
+    display_name: mbedtls3x_crypto_storage_fatfs
   dependency:
     allOf:
     - middleware.mbedtls3x.crypto
