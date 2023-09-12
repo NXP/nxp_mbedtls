@@ -1,4 +1,6 @@
 ---
+# yaml-language-server: $schema=../../bin/generator/sdk_generator/data/sdk_data_schema/v3/software_set_and_project_schema.json
+
 __variable__:
   mbedtls3x_version: 3.4.0
   mbedtls3x_dir: middleware/mbedtls3x
@@ -29,6 +31,7 @@ middleware.mbedtls3x.template:
     full_name: mbedTLS Template
     user_visible: never
     taxonomy:
+      belong_to: mbedtls3x
       csub: template
     display_name: mbedtls3x_template
 
@@ -163,7 +166,7 @@ middleware.mbedtls3x.tests:
     user_visible: never
     full_name: MbedTLS open source Crypto library
     taxonomy:
-      csub: crypto
+      csub: tests
       belong_to: mbedtls3x
     display_name: mbedtls3x_ele_testsuite
 
@@ -186,7 +189,7 @@ middleware.mbedtls3x.crypto_storage_default:
     user_visible: always
     full_name: MbedTLS open source Crypto library
     taxonomy:
-      csub: crypto
+      csub: crypto_storage_default
       belong_to: mbedtls3x
     display_name: mbedtls3x_crypto_storage_simulator
   dependency:
@@ -215,7 +218,7 @@ middleware.mbedtls3x.crypto_storage_fatfs:
     user_visible: always
     full_name: MbedTLS open source Crypto library
     taxonomy:
-      csub: crypto
+      csub: crypto_storage_fatfs
       belong_to: mbedtls3x
     display_name: mbedtls3x_crypto_storage_fatfs
   dependency:
@@ -590,7 +593,7 @@ middleware.mbedtls3x.default_heap_stack:
               - "-Xlinker --defsym=__heap_size__=0x8000"
 
 middleware.mbedtls3x.unused_files:
-  section-type: component
+  section-type: container
   contents:
     repo_base_path: "${mbedtls3x_dir}"
     project_base_path: mbedtls3x
@@ -734,9 +737,6 @@ middleware.mbedtls3x.unused_files:
     type: other
     user_visible: never
     full_name: MbedTLS unused files
-    taxonomy:
-      csub: mbedtls3x
-      belong_to: mbedtls3x
     display_name: unused_files
 
 set.middleware.mbedtls3x:
@@ -762,14 +762,18 @@ set.middleware.mbedtls3x:
         - scr.middleware.mbedtls3x
       cmsis_pack:
         vendor: NXP
-        supported: false
+        # supported: true
+        pack_root:
+          pack_type: SWP
+          pack_name: MBEDTLS3X
+          pack_version: 1.0.0
         scr:
         - scr.middleware.mbedtls3x
     component_taxonomy:
       mbedtls3x:
         cclass: Security
         cgroup: mbedTLS library v3.x
-        cbundle: Mbed_TLS
+        cbundle: Mbed_TLS_3
         cbundle_version: "${mbedtls3x_version}"
   dependency:
     allOf:
@@ -801,3 +805,42 @@ scr.middleware.mbedtls3x:
     Description: Cryptographic and SSL/TLS Library
     Location: middleware/mbedtls3x
     Origin: ARM(Apache-2.0) - https://github.com/Mbed-TLS/mbedtls/releases/tag/v3.4.0
+
+set.board.${board}.mbedtls3x:
+  section-type: set
+  belong_to: set.board.${board}.mbedtls3x
+  section_info:
+    fixed_id: board_${board}
+    display_name: "${board}"
+    full_name: NXP board ${board}
+    description: NXP MCUXpresso board ${board} examples for mbedtls3x
+    type: board
+    version: 1.0.0
+    set_location:
+      repo_base_path: "./boards/${board}/mbedtls3x_examples"
+    product:
+      cmsis_pack:
+        scr:
+          - scr.board.${board}.mbedtls3x
+        vendor: NXP
+        pack_root:
+          pack_type: sBSP
+          pack_name: "${board}_MBEDTLS3X_BSP"
+      kex_package:
+        supported: false
+  dependency:
+    allOf:
+      - set.middleware.mbedtls3x
+
+scr.board.${board}.mbedtls3x:
+  section-type: scr
+  belong_to: set.board.${board}.mbedtls3x
+  contents:
+    Name: SDK MBEDTLS3x examples
+    license:
+      - license.bsd-3
+    Format: source code, binary, project files, linker files
+    Description: SDK out of box examples to show how to use peripheral drivers and
+      integrate middleware.
+    Origin: NXP (BSD-3-Clause)
+    Location: "./boards/${board}/mbedtls3x_examples"

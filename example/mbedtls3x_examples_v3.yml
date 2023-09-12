@@ -3,7 +3,9 @@
 __hierarchy__:
   tmp_mbedtls3x_examples_lpc_settings:
     section-type: application
-    belong_to: set.board.${board}
+    belong_to:
+      kex_package: set.board.${board}
+      cmsis_pack: set.board.${board}.mbedtls3x
     dependency:
     - driver.common
     - driver.clock
@@ -24,6 +26,8 @@ __hierarchy__:
           iar:
             config:
               __common__: 
+                cc-flags:
+                - "--diag_suppress Pe546,Pe188,Pe111,Pa084,Pe068,Pe177,Pe223"
               release: {}
           mdk:
             config:
@@ -68,7 +72,6 @@ __hierarchy__:
             project_path: doc
 mbedtls3x_selftest:
   section-type: application
-  belong_to: set.board.${board}
   dependency:
   - middleware.mbedtls3x
   merge_segment:
@@ -129,7 +132,6 @@ mbedtls3x_selftest:
           project_path: "${board}/mbedtls3x_examples/mbedtls3x_selftest/${multicore_foldername}"
 mbedtls3x_benchmark:
   section-type: application
-  belong_to: set.board.${board}
   dependency:
   - middleware.mbedtls3x
   merge_segment:
@@ -192,7 +194,6 @@ mbedtls3x_benchmark:
           project_path: "${board}/mbedtls3x_examples/mbedtls3x_benchmark/${multicore_foldername}"
 psa_crypto_examples:
   section-type: application
-  belong_to: set.board.${board}
   dependency:
   - middleware.mbedtls3x
   merge_segment:
@@ -252,7 +253,6 @@ psa_crypto_examples:
           project_path: "${board}/mbedtls3x_examples/psa_crypto_examples/${multicore_foldername}"
 mbedtls3x_psatest:
   section-type: application
-  belong_to: set.board.${board}
   dependency:
   - middleware.mbedtls3x.crypto
   - middleware.psatest.ns
@@ -331,7 +331,6 @@ mbedtls3x_psatest:
           project_path: "${board}/mbedtls3x_examples/mbedtls3x_psatest/${multicore_foldername}"
 mbedtls3x_testsuite:
   section-type: application
-  belong_to: set.board.${board}
   dependency:
   - middleware.mbedtls3x
   - middleware.mbedtls3x.tests
@@ -445,7 +444,6 @@ mbedtls3x_testsuite:
           project_path: "${board}/mbedtls3x_examples/mbedtls3x_testsuite/${multicore_foldername}"
 mbedtls3x_testsuite_rsa:
   section-type: application
-  belong_to: set.board.${board}
   dependency:
   - middleware.mbedtls3x
   - middleware.mbedtls3x.tests
@@ -550,7 +548,6 @@ mbedtls3x_testsuite_rsa:
           project_path: "${board}/mbedtls3x_examples/mbedtls3x_testsuite_rsa/${multicore_foldername}"
 mbedtls3x_testsuite_generate:
   section-type: application
-  belong_to: set.board.${board}
   dependency:
   - middleware.mbedtls3x
   - middleware.mbedtls3x.tests
