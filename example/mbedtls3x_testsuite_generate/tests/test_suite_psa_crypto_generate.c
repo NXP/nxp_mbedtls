@@ -1,4 +1,4 @@
-#line 2 "suites/main_test.function"
+// # line 2 "suites/main_test.function"
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
@@ -37,7 +37,7 @@
 /*----------------------------------------------------------------------------*/
 /* Common helper code */
 
-#line 2 "suites/helpers.function"
+// # line 2 "suites/helpers.function"
 /*----------------------------------------------------------------------------*/
 /* Headers */
 
@@ -162,7 +162,7 @@ static int restore_output(FILE *out_stream, int dup_fd)
 #endif /* __unix__ || __APPLE__ __MACH__ */
 
 
-#line 43 "suites/main_test.function"
+// # line 43 "suites/main_test.function"
 
 
 /*----------------------------------------------------------------------------*/
@@ -172,7 +172,7 @@ static int restore_output(FILE *out_stream, int dup_fd)
 #define TEST_SUITE_ACTIVE
 
 #if defined(MBEDTLS_PSA_CRYPTO_C)
-#line 2 "tests/test_suite_psa_crypto_generate.function"
+// # line 2 "tests/test_suite_psa_crypto_generate.function"
 
 #include "psa/crypto.h"
 #include "test/psa_crypto_helpers.h"
@@ -187,7 +187,98 @@ static int restore_output(FILE *out_stream, int dup_fd)
 #define KEY_LOCATION		PSA_CRYPTO_ELE_S4XX_LOCATION
 #endif
 
-#line 24 "tests/test_suite_psa_crypto_generate.function"
+
+static int exercise_single_part_mac_key(mbedtls_svc_key_id_t key,
+                            psa_key_usage_t usage,
+                            psa_algorithm_t alg)
+{
+    psa_mac_operation_t operation = PSA_MAC_OPERATION_INIT;
+    const unsigned char input[] = "foo";
+    unsigned char mac[PSA_MAC_MAX_SIZE] = { 0 };
+    size_t mac_length = sizeof(mac);
+
+    /* Convert wildcard algorithm to exercisable algorithm */
+    if (alg & PSA_ALG_MAC_AT_LEAST_THIS_LENGTH_FLAG) {
+        alg = PSA_ALG_TRUNCATED_MAC(alg, PSA_MAC_TRUNCATED_LENGTH(alg));
+    }
+
+    if (usage & PSA_KEY_USAGE_SIGN_HASH) {
+        PSA_ASSERT(psa_mac_compute(key, alg,
+                                   input, sizeof(input),
+                                   mac, sizeof(mac),
+                                   &mac_length));
+    }
+
+    if (usage & PSA_KEY_USAGE_VERIFY_HASH) {
+        psa_status_t verify_status =
+            (usage & PSA_KEY_USAGE_SIGN_HASH ?
+             PSA_SUCCESS :
+             PSA_ERROR_INVALID_SIGNATURE);
+        TEST_EQUAL(psa_mac_verify(key, alg,
+                                  input, sizeof(input),
+								  mac, mac_length),
+				   verify_status);
+    }
+
+    return 1;
+
+exit:
+    psa_mac_abort(&operation);
+    return 0;
+}
+
+static int exercise_single_part_cipher_key(mbedtls_svc_key_id_t key,
+                               psa_key_usage_t usage,
+                               psa_algorithm_t alg)
+{
+    psa_cipher_operation_t operation = PSA_CIPHER_OPERATION_INIT;
+    unsigned char iv[PSA_CIPHER_IV_MAX_SIZE] = { 0 };
+    psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
+    const unsigned char plaintext[16] = "Hello, world...";
+    unsigned char ciphertext[32] = "(wabblewebblewibblewobblewubble)";
+    size_t ciphertext_length = sizeof(ciphertext);
+    unsigned char decrypted[sizeof(ciphertext)];
+    size_t part_length;
+
+    PSA_ASSERT(psa_get_key_attributes(key, &attributes));
+
+    if (usage & PSA_KEY_USAGE_ENCRYPT) {
+		PSA_ASSERT(psa_cipher_encrypt(key, alg, plaintext, sizeof(plaintext),
+                                    ciphertext, sizeof(ciphertext),
+                                    &ciphertext_length));
+    }
+
+    if (usage & PSA_KEY_USAGE_DECRYPT) {
+        psa_status_t status;
+        int maybe_invalid_padding = 0;
+        if (!(usage & PSA_KEY_USAGE_ENCRYPT)) {
+            maybe_invalid_padding = !PSA_ALG_IS_STREAM_CIPHER(alg);
+        }
+        status = psa_cipher_decrypt(key, alg,
+                                     ciphertext, ciphertext_length,
+                                     decrypted, sizeof(decrypted),
+                                     &part_length);
+
+        /* For a stream cipher, all inputs are valid. For a block cipher,
+         * if the input is some arbitrary data rather than an actual
+           ciphertext, a padding error is likely.  */
+        if (maybe_invalid_padding) {
+            TEST_ASSERT(status == PSA_SUCCESS ||
+                        status == PSA_ERROR_INVALID_PADDING);
+        } else {
+            PSA_ASSERT(status);
+        }
+    }
+
+    return 1;
+
+exit:
+    psa_cipher_abort(&operation);
+    psa_reset_key_attributes(&attributes);
+    return 0;
+}
+
+// # line 116 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_opaque_key(int key_type_arg, int bits_arg,
 				  int usage_arg, int alg_arg,
                   int expected_status_arg)
@@ -205,6 +296,7 @@ void test_generate_opaque_key(int key_type_arg, int bits_arg,
     psa_key_type_t key_type = key_type_arg;
     size_t bits = bits_arg;
     psa_status_t expected_status = expected_status_arg;
+	bool ok = false;
 
     PSA_ASSERT(psa_crypto_init());
 
@@ -227,9 +319,16 @@ void test_generate_opaque_key(int key_type_arg, int bits_arg,
         TEST_EQUAL(psa_get_key_bits(&attributes), bits);
 
         /* Do something with the key according to its type and permitted usage. */
-        if (!mbedtls_test_psa_exercise_key(key_id, usage, alg)) {
-            goto exit;
+		if (PSA_ALG_IS_MAC(alg)) {
+			ok = exercise_single_part_mac_key(key_id, usage, alg);
+		} else if (PSA_ALG_IS_CIPHER(alg)) {
+			ok = exercise_single_part_cipher_key(key_id, usage, alg);
+        } else {
+			ok = mbedtls_test_psa_exercise_key(key_id, usage, alg);
         }
+
+		if (!ok)
+			goto exit;
     }
 
 exit:
@@ -243,7 +342,7 @@ void test_generate_opaque_key_wrapper( void ** params )
 
     test_generate_opaque_key( *( (int *) params[0] ), *( (int *) params[1] ), *( (int *) params[2] ), *( (int *) params[3] ), *( (int *) params[4] ) );
 }
-#line 76 "tests/test_suite_psa_crypto_generate.function"
+// # line 176 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_persistent_key(int key_type_arg, int bits_arg,
 							 int usage_arg, int alg_arg,
 							 int owner_id_arg,
@@ -317,7 +416,7 @@ void test_generate_persistent_key_wrapper( void ** params )
 
     test_generate_persistent_key( *( (int *) params[0] ), *( (int *) params[1] ), *( (int *) params[2] ), *( (int *) params[3] ), *( (int *) params[4] ), *( (int *) params[5] ) );
 }
-#line 146 "tests/test_suite_psa_crypto_generate.function"
+// # line 246 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_key(int type_arg,
                   int bits_arg,
                   int usage_arg,
@@ -382,7 +481,7 @@ void test_generate_key_wrapper( void ** params )
 #if defined(PSA_WANT_ALG_RSA_PKCS1V15_CRYPT)
 #if defined(PSA_WANT_ALG_RSA_PKCS1V15_SIGN)
 #if defined(MBEDTLS_GENPRIME)
-#line 203 "tests/test_suite_psa_crypto_generate.function"
+// # line 303 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_key_rsa(int bits_arg,
                       data_t *e_arg,
                       int expected_status_arg)
@@ -502,7 +601,7 @@ void test_generate_key_rsa_wrapper( void ** params )
 #endif /* MBEDTLS_PSA_CRYPTO_C */
 
 
-#line 54 "suites/main_test.function"
+// # line 54 "suites/main_test.function"
 
 
 /*----------------------------------------------------------------------------*/
@@ -612,9 +711,94 @@ int get_expression(int32_t exp_id, int32_t *out_value)
                 *out_value = PSA_ERROR_INVALID_ARGUMENT;
             }
             break;
+        case 16:
+            {
+                *out_value = PSA_KEY_TYPE_ECC_KEY_PAIR(PSA_ECC_FAMILY_BRAINPOOL_P_R1);
+            }
+            break;
+        case 17:
+            {
+                *out_value = PSA_KEY_TYPE_ECC_PUBLIC_KEY(PSA_ECC_FAMILY_BRAINPOOL_P_R1);
+            }
+            break;
+        case 18:
+            {
+                *out_value = PSA_KEY_TYPE_AES;
+            }
+            break;
+        case 19:
+            {
+                *out_value = PSA_KEY_USAGE_ENCRYPT | PSA_KEY_USAGE_DECRYPT;
+            }
+            break;
+        case 20:
+            {
+                *out_value = PSA_ALG_CTR;
+            }
+            break;
+        case 21:
+            {
+                *out_value = PSA_WANT_ALG_ECB_NO_PADDING;
+            }
+            break;
+        case 22:
+            {
+                *out_value = PSA_ALG_CBC_NO_PADDING;
+            }
+            break;
+        case 23:
+            {
+                *out_value = PSA_ALG_GCM;
+            }
+            break;
+        case 24:
+            {
+                *out_value = PSA_ALG_CCM;
+            }
+            break;
+        case 25:
+            {
+                *out_value = PSA_KEY_TYPE_RSA_KEY_PAIR;
+            }
+            break;
+        case 26:
+            {
+                *out_value = PSA_ALG_RSA_PKCS1V15_SIGN_RAW;
+            }
+            break;
+        case 27:
+            {
+                *out_value = PSA_ALG_RSA_PSS(PSA_ALG_SHA_256);
+            }
+            break;
+        case 28:
+            {
+                *out_value = PSA_ALG_RSA_PSS_ANY_SALT(PSA_ALG_SHA_256);
+            }
+            break;
+        case 29:
+            {
+                *out_value = PSA_KEY_TYPE_HMAC;
+            }
+            break;
+        case 30:
+            {
+                *out_value =  PSA_KEY_USAGE_SIGN_HASH | PSA_KEY_USAGE_VERIFY_HASH;
+            }
+            break;
+        case 31:
+            {
+                *out_value = PSA_ALG_HMAC(PSA_ALG_SHA_256);
+            }
+            break;
+        case 32:
+            {
+                *out_value = PSA_ALG_HMAC(PSA_ALG_SHA_384);
+            }
+            break;
 #endif
 
-#line 82 "suites/main_test.function"
+// # line 82 "suites/main_test.function"
         default:
         {
             ret = KEY_VALUE_MAPPING_NOT_FOUND;
@@ -646,9 +830,117 @@ int dep_check(int dep_id)
     
 #if defined(MBEDTLS_PSA_CRYPTO_C)
 
+        case 0:
+            {
+#if defined(PSA_WANT_ALG_CTR)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 1:
+            {
+#if defined(PSA_WANT_KEY_TYPE_AES)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 2:
+            {
+#if defined(PSA_WANT_ALG_ECB)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 3:
+            {
+#if defined(PSA_WANT_ALG_CBC_NO_PADDING)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 4:
+            {
+#if defined(PSA_WANT_ALG_GCM)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 5:
+            {
+#if defined(PSA_WANT_ALG_RSA_PKCS1V15_SIGN)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 6:
+            {
+#if defined(PSA_WANT_KEY_TYPE_RSA_KEY_PAIR)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 7:
+            {
+#if defined(PSA_WANT_ALG_RSA_PSS)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 8:
+            {
+#if defined(PSA_WANT_ALG_SHA_256)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 9:
+            {
+#if defined(PSA_WANT_ALG_HMAC)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 10:
+            {
+#if defined(PSA_WANT_KEY_TYPE_HMAC)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 11:
+            {
+#if defined(PSA_WANT_ALG_SHA_384)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
 #endif
 
-#line 112 "suites/main_test.function"
+// # line 112 "suites/main_test.function"
         default:
             break;
     }
@@ -709,7 +1001,7 @@ TestWrapper_t test_funcs[] =
     NULL,
 #endif
 
-#line 145 "suites/main_test.function"
+// # line 145 "suites/main_test.function"
 };
 
 /**
@@ -779,7 +1071,7 @@ int check_test(size_t func_idx)
 }
 
 
-#line 2 "suites/host_test.function"
+// # line 2 "suites/host_test.function"
 
 /**
  * \brief       Verifies that string is in string parameter format i.e. "<str>"
@@ -1561,7 +1853,7 @@ int execute_tests(int argc, const char **argv)
 }
 
 
-#line 217 "suites/main_test.function"
+// # line 217 "suites/main_test.function"
 
 /*----------------------------------------------------------------------------*/
 /* Main Test code */
