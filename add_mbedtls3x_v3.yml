@@ -412,6 +412,7 @@ middleware.mbedtls3x.crypto:
     - source: library/psa_crypto_core_common.h
     - source: library/psa_crypto_driver_wrappers_no_static.c
     - source: library/psa_crypto_driver_wrappers_no_static.h
+    - source: library/psa_crypto_driver_wrappers.h
     - source: library/psa_crypto_ecp.c
     - source: library/psa_crypto_ecp.h
     - source: library/psa_crypto_ffdh.c
