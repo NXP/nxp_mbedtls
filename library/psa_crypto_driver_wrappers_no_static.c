@@ -50,6 +50,16 @@
 #include "cc3xx.h"
 
 #endif
+/* Headers for ele_s4xx opaque driver */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
+#include "../port/ele_s4xx/ele_s4xx.h"
+
+#endif
+/* Headers for ele_s4xx transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
+#include "../port/ele_s4xx/ele_s4xx.h"
+
+#endif
 
 /* END-driver headers */
 
@@ -63,6 +73,8 @@
 #define P256_TRANSPARENT_DRIVER_ID (4)
 #define TFM_BUILTIN_KEY_TRANSPARENT_DRIVER_ID (5)
 #define CC3XX_TRANSPARENT_DRIVER_ID (6)
+#define ELE_S4XX_OPAQUE_DRIVER_ID (7)
+#define ELE_S4XX_TRANSPARENT_DRIVER_ID (8)
 
 /* END-driver id */
 
@@ -222,6 +234,7 @@ psa_status_t psa_driver_wrapper_export_public_key(
 #endif
 
 
+
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
             /* Fell through, meaning no accelerator supports this operation */
             return( psa_export_public_key_internal( attributes,
@@ -237,6 +250,18 @@ psa_status_t psa_driver_wrapper_export_public_key(
 #if (defined(PSA_CRYPTO_DRIVER_TEST) )
         case 0x7fffff:
             return( mbedtls_test_opaque_export_public_key
+            (attributes,
+                            key_buffer,
+                            key_buffer_size,
+                            data,
+                            data_size,
+                            data_length
+        ));
+#endif
+
+#if (defined(PSA_CRYPTO_DRIVER_ELE_S4XX) )
+        case 0x000001:
+            return( ele_s4xx_opaque_export_public_key
             (attributes,
                             key_buffer,
                             key_buffer_size,
@@ -276,6 +301,7 @@ psa_status_t psa_driver_wrapper_get_builtin_key(
                             key_buffer_length
         ));
 #endif
+
 
 
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
