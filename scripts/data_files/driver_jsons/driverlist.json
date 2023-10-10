@@ -3,5 +3,7 @@
     "mbedtls_test_transparent_driver.json",
     "p256_transparent_driver.json",
     "tfm_builtinkeys_driver.json",
-    "cc3xx_transparent_driver.json"
+    "cc3xx_transparent_driver.json",
+    "ele_s4xx_opaque_driver.json",
+    "ele_s4xx_transparent_driver.json"
 ]
