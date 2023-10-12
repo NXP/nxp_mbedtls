@@ -27,9 +27,11 @@ Connect a serial cable from the debug UART port of the target board to the PC. S
 
 Running the demo
 ================
-  CALLOC(0): passed
-  (NULL)  CALLOC(1): passed
+  CALLOC(0,1): passed (NULL)
+  CALLOC(1,0): passed (NULL)
+  CALLOC(1): passed
   CALLOC(1 again): passed
+
   MD5 test #1: passed
   MD5 test #2: passed
   MD5 test #3: passed
@@ -37,33 +39,54 @@ Running the demo
   MD5 test #5: passed
   MD5 test #6: passed
   MD5 test #7: passed
+
   SHA-1 test #1: passed
   SHA-1 test #2: passed
   SHA-1 test #3: passed
+
   SHA-224 test #1: passed
   SHA-224 test #2: passed
   SHA-224 test #3: passed
+
   SHA-256 test #1: passed
   SHA-256 test #2: passed
   SHA-256 test #3: passed
+
   SHA-384 test #1: passed
   SHA-384 test #2: passed
   SHA-384 test #3: passed
+
   SHA-512 test #1: passed
   SHA-512 test #2: passed
   SHA-512 test #3: passed
+
+  SHA3-224 test 0 passed
+  SHA3-256 test 0 passed
+  SHA3-384 test 0 passed
+  SHA3-512 test 0 passed
+  SHA3-224 test 1 passed
+  SHA3-256 test 1 passed
+  SHA3-384 test 1 passed
+  SHA3-512 test 1 passed
+  SHA3-224 long KAT test passed
+  SHA3-256 long KAT test passed
+  SHA3-384 long KAT test passed
+  SHA3-512 long KAT test passed
+
   DES -ECB- 56 (dec): passed
   DES -ECB- 56 (enc): passed
   DES3-ECB-112 (dec): passed
   DES3-ECB-112 (enc): passed
   DES3-ECB-168 (dec): passed
   DES3-ECB-168 (enc): passed
+
   DES -CBC- 56 (dec): passed
   DES -CBC- 56 (enc): passed
   DES3-CBC-112 (dec): passed
   DES3-CBC-112 (enc): passed
   DES3-CBC-168 (dec): passed
   DES3-CBC-168 (enc): passed
+
   AES note: built-in implementation.
   AES-ECB-128 (dec): passed
   AES-ECB-128 (enc): passed
@@ -71,36 +94,42 @@ Running the demo
   AES-ECB-192 (enc): passed
   AES-ECB-256 (dec): passed
   AES-ECB-256 (enc): passed
+
   AES-CBC-128 (dec): passed
   AES-CBC-128 (enc): passed
   AES-CBC-192 (dec): passed
   AES-CBC-192 (enc): passed
   AES-CBC-256 (dec): passed
   AES-CBC-256 (enc): passed
+
   AES-CFB128-128 (dec): passed
   AES-CFB128-128 (enc): passed
   AES-CFB128-192 (dec): passed
   AES-CFB128-192 (enc): passed
   AES-CFB128-256 (dec): passed
   AES-CFB128-256 (enc): passed
+
   AES-OFB-128 (dec): passed
   AES-OFB-128 (enc): passed
   AES-OFB-192 (dec): passed
   AES-OFB-192 (enc): passed
   AES-OFB-256 (dec): passed
   AES-OFB-256 (enc): passed
+
   AES-CTR-128 (dec): passed
   AES-CTR-128 (enc): passed
   AES-CTR-128 (dec): passed
   AES-CTR-128 (enc): passed
   AES-CTR-128 (dec): passed
   AES-CTR-128 (enc): passed
+
   AES-XTS-128 (dec): passed
   AES-XTS-128 (enc): passed
   AES-XTS-128 (dec): passed
   AES-XTS-128 (enc): passed
   AES-XTS-128 (dec): passed
   AES-XTS-128 (enc): passed
+
   GCM note: built-in implementation.
   AES-GCM-128 #0 (enc): passed
   AES-GCM-128 #0 (dec): passed
@@ -174,9 +203,11 @@ Running the demo
   AES-GCM-256 #5 (dec): passed
   AES-GCM-256 #5 split (enc): passed
   AES-GCM-256 #5 split (dec): passed
+
   CCM-AES #1: passed
   CCM-AES #2: passed
   CCM-AES #3: passed
+
   AES 128 CMAC subkey #1: passed
   AES 128 CMAC subkey #2: passed
   AES 128 CMAC subkey #3: passed
@@ -220,29 +251,46 @@ Running the demo
   AES CMAC 128 PRF #0: passed
   AES CMAC 128 PRF #1: passed
   AES CMAC 128 PRF #2: passed
+
   Poly1305 test 0 passed
   Poly1305 test 1 passed
+
   Base64 encoding test: passed
   Base64 decoding test: passed
+
   MPI test #1 (mul_mpi): passed
   MPI test #2 (div_mpi): passed
   MPI test #3 (exp_mod): passed
   MPI test #4 (inv_mod): passed
   MPI test #5 (simple gcd): passed
+
   RSA key validation: passed
   PKCS#1 encryption : passed
   PKCS#1 decryption : passed
   PKCS#1 data sign  : passed
   PKCS#1 sig. verify: passed
+
   CTR_DRBG (PR = TRUE) : passed
   CTR_DRBG (PR = FALSE): passed
+
   HMAC_DRBG (PR = True) : passed
   HMAC_DRBG (PR = False) : passed
+
   ECP SW test #1 (constant op_count, base point G): passed
   ECP SW test #2 (constant op_count, other point): passed
   ECP Montgomery test (constant op_count): passed
+
   DHM parameter load: passed
+
   ENTROPY test: passed
-  PBKDF2 (SHA1): skipped
-  Executed 22 test suites
-  [ All tests PASS ] 
+
+  PBKDF2 (SHA1) #0: passed
+  PBKDF2 (SHA1) #1: passed
+  PBKDF2 (SHA1) #2: passed
+  PBKDF2 (SHA1) #3: passed
+  PBKDF2 (SHA1) #4: passed
+  PBKDF2 (SHA1) #5: passed
+
+  Executed 23 test suites
+
+  [ All tests PASS ]

@@ -254,11 +254,10 @@ TEST: 221 | DESCRIPTION: Testing crypto key derivation APIs | UT: psa_key_deriva
 [Check 4] Test psa_key_derivation_output_key - Greater Capacity than available
 [Check 5] Test psa_key_derivation_output_key - ECC Public key
 [Check 6] Test psa_key_derivation_output_key -  ECC keypair (wrong key length)
-        Failed at Checkpoint: 14
-        Actual: 0
-        Expected: 4294967161
+[Check 7] Test psa_key_derivation_output_key -  RSA Public Key[Check 8] Test psa_key_derivation_output_key -  RSA keypair
+[Check 9] Test psa_key_derivation_output_key - Invalid key size
 
-TEST RESULT: FAILED (Error Code=0x1)
+TEST RESULT: PASSED
 
 ******************************************
 
@@ -482,8 +481,9 @@ TEST RESULT: PASSED
 TEST: 243 | DESCRIPTION: Testing crypto key derivation APIs | UT: psa_raw_key_agreement
 [Info] Executing tests from non-secure
 [Check 1] Test psa_raw_key_agreement - Not a key agreement alg
+No test available for the selected crypto configuration
 
-TEST RESULT: PASSED
+TEST RESULT: SKIPPED (Skip Code=0x2d)
 
 ******************************************
 
@@ -711,8 +711,8 @@ TEST RESULT: PASSED
 TOTAL TESTS     : 61
 TOTAL PASSED    : 50
 TOTAL SIM ERROR : 0
-TOTAL FAILED    : 1
-TOTAL SKIPPED   : 10
+TOTAL FAILED    : 0
+TOTAL SKIPPED   : 11
 ******************************************
 
 Entering standby..
