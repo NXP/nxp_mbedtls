@@ -795,7 +795,7 @@ set.middleware.mbedtls3x:
     component_taxonomy:
       mbedtls3x:
         cclass: Security
-        cgroup: mbedTLS library v3.x
+        cgroup: MbedTLSv3 library
         cbundle: Mbed_TLS_3
         cbundle_version: "${mbedtls3x_version}"
   dependency:
