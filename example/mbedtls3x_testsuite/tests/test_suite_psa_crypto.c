@@ -1,4 +1,4 @@
-#if 1
+#if 0
 // #line 2 "suites/main_test.function"
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
