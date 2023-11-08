@@ -1,3 +1,4 @@
+#if 1
 // #line 2 "suites/main_test.function"
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
@@ -1498,3 +1499,4 @@ int main(int argc, const char *argv[])
     mbedtls_test_platform_teardown();
     return ret;
 }
+#endif

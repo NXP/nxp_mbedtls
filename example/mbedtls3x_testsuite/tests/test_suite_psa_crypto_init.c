@@ -1,5 +1,5 @@
 #if 0
-// #line 2 "suites/main_test.function"
+//#line 2 "suites/main_test.function"
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
@@ -38,17 +38,22 @@
 /*----------------------------------------------------------------------------*/
 /* Common helper code */
 
-// #line 2 "suites/helpers.function"
+//#line 2 "suites/helpers.function"
 /*----------------------------------------------------------------------------*/
 /* Headers */
 
+#include <test/arguments.h>
 #include <test/helpers.h>
 #include <test/macros.h>
 #include <test/random.h>
 #include <test/bignum_helpers.h>
 #include <test/psa_crypto_helpers.h>
 
+#include <errno.h>
+#include <limits.h>
+#include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #if defined(MBEDTLS_ERROR_C)
 #include "mbedtls/error.h"
@@ -57,23 +62,6 @@
 
 #if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C)
 #include "mbedtls/memory_buffer_alloc.h"
-#endif
-
-#ifdef _MSC_VER
-#include <basetsd.h>
-typedef UINT8 uint8_t;
-typedef INT32 int32_t;
-typedef UINT32 uint32_t;
-#define strncasecmp _strnicmp
-#define strcasecmp _stricmp
-#else
-#include <stdint.h>
-#endif
-
-#include <string.h>
-
-#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__)) || defined(__MINGW32__)
-#include <strings.h>
 #endif
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
@@ -163,7 +151,7 @@ static int restore_output(FILE *out_stream, int dup_fd)
 #endif /* __unix__ || __APPLE__ __MACH__ */
 
 
-// #line 43 "suites/main_test.function"
+//#line 43 "suites/main_test.function"
 
 
 /*----------------------------------------------------------------------------*/
@@ -173,7 +161,7 @@ static int restore_output(FILE *out_stream, int dup_fd)
 #define TEST_SUITE_ACTIVE
 
 #if defined(MBEDTLS_PSA_CRYPTO_C)
-// #line 2 "../../tests/suites/test_suite_psa_crypto_init.function"
+//#line 2 "../../tests/suites/test_suite_psa_crypto_init.function"
 #include <stdint.h>
 
 /* Some tests in this module configure entropy sources. */
@@ -249,11 +237,7 @@ static void custom_entropy_init(mbedtls_entropy_context *ctx)
 #endif
 
     ctx->accumulator_started = 0;
-#if defined(MBEDTLS_ENTROPY_SHA512_ACCUMULATOR)
-    mbedtls_sha512_init(&ctx->accumulator);
-#else
-    mbedtls_sha256_init(&ctx->accumulator);
-#endif
+    mbedtls_md_init(&ctx->accumulator);
 
 #if !defined(MBEDTLS_NO_PLATFORM_ENTROPY)
     if (custom_entropy_sources_mask & ENTROPY_SOURCE_PLATFORM) {
@@ -293,8 +277,8 @@ static void custom_entropy_init(mbedtls_entropy_context *ctx)
 
 #if defined(MBEDTLS_ENTROPY_NV_SEED)
 #if !defined(MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG)
-// #line 127 "../../tests/suites/test_suite_psa_crypto_init.function"
-void test_create_nv_seed()
+//#line 123 "../../tests/suites/test_suite_psa_crypto_init.function"
+void test_create_nv_seed(void)
 {
     static unsigned char seed[ENTROPY_MIN_NV_SEED_SIZE];
     TEST_ASSERT(mbedtls_nv_seed_write(seed, sizeof(seed)) >= 0);
@@ -310,7 +294,7 @@ void test_create_nv_seed_wrapper( void ** params )
 }
 #endif /* !MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG */
 #endif /* MBEDTLS_ENTROPY_NV_SEED */
-// #line 135 "../../tests/suites/test_suite_psa_crypto_init.function"
+//#line 131 "../../tests/suites/test_suite_psa_crypto_init.function"
 void test_init_deinit(int count)
 {
     psa_status_t status;
@@ -329,9 +313,9 @@ exit:
 void test_init_deinit_wrapper( void ** params )
 {
 
-    test_init_deinit( *( (int *) params[0] ) );
+    test_init_deinit( ((mbedtls_test_argument_t *) params[0])->sint );
 }
-// #line 150 "../../tests/suites/test_suite_psa_crypto_init.function"
+//#line 146 "../../tests/suites/test_suite_psa_crypto_init.function"
 void test_deinit_without_init(int count)
 {
     int i;
@@ -347,9 +331,9 @@ exit:
 void test_deinit_without_init_wrapper( void ** params )
 {
 
-    test_deinit_without_init( *( (int *) params[0] ) );
+    test_deinit_without_init( ((mbedtls_test_argument_t *) params[0])->sint );
 }
-// #line 162 "../../tests/suites/test_suite_psa_crypto_init.function"
+//#line 158 "../../tests/suites/test_suite_psa_crypto_init.function"
 void test_validate_module_init_generate_random(int count)
 {
     psa_status_t status;
@@ -369,9 +353,9 @@ exit:
 void test_validate_module_init_generate_random_wrapper( void ** params )
 {
 
-    test_validate_module_init_generate_random( *( (int *) params[0] ) );
+    test_validate_module_init_generate_random( ((mbedtls_test_argument_t *) params[0])->sint );
 }
-// #line 178 "../../tests/suites/test_suite_psa_crypto_init.function"
+//#line 174 "../../tests/suites/test_suite_psa_crypto_init.function"
 void test_validate_module_init_key_based(int count)
 {
     psa_status_t status;
@@ -396,10 +380,10 @@ exit:
 void test_validate_module_init_key_based_wrapper( void ** params )
 {
 
-    test_validate_module_init_key_based( *( (int *) params[0] ) );
+    test_validate_module_init_key_based( ((mbedtls_test_argument_t *) params[0])->sint );
 }
 #if !defined(MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG)
-// #line 199 "../../tests/suites/test_suite_psa_crypto_init.function"
+//#line 195 "../../tests/suites/test_suite_psa_crypto_init.function"
 void test_custom_entropy_sources(int sources_arg, int expected_init_status_arg)
 {
     psa_status_t expected_init_status = expected_init_status_arg;
@@ -423,11 +407,11 @@ exit:
 void test_custom_entropy_sources_wrapper( void ** params )
 {
 
-    test_custom_entropy_sources( *( (int *) params[0] ), *( (int *) params[1] ) );
+    test_custom_entropy_sources( ((mbedtls_test_argument_t *) params[0])->sint, ((mbedtls_test_argument_t *) params[1])->sint );
 }
 #endif /* !MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG */
 #if !defined(MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG)
-// #line 221 "../../tests/suites/test_suite_psa_crypto_init.function"
+//#line 217 "../../tests/suites/test_suite_psa_crypto_init.function"
 void test_fake_entropy_source(int threshold,
                          int amount1,
                          int amount2,
@@ -474,12 +458,12 @@ exit:
 void test_fake_entropy_source_wrapper( void ** params )
 {
 
-    test_fake_entropy_source( *( (int *) params[0] ), *( (int *) params[1] ), *( (int *) params[2] ), *( (int *) params[3] ), *( (int *) params[4] ), *( (int *) params[5] ) );
+    test_fake_entropy_source( ((mbedtls_test_argument_t *) params[0])->sint, ((mbedtls_test_argument_t *) params[1])->sint, ((mbedtls_test_argument_t *) params[2])->sint, ((mbedtls_test_argument_t *) params[3])->sint, ((mbedtls_test_argument_t *) params[4])->sint, ((mbedtls_test_argument_t *) params[5])->sint );
 }
 #endif /* !MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG */
 #if defined(MBEDTLS_ENTROPY_NV_SEED)
 #if !defined(MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG)
-// #line 266 "../../tests/suites/test_suite_psa_crypto_init.function"
+//#line 262 "../../tests/suites/test_suite_psa_crypto_init.function"
 void test_entropy_from_nv_seed(int seed_size_arg,
                           int expected_init_status_arg)
 {
@@ -488,7 +472,7 @@ void test_entropy_from_nv_seed(int seed_size_arg,
     uint8_t *seed = NULL;
     size_t seed_size = seed_size_arg;
 
-    ASSERT_ALLOC(seed, seed_size);
+    TEST_CALLOC(seed, seed_size);
     TEST_ASSERT(mbedtls_nv_seed_write(seed, seed_size) >= 0);
 
     custom_entropy_sources_mask = ENTROPY_SOURCE_NV_SEED;
@@ -510,14 +494,14 @@ exit:
 void test_entropy_from_nv_seed_wrapper( void ** params )
 {
 
-    test_entropy_from_nv_seed( *( (int *) params[0] ), *( (int *) params[1] ) );
+    test_entropy_from_nv_seed( ((mbedtls_test_argument_t *) params[0])->sint, ((mbedtls_test_argument_t *) params[1])->sint );
 }
 #endif /* !MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG */
 #endif /* MBEDTLS_ENTROPY_NV_SEED */
 #endif /* MBEDTLS_PSA_CRYPTO_C */
 
 
-// #line 54 "suites/main_test.function"
+//#line 54 "suites/main_test.function"
 
 
 /*----------------------------------------------------------------------------*/
@@ -536,7 +520,7 @@ void test_entropy_from_nv_seed_wrapper( void ** params )
  *
  * \return       0 if exp_id is found. 1 otherwise.
  */
-int get_expression(int32_t exp_id, int32_t *out_value)
+int get_expression(int32_t exp_id, intmax_t *out_value)
 {
     int ret = KEY_VALUE_MAPPING_FOUND;
 
@@ -569,27 +553,22 @@ int get_expression(int32_t exp_id, int32_t *out_value)
             break;
         case 4:
             {
-                *out_value = -1;
+                *out_value = ENTROPY_NONCE_LEN - 1;
             }
             break;
         case 5:
             {
-                *out_value = ENTROPY_NONCE_LEN - 1;
-            }
-            break;
-        case 6:
-            {
                 *out_value = MBEDTLS_ENTROPY_MIN_PLATFORM - 1;
             }
             break;
-        case 7:
+        case 6:
             {
                 *out_value = ENTROPY_MIN_NV_SEED_SIZE;
             }
             break;
 #endif
 
-// #line 82 "suites/main_test.function"
+//#line 82 "suites/main_test.function"
         default:
         {
             ret = KEY_VALUE_MAPPING_NOT_FOUND;
@@ -623,7 +602,7 @@ int dep_check(int dep_id)
 
         case 0:
             {
-#if (ENTROPY_NONCE_LEN!=0)
+#if !defined(MBEDTLS_PSA_INJECT_ENTROPY)
                 ret = DEPENDENCY_SUPPORTED;
 #else
                 ret = DEPENDENCY_NOT_SUPPORTED;
@@ -631,6 +610,15 @@ int dep_check(int dep_id)
             }
             break;
         case 1:
+            {
+#if (ENTROPY_NONCE_LEN!=0)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 2:
             {
 #if (ENTROPY_NONCE_LEN==0)
                 ret = DEPENDENCY_SUPPORTED;
@@ -641,7 +629,7 @@ int dep_check(int dep_id)
             break;
 #endif
 
-// #line 112 "suites/main_test.function"
+//#line 112 "suites/main_test.function"
         default:
             break;
     }
@@ -730,7 +718,7 @@ TestWrapper_t test_funcs[] =
     NULL,
 #endif
 
-// #line 145 "suites/main_test.function"
+//#line 145 "suites/main_test.function"
 };
 
 /**
@@ -800,7 +788,7 @@ int check_test(size_t func_idx)
 }
 
 
-// #line 2 "suites/host_test.function"
+//#line 2 "suites/host_test.function"
 
 /**
  * \brief       Verifies that string is in string parameter format i.e. "<str>"
@@ -834,7 +822,7 @@ int verify_string(char **str)
  *
  * \return      0 if success else 1
  */
-int verify_int(char *str, int32_t *value)
+int verify_int(char *str, intmax_t *value)
 {
     size_t i;
     int minus = 0;
@@ -982,24 +970,24 @@ static int parse_arguments(char *buf, size_t len, char **params,
         p++;
     }
 
-    /* Replace newlines, question marks and colons in strings */
+    /* Replace backslash escapes in strings */
     for (i = 0; i < cnt; i++) {
         p = params[i];
         q = params[i];
 
         while (*p != '\0') {
-            if (*p == '\\' && *(p + 1) == 'n') {
-                p += 2;
-                *(q++) = '\n';
-            } else if (*p == '\\' && *(p + 1) == ':') {
-                p += 2;
-                *(q++) = ':';
-            } else if (*p == '\\' && *(p + 1) == '?') {
-                p += 2;
-                *(q++) = '?';
-            } else {
-                *(q++) = *(p++);
+            if (*p == '\\') {
+                ++p;
+                switch (*p) {
+                    case 'n':
+                        *p = '\n';
+                        break;
+                    default:
+                        // Fall through to copying *p
+                        break;
+                }
             }
+            *(q++) = *(p++);
         }
         *q = '\0';
     }
@@ -1025,7 +1013,8 @@ static int parse_arguments(char *buf, size_t len, char **params,
  *
  * \return      0 for success else 1
  */
-static int convert_params(size_t cnt, char **params, int32_t *int_params_store)
+static int convert_params(size_t cnt, char **params,
+                          mbedtls_test_argument_t *int_params_store)
 {
     char **cur = params;
     char **out = params;
@@ -1043,7 +1032,7 @@ static int convert_params(size_t cnt, char **params, int32_t *int_params_store)
                 break;
             }
         } else if (strcmp(type, "int") == 0) {
-            if (verify_int(val, int_params_store) == 0) {
+            if (verify_int(val, &int_params_store->sint) == 0) {
                 *out++ = (char *) int_params_store++;
             } else {
                 ret = (DISPATCH_INVALID_TEST_DATA);
@@ -1057,7 +1046,7 @@ static int convert_params(size_t cnt, char **params, int32_t *int_params_store)
                     mbedtls_test_unhexify((unsigned char *) val, strlen(val),
                                           val, &len) == 0);
 
-                *int_params_store = len;
+                int_params_store->len = len;
                 *out++ = val;
                 *out++ = (char *) (int_params_store++);
             } else {
@@ -1066,7 +1055,7 @@ static int convert_params(size_t cnt, char **params, int32_t *int_params_store)
             }
         } else if (strcmp(type, "exp") == 0) {
             int exp_id = strtol(val, NULL, 10);
-            if (get_expression(exp_id, int_params_store) == 0) {
+            if (get_expression(exp_id, &int_params_store->sint) == 0) {
                 *out++ = (char *) int_params_store++;
             } else {
                 ret = (DISPATCH_INVALID_TEST_DATA);
@@ -1287,7 +1276,7 @@ int execute_tests(int argc, const char **argv)
     char buf[5000];
     char *params[50];
     /* Store for processed integer params. */
-    int32_t int_params[50];
+    mbedtls_test_argument_t int_params[50];
     void *pointer;
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
     int stdout_fd = -1;
@@ -1582,7 +1571,7 @@ int execute_tests(int argc, const char **argv)
 }
 
 
-// #line 217 "suites/main_test.function"
+//#line 217 "suites/main_test.function"
 
 /*----------------------------------------------------------------------------*/
 /* Main Test code */
@@ -1608,7 +1597,7 @@ int main(int argc, const char *argv[])
 
     int ret = mbedtls_test_platform_setup();
     if (ret != 0) {
-        mbedtls_printf(stderr,
+        mbedtls_fprintf(stderr,
                         "FATAL: Failed to initialize platform - error %d\n",
                         ret);
         return -1;
