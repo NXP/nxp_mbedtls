@@ -25,10 +25,9 @@
  *  limitations under the License.
  */
 
-#ifndef MCUX_MBEDTLS_PSATEST_CONFIG_H
-#define MCUX_MBEDTLS_PSATEST_CONFIG_H
+#ifndef MCUX_MBEDTLS_TESTSUITE_CONFIG_H
+#define MCUX_MBEDTLS_TESTSUITE_CONFIG_H
 
-   
 /**
  * This is an optional version symbol that enables compatibility handling of
  * config files.
@@ -238,7 +237,7 @@
 //#define MBEDTLS_PLATFORM_SNPRINTF_ALT
 //#define MBEDTLS_PLATFORM_VSNPRINTF_ALT
 //#define MBEDTLS_PLATFORM_NV_SEED_ALT
-#define MBEDTLS_PLATFORM_SETUP_TEARDOWN_ALT
+#define MBEDTLS_PLATFORM_SETUP_TEARDOWN_ALT	// NXP. Needed for testsuites
 
 /**
  * \def MBEDTLS_DEPRECATED_WARNING
@@ -733,6 +732,19 @@
 #define MBEDTLS_PK_PARSE_EC_EXTENDED
 
 /**
+ * \def MBEDTLS_PK_PARSE_EC_COMPRESSED
+ *
+ * Enable the support for parsing public keys of type Short Weierstrass
+ * (MBEDTLS_ECP_DP_SECP_XXX and MBEDTLS_ECP_DP_BP_XXX) which are using the
+ * compressed point format. This parsing is done through ECP module's functions.
+ *
+ * \note As explained in the description of MBEDTLS_ECP_PF_COMPRESSED (in ecp.h)
+ *       the only unsupported curves are MBEDTLS_ECP_DP_SECP224R1 and
+ *       MBEDTLS_ECP_DP_SECP224K1.
+ */
+#define MBEDTLS_PK_PARSE_EC_COMPRESSED
+
+/**
  * \def MBEDTLS_ERROR_STRERROR_DUMMY
  *
  * Enable a dummy error function to make use of mbedtls_strerror() in
@@ -799,7 +811,6 @@
  *
  * This option is only useful if both MBEDTLS_SHA256_C and
  * MBEDTLS_SHA512_C are defined. Otherwise the available hash module is used.
-
  */
 //#define MBEDTLS_ENTROPY_FORCE_SHA256
 
@@ -939,18 +950,6 @@
  */
 //#define MBEDTLS_PSA_CRYPTO_CLIENT
 
-/** \def MBEDTLS_PSA_CRYPTO_DRIVERS
- *
- * Enable support for the experimental PSA crypto driver interface.
- *
- * Requires: MBEDTLS_PSA_CRYPTO_C
- *
- * \warning This interface is experimental. We intend to maintain backward
- *          compatibility with application code that relies on drivers,
- *          but the driver interfaces may change without notice.
- */
-#define MBEDTLS_PSA_CRYPTO_DRIVERS				// NXP
-
 /** \def MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG
  *
  * Make the PSA Crypto module use an external random generator provided
@@ -988,8 +987,6 @@
  * \note This option is experimental and may be removed without notice.
  */
 //#define MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG
-
-#define MBEDTLS_PSA_CRYPTO_STORAGE_C				// NXP
 
 /**
  * \def MBEDTLS_PSA_CRYPTO_SPM
@@ -1106,7 +1103,7 @@
  *
  * Uncomment this to enable internal use of PSA Crypto and new associated APIs.
  */
-//#define MBEDTLS_USE_PSA_CRYPTO
+#define MBEDTLS_USE_PSA_CRYPTO
 
 /**
  * \def MBEDTLS_PSA_CRYPTO_CONFIG
@@ -1167,6 +1164,30 @@
  * This modules adds support for the AES-NI instructions on x86-64
  */
 #define MBEDTLS_AESNI_C
+
+/**
+ * \def MBEDTLS_AESCE_C
+ *
+ * Enable AES cryptographic extension support on 64-bit Arm.
+ *
+ * Module:  library/aesce.c
+ * Caller:  library/aes.c
+ *
+ * Requires: MBEDTLS_AES_C
+ *
+ * \warning Runtime detection only works on Linux. For non-Linux operating
+ *          system, Armv8-A Cryptographic Extensions must be supported by
+ *          the CPU when this option is enabled.
+ *
+ * \note    Minimum compiler versions for this feature are Clang 4.0,
+ *          armclang 6.6, GCC 6.0 or MSVC 2019 version 16.11.2.
+ *
+ * \note \c CFLAGS must be set to a minimum of \c -march=armv8-a+crypto for
+ * armclang <= 6.9
+ *
+ * This module adds support for the AES Armv8-A Cryptographic Extensions on Aarch64 systems.
+ */
+#define MBEDTLS_AESCE_C
 
 /**
  * \def MBEDTLS_AES_C
@@ -2066,7 +2087,7 @@
  *           either MBEDTLS_PSA_ITS_FILE_C or a native implementation of
  *           the PSA ITS interface
  */
-#define MBEDTLS_PSA_CRYPTO_STORAGE_C				// NXP
+// #define MBEDTLS_PSA_CRYPTO_STORAGE_C				// NXP
 
 /**
  * \def MBEDTLS_PSA_ITS_FILE_C
@@ -2248,6 +2269,17 @@
  * This module adds support for SHA-512.
  */
 #define MBEDTLS_SHA512_C
+
+/**
+ * \def MBEDTLS_SHA3_C
+ *
+ * Enable the SHA3 cryptographic hash algorithm.
+ *
+ * Module:  library/sha3.c
+ *
+ * This module adds support for SHA3.
+ */
+#define MBEDTLS_SHA3_C
 
 /**
  * \def MBEDTLS_SHA512_USE_A64_CRYPTO_IF_PRESENT
@@ -2630,7 +2662,5 @@
 #if defined(MBEDTLS_USER_CONFIG_FILE)
 #include MBEDTLS_USER_CONFIG_FILE
 #endif
-
-#include "mbedtls/check_config.h"
 
 #endif /* MCUX_MBEDTLS_PSATEST_CONFIG_H */

@@ -1,4 +1,4 @@
-// # line 2 "suites/main_test.function"
+// #line 2 "suites/main_test.function"
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
@@ -37,17 +37,22 @@
 /*----------------------------------------------------------------------------*/
 /* Common helper code */
 
-// # line 2 "suites/helpers.function"
+// #line 2 "suites/helpers.function"
 /*----------------------------------------------------------------------------*/
 /* Headers */
 
+#include <test/arguments.h>
 #include <test/helpers.h>
 #include <test/macros.h>
 #include <test/random.h>
 #include <test/bignum_helpers.h>
 #include <test/psa_crypto_helpers.h>
 
+#include <errno.h>
+#include <limits.h>
+#include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #if defined(MBEDTLS_ERROR_C)
 #include "mbedtls/error.h"
@@ -56,23 +61,6 @@
 
 #if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C)
 #include "mbedtls/memory_buffer_alloc.h"
-#endif
-
-#ifdef _MSC_VER
-#include <basetsd.h>
-typedef UINT8 uint8_t;
-typedef INT32 int32_t;
-typedef UINT32 uint32_t;
-#define strncasecmp _strnicmp
-#define strcasecmp _stricmp
-#else
-#include <stdint.h>
-#endif
-
-#include <string.h>
-
-#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__)) || defined(__MINGW32__)
-#include <strings.h>
 #endif
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
@@ -162,7 +150,7 @@ static int restore_output(FILE *out_stream, int dup_fd)
 #endif /* __unix__ || __APPLE__ __MACH__ */
 
 
-// # line 43 "suites/main_test.function"
+// #line 43 "suites/main_test.function"
 
 
 /*----------------------------------------------------------------------------*/
@@ -172,7 +160,7 @@ static int restore_output(FILE *out_stream, int dup_fd)
 #define TEST_SUITE_ACTIVE
 
 #if defined(MBEDTLS_PSA_CRYPTO_C)
-// # line 2 "tests/test_suite_psa_crypto_generate.function"
+// #line 2 "tests/test_suite_psa_crypto_generate.function"
 
 #include "psa/crypto.h"
 #include "test/psa_crypto_helpers.h"
@@ -278,7 +266,7 @@ exit:
     return 0;
 }
 
-// # line 116 "tests/test_suite_psa_crypto_generate.function"
+// #line 116 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_opaque_key(int key_type_arg, int bits_arg,
 				  int usage_arg, int alg_arg,
                   int expected_status_arg)
@@ -340,9 +328,9 @@ exit:
 void test_generate_opaque_key_wrapper( void ** params )
 {
 
-    test_generate_opaque_key( *( (int *) params[0] ), *( (int *) params[1] ), *( (int *) params[2] ), *( (int *) params[3] ), *( (int *) params[4] ) );
+    test_generate_opaque_key( ((mbedtls_test_argument_t *) params[0])->sint, ((mbedtls_test_argument_t *) params[1])->sint, ((mbedtls_test_argument_t *) params[2])->sint, ((mbedtls_test_argument_t *) params[3])->sint, ((mbedtls_test_argument_t *) params[4])->sint );
 }
-// # line 176 "tests/test_suite_psa_crypto_generate.function"
+// #line 176 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_persistent_key(int key_type_arg, int bits_arg,
 							 int usage_arg, int alg_arg,
 							 int owner_id_arg,
@@ -414,9 +402,9 @@ exit:
 void test_generate_persistent_key_wrapper( void ** params )
 {
 
-    test_generate_persistent_key( *( (int *) params[0] ), *( (int *) params[1] ), *( (int *) params[2] ), *( (int *) params[3] ), *( (int *) params[4] ), *( (int *) params[5] ) );
+    test_generate_persistent_key( ((mbedtls_test_argument_t *) params[0])->sint, ((mbedtls_test_argument_t *) params[1])->sint, ((mbedtls_test_argument_t *) params[2])->sint, ((mbedtls_test_argument_t *) params[3])->sint, ((mbedtls_test_argument_t *) params[4])->sint, ((mbedtls_test_argument_t *) params[5])->sint );
 }
-// # line 246 "tests/test_suite_psa_crypto_generate.function"
+// #line 246 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_key(int type_arg,
                   int bits_arg,
                   int usage_arg,
@@ -475,13 +463,13 @@ exit:
 void test_generate_key_wrapper( void ** params )
 {
 
-    test_generate_key( *( (int *) params[0] ), *( (int *) params[1] ), *( (int *) params[2] ), *( (int *) params[3] ), *( (int *) params[4] ), *( (int *) params[5] ) );
+    test_generate_key( ((mbedtls_test_argument_t *) params[0])->sint, ((mbedtls_test_argument_t *) params[1])->sint, ((mbedtls_test_argument_t *) params[2])->sint, ((mbedtls_test_argument_t *) params[3])->sint, ((mbedtls_test_argument_t *) params[4])->sint, ((mbedtls_test_argument_t *) params[5])->sint );
 }
 #if defined(PSA_WANT_KEY_TYPE_RSA_KEY_PAIR)
 #if defined(PSA_WANT_ALG_RSA_PKCS1V15_CRYPT)
 #if defined(PSA_WANT_ALG_RSA_PKCS1V15_SIGN)
 #if defined(MBEDTLS_GENPRIME)
-// # line 303 "tests/test_suite_psa_crypto_generate.function"
+// #line 303 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_key_rsa(int bits_arg,
                       data_t *e_arg,
                       int expected_status_arg)
@@ -590,9 +578,9 @@ exit:
 
 void test_generate_key_rsa_wrapper( void ** params )
 {
-    data_t data1 = {(uint8_t *) params[1], *( (uint32_t *) params[2] )};
+    data_t data1 = {(uint8_t *) params[1], ((mbedtls_test_argument_t *) params[2])->len};
 
-    test_generate_key_rsa( *( (int *) params[0] ), &data1, *( (int *) params[3] ) );
+    test_generate_key_rsa( ((mbedtls_test_argument_t *) params[0])->sint, &data1, ((mbedtls_test_argument_t *) params[3])->sint );
 }
 #endif /* MBEDTLS_GENPRIME */
 #endif /* PSA_WANT_ALG_RSA_PKCS1V15_SIGN */
@@ -601,7 +589,7 @@ void test_generate_key_rsa_wrapper( void ** params )
 #endif /* MBEDTLS_PSA_CRYPTO_C */
 
 
-// # line 54 "suites/main_test.function"
+// #line 54 "suites/main_test.function"
 
 
 /*----------------------------------------------------------------------------*/
@@ -620,7 +608,7 @@ void test_generate_key_rsa_wrapper( void ** params )
  *
  * \return       0 if exp_id is found. 1 otherwise.
  */
-int get_expression(int32_t exp_id, int32_t *out_value)
+int get_expression(int32_t exp_id, intmax_t *out_value)
 {
     int ret = KEY_VALUE_MAPPING_FOUND;
 
@@ -738,7 +726,7 @@ int get_expression(int32_t exp_id, int32_t *out_value)
             break;
         case 21:
             {
-                *out_value = PSA_WANT_ALG_ECB_NO_PADDING;
+                *out_value = PSA_ALG_ECB_NO_PADDING;
             }
             break;
         case 22:
@@ -763,42 +751,47 @@ int get_expression(int32_t exp_id, int32_t *out_value)
             break;
         case 26:
             {
-                *out_value = PSA_ALG_RSA_PKCS1V15_SIGN_RAW;
+                *out_value = PSA_ALG_RSA_PKCS1V15_SIGN(PSA_ALG_SHA_256);
             }
             break;
         case 27:
             {
-                *out_value = PSA_ALG_RSA_PSS(PSA_ALG_SHA_256);
+                *out_value = PSA_ALG_RSA_PKCS1V15_SIGN(PSA_ALG_SHA_384);
             }
             break;
         case 28:
             {
-                *out_value = PSA_ALG_RSA_PSS_ANY_SALT(PSA_ALG_SHA_256);
+                *out_value = PSA_ALG_RSA_PSS(PSA_ALG_SHA_512);
             }
             break;
         case 29:
             {
-                *out_value = PSA_KEY_TYPE_HMAC;
+                *out_value = PSA_ALG_RSA_PSS(PSA_ALG_SHA_256);
             }
             break;
         case 30:
             {
-                *out_value =  PSA_KEY_USAGE_SIGN_HASH | PSA_KEY_USAGE_VERIFY_HASH;
+                *out_value = PSA_KEY_TYPE_HMAC;
             }
             break;
         case 31:
             {
-                *out_value = PSA_ALG_HMAC(PSA_ALG_SHA_256);
+                *out_value =  PSA_KEY_USAGE_SIGN_MESSAGE | PSA_KEY_USAGE_VERIFY_MESSAGE;
             }
             break;
         case 32:
+            {
+                *out_value = PSA_ALG_HMAC(PSA_ALG_SHA_256);
+            }
+            break;
+        case 33:
             {
                 *out_value = PSA_ALG_HMAC(PSA_ALG_SHA_384);
             }
             break;
 #endif
 
-// # line 82 "suites/main_test.function"
+// #line 82 "suites/main_test.function"
         default:
         {
             ret = KEY_VALUE_MAPPING_NOT_FOUND;
@@ -850,7 +843,7 @@ int dep_check(int dep_id)
             break;
         case 2:
             {
-#if defined(PSA_WANT_ALG_ECB)
+#if defined(PSA_WANT_ALG_ECB_NO_PADDING)
                 ret = DEPENDENCY_SUPPORTED;
 #else
                 ret = DEPENDENCY_NOT_SUPPORTED;
@@ -886,7 +879,7 @@ int dep_check(int dep_id)
             break;
         case 6:
             {
-#if defined(PSA_WANT_KEY_TYPE_RSA_KEY_PAIR)
+#if defined(PSA_WANT_KEY_TYPE_RSA_KEY_PAIR_GENERATE)
                 ret = DEPENDENCY_SUPPORTED;
 #else
                 ret = DEPENDENCY_NOT_SUPPORTED;
@@ -904,7 +897,7 @@ int dep_check(int dep_id)
             break;
         case 8:
             {
-#if defined(PSA_WANT_ALG_SHA_256)
+#if defined(PSA_WANT_ALG_SHA_512)
                 ret = DEPENDENCY_SUPPORTED;
 #else
                 ret = DEPENDENCY_NOT_SUPPORTED;
@@ -913,7 +906,7 @@ int dep_check(int dep_id)
             break;
         case 9:
             {
-#if defined(PSA_WANT_ALG_HMAC)
+#if defined(PSA_WANT_ALG_SHA_256)
                 ret = DEPENDENCY_SUPPORTED;
 #else
                 ret = DEPENDENCY_NOT_SUPPORTED;
@@ -922,7 +915,7 @@ int dep_check(int dep_id)
             break;
         case 10:
             {
-#if defined(PSA_WANT_KEY_TYPE_HMAC)
+#if defined(PSA_WANT_ALG_HMAC)
                 ret = DEPENDENCY_SUPPORTED;
 #else
                 ret = DEPENDENCY_NOT_SUPPORTED;
@@ -930,6 +923,15 @@ int dep_check(int dep_id)
             }
             break;
         case 11:
+            {
+#if defined(PSA_WANT_KEY_TYPE_HMAC)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 12:
             {
 #if defined(PSA_WANT_ALG_SHA_384)
                 ret = DEPENDENCY_SUPPORTED;
@@ -940,7 +942,7 @@ int dep_check(int dep_id)
             break;
 #endif
 
-// # line 112 "suites/main_test.function"
+// #line 112 "suites/main_test.function"
         default:
             break;
     }
@@ -1001,7 +1003,7 @@ TestWrapper_t test_funcs[] =
     NULL,
 #endif
 
-// # line 145 "suites/main_test.function"
+// #line 145 "suites/main_test.function"
 };
 
 /**
@@ -1071,7 +1073,7 @@ int check_test(size_t func_idx)
 }
 
 
-// # line 2 "suites/host_test.function"
+// #line 2 "suites/host_test.function"
 
 /**
  * \brief       Verifies that string is in string parameter format i.e. "<str>"
@@ -1105,7 +1107,7 @@ int verify_string(char **str)
  *
  * \return      0 if success else 1
  */
-int verify_int(char *str, int32_t *value)
+int verify_int(char *str, intmax_t *value)
 {
     size_t i;
     int minus = 0;
@@ -1253,24 +1255,24 @@ static int parse_arguments(char *buf, size_t len, char **params,
         p++;
     }
 
-    /* Replace newlines, question marks and colons in strings */
+    /* Replace backslash escapes in strings */
     for (i = 0; i < cnt; i++) {
         p = params[i];
         q = params[i];
 
         while (*p != '\0') {
-            if (*p == '\\' && *(p + 1) == 'n') {
-                p += 2;
-                *(q++) = '\n';
-            } else if (*p == '\\' && *(p + 1) == ':') {
-                p += 2;
-                *(q++) = ':';
-            } else if (*p == '\\' && *(p + 1) == '?') {
-                p += 2;
-                *(q++) = '?';
-            } else {
-                *(q++) = *(p++);
+            if (*p == '\\') {
+                ++p;
+                switch (*p) {
+                    case 'n':
+                        *p = '\n';
+                        break;
+                    default:
+                        // Fall through to copying *p
+                        break;
+                }
             }
+            *(q++) = *(p++);
         }
         *q = '\0';
     }
@@ -1296,7 +1298,8 @@ static int parse_arguments(char *buf, size_t len, char **params,
  *
  * \return      0 for success else 1
  */
-static int convert_params(size_t cnt, char **params, int32_t *int_params_store)
+static int convert_params(size_t cnt, char **params,
+                          mbedtls_test_argument_t *int_params_store)
 {
     char **cur = params;
     char **out = params;
@@ -1314,7 +1317,7 @@ static int convert_params(size_t cnt, char **params, int32_t *int_params_store)
                 break;
             }
         } else if (strcmp(type, "int") == 0) {
-            if (verify_int(val, int_params_store) == 0) {
+            if (verify_int(val, &int_params_store->sint) == 0) {
                 *out++ = (char *) int_params_store++;
             } else {
                 ret = (DISPATCH_INVALID_TEST_DATA);
@@ -1328,7 +1331,7 @@ static int convert_params(size_t cnt, char **params, int32_t *int_params_store)
                     mbedtls_test_unhexify((unsigned char *) val, strlen(val),
                                           val, &len) == 0);
 
-                *int_params_store = len;
+                int_params_store->len = len;
                 *out++ = val;
                 *out++ = (char *) (int_params_store++);
             } else {
@@ -1337,7 +1340,7 @@ static int convert_params(size_t cnt, char **params, int32_t *int_params_store)
             }
         } else if (strcmp(type, "exp") == 0) {
             int exp_id = strtol(val, NULL, 10);
-            if (get_expression(exp_id, int_params_store) == 0) {
+            if (get_expression(exp_id, &int_params_store->sint) == 0) {
                 *out++ = (char *) int_params_store++;
             } else {
                 ret = (DISPATCH_INVALID_TEST_DATA);
@@ -1558,7 +1561,7 @@ int execute_tests(int argc, const char **argv)
     char buf[5000];
     char *params[50];
     /* Store for processed integer params. */
-    int32_t int_params[50];
+    mbedtls_test_argument_t int_params[50];
     void *pointer;
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
     int stdout_fd = -1;
@@ -1853,7 +1856,7 @@ int execute_tests(int argc, const char **argv)
 }
 
 
-// # line 217 "suites/main_test.function"
+// #line 217 "suites/main_test.function"
 
 /*----------------------------------------------------------------------------*/
 /* Main Test code */

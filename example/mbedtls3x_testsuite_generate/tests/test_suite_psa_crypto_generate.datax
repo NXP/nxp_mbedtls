@@ -158,31 +158,31 @@ depends_on:5:6
 
 PSA generate key: RSA, 3072 bits, good, sign (PKCS#1 v1.5)
 depends_on:5:6
-0:exp:25:int:3072:exp:7:exp:26:exp:3
+0:exp:25:int:3072:exp:7:exp:27:exp:3
 
-PSA generate key: RSA, 4096 bits, good, sign (PSS SHA-256)
+PSA generate key: RSA, 4096 bits, good, sign (PSS SHA-512)
 depends_on:7:8:6
-0:exp:25:int:4096:exp:7:exp:27:exp:3
+0:exp:25:int:4096:exp:7:exp:28:exp:3
 
-PSA generate key: RSA, 2048 bits, good, sign (PSS-any-salt SHA-256)
-depends_on:7:8:6
-0:exp:25:int:2048:exp:7:exp:28:exp:3
+PSA generate key: RSA, 2048 bits, good, sign (PSS SHA-256)
+depends_on:7:9:6
+0:exp:25:int:2048:exp:7:exp:29:exp:3
 
 PSA generate key:  HMAC 224 bits , SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{HASH,MESSAGE}
-depends_on:9:8:10
-0:exp:29:int:224:exp:30:exp:31:exp:3
+depends_on:10:9:11
+0:exp:30:int:224:exp:31:exp:32:exp:3
 
 PSA generate key:  HMAC 256 bits, SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{HASH,MESSAGE}
-depends_on:9:8:10
-0:exp:29:int:256:exp:30:exp:31:exp:3
+depends_on:10:9:11
+0:exp:30:int:256:exp:31:exp:32:exp:3
 
 PSA generate key:  HMAC 384 bits, SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{HASH,MESSAGE}
-depends_on:9:11:10
-0:exp:29:int:384:exp:30:exp:32:exp:3
+depends_on:10:12:11
+0:exp:30:int:384:exp:31:exp:33:exp:3
 
 PSA generate key:  HMAC 512 bits, SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{HASH,MESSAGE}
-depends_on:9:11:10
-0:exp:29:int:512:exp:30:exp:32:exp:3
+depends_on:10:12:11
+0:exp:30:int:512:exp:31:exp:33:exp:3
 
 PSA generate persistent key: PSA ECC_KEY_PAIR(SECP_R1) 256-bit, PERSISTENT KEY (Key ID 1)
 1:exp:8:int:256:exp:9:exp:4:int:0:int:1
