@@ -1101,6 +1101,36 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
     return( status );
 }
 
+/* This is a temporary placeholder for destroy till full stateful destroy is added in upstream */
+static inline psa_status_t psa_driver_wrapper_destroy_key(
+    const psa_key_attributes_t *attributes,
+    uint8_t *key_buffer, size_t key_buffer_size)
+{
+    psa_status_t status = PSA_ERROR_CORRUPTION_DETECTED;
+    psa_key_location_t location =
+        PSA_KEY_LIFETIME_GET_LOCATION(attributes->core.lifetime);
+
+    switch( location )
+    {
+        /* Add cases for opaque driver here */
+#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)
+#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
+    case PSA_CRYPTO_ELE_S4XX_LOCATION:
+            status = ele_s4xx_opaque_destroy_key(
+                attributes, key_buffer, key_buffer_size);
+            break;
+#endif /* PSA_CRYPTO_DRIVER_TEST */
+#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
+
+        /* Drivers which may not have any state to change for destruction of key */
+        default:
+            status = PSA_SUCCESS;
+            break;
+    }
+
+    return( status );
+}
+
 static inline psa_status_t psa_driver_wrapper_import_key(
     const psa_key_attributes_t *attributes,
     const uint8_t *data,
