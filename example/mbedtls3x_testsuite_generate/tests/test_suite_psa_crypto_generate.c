@@ -1,4 +1,4 @@
-// #line 2 "suites/main_test.function"
+#line 2 "suites/main_test.function"
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
@@ -37,7 +37,7 @@
 /*----------------------------------------------------------------------------*/
 /* Common helper code */
 
-// #line 2 "suites/helpers.function"
+#line 2 "suites/helpers.function"
 /*----------------------------------------------------------------------------*/
 /* Headers */
 
@@ -150,7 +150,7 @@ static int restore_output(FILE *out_stream, int dup_fd)
 #endif /* __unix__ || __APPLE__ __MACH__ */
 
 
-// #line 43 "suites/main_test.function"
+#line 43 "suites/main_test.function"
 
 
 /*----------------------------------------------------------------------------*/
@@ -160,7 +160,7 @@ static int restore_output(FILE *out_stream, int dup_fd)
 #define TEST_SUITE_ACTIVE
 
 #if defined(MBEDTLS_PSA_CRYPTO_C)
-// #line 2 "tests/test_suite_psa_crypto_generate.function"
+#line 2 "tests/test_suite_psa_crypto_generate.function"
 
 #include "psa/crypto.h"
 #include "test/psa_crypto_helpers.h"
@@ -266,7 +266,7 @@ exit:
     return 0;
 }
 
-// #line 116 "tests/test_suite_psa_crypto_generate.function"
+#line 116 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_opaque_key(int key_type_arg, int bits_arg,
 				  int usage_arg, int alg_arg,
                   int expected_status_arg)
@@ -330,11 +330,13 @@ void test_generate_opaque_key_wrapper( void ** params )
 
     test_generate_opaque_key( ((mbedtls_test_argument_t *) params[0])->sint, ((mbedtls_test_argument_t *) params[1])->sint, ((mbedtls_test_argument_t *) params[2])->sint, ((mbedtls_test_argument_t *) params[3])->sint, ((mbedtls_test_argument_t *) params[4])->sint );
 }
-// #line 176 "tests/test_suite_psa_crypto_generate.function"
-void test_generate_persistent_key(int key_type_arg, int bits_arg,
+#line 176 "tests/test_suite_psa_crypto_generate.function"
+void test_generate_persistent_key(
+							 int key_type_arg, int bits_arg,
 							 int usage_arg, int alg_arg,
 							 int owner_id_arg,
-							 int id_arg)
+							 int id_arg,
+							 int expected_status_arg)
 {
     psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
     mbedtls_svc_key_id_t id = mbedtls_svc_key_id_make(owner_id_arg, id_arg);
@@ -346,34 +348,27 @@ void test_generate_persistent_key(int key_type_arg, int bits_arg,
     psa_key_usage_t expected_usage = mbedtls_test_update_key_usage_flags(usage_arg);
     mbedtls_svc_key_id_t key_id = MBEDTLS_SVC_KEY_ID_INIT;
 
-
     // key lifetime, usage flags, algorithm are irrelevant for this test
     psa_key_type_t key_type = key_type_arg;
     size_t bits = bits_arg;
-    psa_status_t status;
+    psa_status_t expected_status = expected_status_arg;
+	bool ok = false;
 
     PSA_ASSERT(psa_crypto_init());
 
-    psa_set_key_id(&attributes, id);
+	psa_set_key_id(&attributes, id);
     psa_set_key_usage_flags(&attributes, usage);
     psa_set_key_algorithm(&attributes, alg);
     psa_set_key_type(&attributes, key_type);
     psa_set_key_bits(&attributes, bits);
     psa_set_key_lifetime(&attributes, lifetime);
-    status = psa_generate_key(&attributes, &key_id);
-
-    // For persistent key same id should be returned back
-    if (status == PSA_SUCCESS) {
-      TEST_EQUAL(key_id, id);
-    }
-
-    // Use already passed id if key already exists
-    if (status == PSA_ERROR_ALREADY_EXISTS) {
-      key_id = id;
-    }
+    TEST_EQUAL(psa_generate_key(&attributes, &key_id),
+               expected_status);
 
     // Verify attributes of the created key on success
-    if (status == PSA_SUCCESS || status == PSA_ERROR_ALREADY_EXISTS ) {
+    if (expected_status == PSA_SUCCESS) {
+	    // For persistent key same id should be returned back
+		TEST_EQUAL(key_id, id);
         psa_reset_key_attributes(&attributes);
         PSA_ASSERT(psa_get_key_attributes(key_id, &attributes));
         TEST_EQUAL(psa_get_key_lifetime(&attributes), lifetime);
@@ -383,28 +378,30 @@ void test_generate_persistent_key(int key_type_arg, int bits_arg,
         TEST_EQUAL(psa_get_key_bits(&attributes), bits);
 
         /* Do something with the key according to its type and permitted usage. */
-        if (!mbedtls_test_psa_exercise_key(key_id, usage, alg)) {
-            goto exit;
+		if (PSA_ALG_IS_MAC(alg)) {
+			ok = exercise_single_part_mac_key(key_id, usage, alg);
+		} else if (PSA_ALG_IS_CIPHER(alg)) {
+			ok = exercise_single_part_cipher_key(key_id, usage, alg);
+        } else {
+			ok = mbedtls_test_psa_exercise_key(key_id, usage, alg);
         }
-    }
 
+		if (!ok)
+			goto exit;
+    }
 
 exit:
     psa_reset_key_attributes(&attributes);
-    // To test persistent keys, destroying it if we have tested that it already exists.
-    // So this test basically needs to be run twice
-    if (status == PSA_ERROR_ALREADY_EXISTS) {
-        psa_destroy_key(key_id);
-        PSA_DONE();
-    }
+    psa_destroy_key(key_id);
+    PSA_DONE();
 }
 
 void test_generate_persistent_key_wrapper( void ** params )
 {
 
-    test_generate_persistent_key( ((mbedtls_test_argument_t *) params[0])->sint, ((mbedtls_test_argument_t *) params[1])->sint, ((mbedtls_test_argument_t *) params[2])->sint, ((mbedtls_test_argument_t *) params[3])->sint, ((mbedtls_test_argument_t *) params[4])->sint, ((mbedtls_test_argument_t *) params[5])->sint );
+    test_generate_persistent_key( ((mbedtls_test_argument_t *) params[0])->sint, ((mbedtls_test_argument_t *) params[1])->sint, ((mbedtls_test_argument_t *) params[2])->sint, ((mbedtls_test_argument_t *) params[3])->sint, ((mbedtls_test_argument_t *) params[4])->sint, ((mbedtls_test_argument_t *) params[5])->sint, ((mbedtls_test_argument_t *) params[6])->sint );
 }
-// #line 246 "tests/test_suite_psa_crypto_generate.function"
+#line 243 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_key(int type_arg,
                   int bits_arg,
                   int usage_arg,
@@ -469,7 +466,7 @@ void test_generate_key_wrapper( void ** params )
 #if defined(PSA_WANT_ALG_RSA_PKCS1V15_CRYPT)
 #if defined(PSA_WANT_ALG_RSA_PKCS1V15_SIGN)
 #if defined(MBEDTLS_GENPRIME)
-// #line 303 "tests/test_suite_psa_crypto_generate.function"
+#line 300 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_key_rsa(int bits_arg,
                       data_t *e_arg,
                       int expected_status_arg)
@@ -589,7 +586,7 @@ void test_generate_key_rsa_wrapper( void ** params )
 #endif /* MBEDTLS_PSA_CRYPTO_C */
 
 
-// #line 54 "suites/main_test.function"
+#line 54 "suites/main_test.function"
 
 
 /*----------------------------------------------------------------------------*/
@@ -789,9 +786,14 @@ int get_expression(int32_t exp_id, intmax_t *out_value)
                 *out_value = PSA_ALG_HMAC(PSA_ALG_SHA_384);
             }
             break;
+        case 34:
+            {
+                *out_value =  PSA_SUCCESS;
+            }
+            break;
 #endif
 
-// #line 82 "suites/main_test.function"
+#line 82 "suites/main_test.function"
         default:
         {
             ret = KEY_VALUE_MAPPING_NOT_FOUND;
@@ -942,7 +944,7 @@ int dep_check(int dep_id)
             break;
 #endif
 
-// #line 112 "suites/main_test.function"
+#line 112 "suites/main_test.function"
         default:
             break;
     }
@@ -1003,7 +1005,7 @@ TestWrapper_t test_funcs[] =
     NULL,
 #endif
 
-// #line 145 "suites/main_test.function"
+#line 145 "suites/main_test.function"
 };
 
 /**
@@ -1073,7 +1075,7 @@ int check_test(size_t func_idx)
 }
 
 
-// #line 2 "suites/host_test.function"
+#line 2 "suites/host_test.function"
 
 /**
  * \brief       Verifies that string is in string parameter format i.e. "<str>"
@@ -1856,7 +1858,7 @@ int execute_tests(int argc, const char **argv)
 }
 
 
-// #line 217 "suites/main_test.function"
+#line 217 "suites/main_test.function"
 
 /*----------------------------------------------------------------------------*/
 /* Main Test code */

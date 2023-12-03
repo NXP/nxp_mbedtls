@@ -168,22 +168,43 @@ PSA generate key: RSA, 2048 bits, good, sign (PSS SHA-256)
 depends_on:7:9:6
 0:exp:25:int:2048:exp:7:exp:29:exp:3
 
-PSA generate key:  HMAC 224 bits , SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{HASH,MESSAGE}
+PSA generate key:  HMAC 224 bits , {SIGN,VERIFY}_{MESSAGE}
 depends_on:10:9:11
 0:exp:30:int:224:exp:31:exp:32:exp:3
 
-PSA generate key:  HMAC 256 bits, SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{HASH,MESSAGE}
+PSA generate key:  HMAC 256 bits, {SIGN,VERIFY}_{MESSAGE}
 depends_on:10:9:11
 0:exp:30:int:256:exp:31:exp:32:exp:3
 
-PSA generate key:  HMAC 384 bits, SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{HASH,MESSAGE}
+PSA generate key:  HMAC 384 bits, {SIGN,VERIFY}_{MESSAGE}
 depends_on:10:12:11
 0:exp:30:int:384:exp:31:exp:33:exp:3
 
-PSA generate key:  HMAC 512 bits, SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{HASH,MESSAGE}
+PSA generate key:  HMAC 512 bits, SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{MESSAGE}
 depends_on:10:12:11
 0:exp:30:int:512:exp:31:exp:33:exp:3
 
 PSA generate persistent key: PSA ECC_KEY_PAIR(SECP_R1) 256-bit, PERSISTENT KEY (Key ID 1)
-1:exp:8:int:256:exp:9:exp:4:int:0:int:1
+1:exp:8:int:256:exp:9:exp:4:int:0:int:1:exp:3
+
+PSA generate_persistent_key (key ID 10): PSA ECC_KEY_PAIR(SECP_R1) 521-bit, SIGN_HASH -> SIGN_HASH+MESSAGE
+1:exp:0:int:521:exp:1:exp:6:int:0:int:10:exp:3
+
+PSA generate persistent key (key ID 15): PSA ECC_KEY_PAIR(SECP_R1) 521-bit, SIGN_HASH -> SIGN_HASH+MESSAGE
+1:exp:0:int:521:exp:1:exp:6:int:0:int:15:exp:3
+
+PSA generate  persistent key (key ID 11):  HMAC 384 bits, {SIGN,VERIFY}_{MESSAGE}
+depends_on:10:12:11
+1:exp:30:int:384:exp:31:exp:33:int:0:int:11:exp:34
+
+PSA generate persistent key (key ID 12): PSA ECC_KEY_PAIR(BRAINPOOL_R1) 384-bit, SIGN+VERIFY_HASH -> {SIGN,VERIFY}_{HASH,MESSAGE}
+1:exp:16:int:384:exp:7:exp:5:int:0:int:12:exp:3
+
+PSA generate persistent key (key ID 0x3fffffff): AES, 256 bits, CTR
+depends_on:0:1
+1:exp:18:int:256:exp:19:exp:20:int:0:int:0x3fffffff:exp:3
+
+PSA generate persistent key (key ID invalid): AES, 256 bits, CTR
+depends_on:0:1
+1:exp:18:int:256:exp:19:exp:20:int:0:int:0x40000000:exp:15
 
