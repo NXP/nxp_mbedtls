@@ -1,4 +1,4 @@
-#line 2 "suites/main_test.function"
+// #line 2 "suites/main_test.function"
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
@@ -37,7 +37,7 @@
 /*----------------------------------------------------------------------------*/
 /* Common helper code */
 
-#line 2 "suites/helpers.function"
+// #line 2 "suites/helpers.function"
 /*----------------------------------------------------------------------------*/
 /* Headers */
 
@@ -150,7 +150,7 @@ static int restore_output(FILE *out_stream, int dup_fd)
 #endif /* __unix__ || __APPLE__ __MACH__ */
 
 
-#line 43 "suites/main_test.function"
+// #line 43 "suites/main_test.function"
 
 
 /*----------------------------------------------------------------------------*/
@@ -160,7 +160,7 @@ static int restore_output(FILE *out_stream, int dup_fd)
 #define TEST_SUITE_ACTIVE
 
 #if defined(MBEDTLS_PSA_CRYPTO_C)
-#line 2 "tests/test_suite_psa_crypto_generate.function"
+// #line 2 "tests/test_suite_psa_crypto_generate.function"
 
 #include "psa/crypto.h"
 #include "test/psa_crypto_helpers.h"
@@ -266,7 +266,7 @@ exit:
     return 0;
 }
 
-#line 116 "tests/test_suite_psa_crypto_generate.function"
+// #line 116 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_opaque_key(int key_type_arg, int bits_arg,
 				  int usage_arg, int alg_arg,
                   int expected_status_arg)
@@ -330,7 +330,7 @@ void test_generate_opaque_key_wrapper( void ** params )
 
     test_generate_opaque_key( ((mbedtls_test_argument_t *) params[0])->sint, ((mbedtls_test_argument_t *) params[1])->sint, ((mbedtls_test_argument_t *) params[2])->sint, ((mbedtls_test_argument_t *) params[3])->sint, ((mbedtls_test_argument_t *) params[4])->sint );
 }
-#line 176 "tests/test_suite_psa_crypto_generate.function"
+// #line 176 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_persistent_key(
 							 int key_type_arg, int bits_arg,
 							 int usage_arg, int alg_arg,
@@ -401,7 +401,7 @@ void test_generate_persistent_key_wrapper( void ** params )
 
     test_generate_persistent_key( ((mbedtls_test_argument_t *) params[0])->sint, ((mbedtls_test_argument_t *) params[1])->sint, ((mbedtls_test_argument_t *) params[2])->sint, ((mbedtls_test_argument_t *) params[3])->sint, ((mbedtls_test_argument_t *) params[4])->sint, ((mbedtls_test_argument_t *) params[5])->sint, ((mbedtls_test_argument_t *) params[6])->sint );
 }
-#line 243 "tests/test_suite_psa_crypto_generate.function"
+// #line 243 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_key(int type_arg,
                   int bits_arg,
                   int usage_arg,
@@ -466,7 +466,7 @@ void test_generate_key_wrapper( void ** params )
 #if defined(PSA_WANT_ALG_RSA_PKCS1V15_CRYPT)
 #if defined(PSA_WANT_ALG_RSA_PKCS1V15_SIGN)
 #if defined(MBEDTLS_GENPRIME)
-#line 300 "tests/test_suite_psa_crypto_generate.function"
+// #line 300 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_key_rsa(int bits_arg,
                       data_t *e_arg,
                       int expected_status_arg)
@@ -586,7 +586,7 @@ void test_generate_key_rsa_wrapper( void ** params )
 #endif /* MBEDTLS_PSA_CRYPTO_C */
 
 
-#line 54 "suites/main_test.function"
+// #line 54 "suites/main_test.function"
 
 
 /*----------------------------------------------------------------------------*/
@@ -793,7 +793,7 @@ int get_expression(int32_t exp_id, intmax_t *out_value)
             break;
 #endif
 
-#line 82 "suites/main_test.function"
+// #line 82 "suites/main_test.function"
         default:
         {
             ret = KEY_VALUE_MAPPING_NOT_FOUND;
@@ -944,7 +944,7 @@ int dep_check(int dep_id)
             break;
 #endif
 
-#line 112 "suites/main_test.function"
+// #line 112 "suites/main_test.function"
         default:
             break;
     }
@@ -1005,7 +1005,7 @@ TestWrapper_t test_funcs[] =
     NULL,
 #endif
 
-#line 145 "suites/main_test.function"
+// #line 145 "suites/main_test.function"
 };
 
 /**
@@ -1075,7 +1075,7 @@ int check_test(size_t func_idx)
 }
 
 
-#line 2 "suites/host_test.function"
+// #line 2 "suites/host_test.function"
 
 /**
  * \brief       Verifies that string is in string parameter format i.e. "<str>"
@@ -1858,7 +1858,7 @@ int execute_tests(int argc, const char **argv)
 }
 
 
-#line 217 "suites/main_test.function"
+// #line 217 "suites/main_test.function"
 
 /*----------------------------------------------------------------------------*/
 /* Main Test code */
