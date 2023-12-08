@@ -1063,6 +1063,15 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
                 }
 
 #endif /* MBEDTLS_PSA_P256M_DRIVER_ENABLED */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
+                status = ele_s4xx_transparent_generate_key(
+                    attributes, key_buffer, key_buffer_size,
+                    key_buffer_length );
+                /* Declared with fallback == true */
+                if( status != PSA_ERROR_NOT_SUPPORTED )
+                    break;
+#endif /* PSA_CRYPTO_DRIVER_ELE_S4XX */
+
             }
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
