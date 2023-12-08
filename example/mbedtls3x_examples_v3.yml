@@ -574,30 +574,30 @@ mbedtls3x_testsuite_generate:
           config:
             __common__:
               ad-flags:
-              - --predefine="-D__stack_size__=0x18000"
-              - --predefine="-D__heap_size__=0x4000
+              - --predefine="-D__stack_size__=0x4000"
+              - --predefine="-D__heap_size__=0x1c000
               cc-define:
                 MULADDC_CANNOT_USE_R7: 
         iar:
           config:
             __common__:
               ad-flags:
-              - __stack_size__=0x18000
-              - __heap_size__=0x4000
+              - __stack_size__=0x4000
+              - __heap_size__=0x1c000
               cx-flags:
               - "--diag_suppress Pe546,Pe188,Pe111,Pa084,Pe068,Pe177,Pe223"
         armgcc:
           config:
             __common__:
               ad-flags:
-              - "-Xlinker --defsym=__stack_size__=0x18000"
-              - "-Xlinker --defsym=__heap_size__=0x4000"
+              - "-Xlinker --defsym=__stack_size__=0x4000"
+              - "-Xlinker --defsym=__heap_size__=0x1c000"
         mcux:
           config:
             __common__:
               ad-flags:
-              - "-Xlinker --defsym=__stack_size__=0x18000"
-              - "-Xlinker --defsym=__heap_size__=0x4000"
+              - "-Xlinker --defsym=__stack_size__=0x4000"
+              - "-Xlinker --defsym=__heap_size__=0x1c000"
     modules:
       demo:
         required: true
