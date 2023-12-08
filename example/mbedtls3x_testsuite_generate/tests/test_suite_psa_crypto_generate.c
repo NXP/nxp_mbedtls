@@ -462,10 +462,9 @@ void test_generate_key_wrapper( void ** params )
 
     test_generate_key( ((mbedtls_test_argument_t *) params[0])->sint, ((mbedtls_test_argument_t *) params[1])->sint, ((mbedtls_test_argument_t *) params[2])->sint, ((mbedtls_test_argument_t *) params[3])->sint, ((mbedtls_test_argument_t *) params[4])->sint, ((mbedtls_test_argument_t *) params[5])->sint );
 }
-#if defined(PSA_WANT_KEY_TYPE_RSA_KEY_PAIR)
+#if defined(PSA_WANT_KEY_TYPE_RSA_KEY_PAIR_GENERATE)
 #if defined(PSA_WANT_ALG_RSA_PKCS1V15_CRYPT)
 #if defined(PSA_WANT_ALG_RSA_PKCS1V15_SIGN)
-#if defined(MBEDTLS_GENPRIME)
 // #line 300 "tests/test_suite_psa_crypto_generate.function"
 void test_generate_key_rsa(int bits_arg,
                       data_t *e_arg,
@@ -579,10 +578,9 @@ void test_generate_key_rsa_wrapper( void ** params )
 
     test_generate_key_rsa( ((mbedtls_test_argument_t *) params[0])->sint, &data1, ((mbedtls_test_argument_t *) params[3])->sint );
 }
-#endif /* MBEDTLS_GENPRIME */
 #endif /* PSA_WANT_ALG_RSA_PKCS1V15_SIGN */
 #endif /* PSA_WANT_ALG_RSA_PKCS1V15_CRYPT */
-#endif /* PSA_WANT_KEY_TYPE_RSA_KEY_PAIR */
+#endif /* PSA_WANT_KEY_TYPE_RSA_KEY_PAIR_GENERATE */
 #endif /* MBEDTLS_PSA_CRYPTO_C */
 
 
@@ -791,6 +789,46 @@ int get_expression(int32_t exp_id, intmax_t *out_value)
                 *out_value =  PSA_SUCCESS;
             }
             break;
+        case 35:
+            {
+                *out_value = PSA_KEY_TYPE_RSA_PUBLIC_KEY;
+            }
+            break;
+        case 36:
+            {
+                *out_value = PSA_KEY_USAGE_EXPORT;
+            }
+            break;
+        case 37:
+            {
+                *out_value = PSA_KEY_USAGE_EXPORT | PSA_KEY_USAGE_SIGN_HASH | PSA_KEY_USAGE_VERIFY_HASH;
+            }
+            break;
+        case 38:
+            {
+                *out_value = PSA_ALG_RSA_PKCS1V15_SIGN(PSA_ALG_SHA_512);
+            }
+            break;
+        case 39:
+            {
+                *out_value = PSA_ALG_RSA_PSS_ANY_SALT(PSA_ALG_SHA_256);
+            }
+            break;
+        case 40:
+            {
+                *out_value = PSA_KEY_USAGE_EXPORT | PSA_KEY_USAGE_ENCRYPT | PSA_KEY_USAGE_DECRYPT;
+            }
+            break;
+        case 41:
+            {
+                *out_value = PSA_ALG_RSA_PKCS1V15_CRYPT;
+            }
+            break;
+        case 42:
+            {
+                *out_value = PSA_ALG_RSA_OAEP(PSA_ALG_SHA_256);
+            }
+            break;
 #endif
 
 // #line 82 "suites/main_test.function"
@@ -942,6 +980,33 @@ int dep_check(int dep_id)
 #endif
             }
             break;
+        case 13:
+            {
+#if defined(PSA_WANT_KEY_TYPE_RSA_PUBLIC_KEY)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 14:
+            {
+#if defined(PSA_WANT_ALG_RSA_PKCS1V15_CRYPT)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
+        case 15:
+            {
+#if defined(PSA_WANT_ALG_RSA_OAEP)
+                ret = DEPENDENCY_SUPPORTED;
+#else
+                ret = DEPENDENCY_NOT_SUPPORTED;
+#endif
+            }
+            break;
 #endif
 
 // #line 112 "suites/main_test.function"
@@ -999,7 +1064,7 @@ TestWrapper_t test_funcs[] =
 #endif
 /* Function Id: 3 */
 
-#if defined(MBEDTLS_PSA_CRYPTO_C) && defined(PSA_WANT_KEY_TYPE_RSA_KEY_PAIR) && defined(PSA_WANT_ALG_RSA_PKCS1V15_CRYPT) && defined(PSA_WANT_ALG_RSA_PKCS1V15_SIGN) && defined(MBEDTLS_GENPRIME)
+#if defined(MBEDTLS_PSA_CRYPTO_C) && defined(PSA_WANT_KEY_TYPE_RSA_KEY_PAIR_GENERATE) && defined(PSA_WANT_ALG_RSA_PKCS1V15_CRYPT) && defined(PSA_WANT_ALG_RSA_PKCS1V15_SIGN)
     test_generate_key_rsa_wrapper,
 #else
     NULL,
