@@ -90,10 +90,14 @@ middleware.mbedtls3x.port.rng:
           - driver.trng
           - device:
             - MIMXRT685S
+            - RW610
+            - RW612
         - not:
             device:
               - LPC55S16
               - MIMXRT685S
+              - RW610
+              - RW612
 
 middleware.mbedtls3x.port.ele_s400:
   section-type: component
@@ -126,6 +130,32 @@ middleware.mbedtls3x.port.ele_s400:
     - middleware.mbedtls3x.port.config
     - driver.s3mu
     - component.ele_crypto
+
+middleware.mbedtls3x.port.tfm:
+  section-type: component
+  contents:
+    repo_base_path: middleware/mbedtls3x
+    project_base_path: mbedtls3x
+    cc-include:
+    - repo_relative_path: port/tfm
+    files:
+    - source: port/tfm/entropy_poll_alt.c
+    - source: library/psa_crypto_client.c
+  belong_to: set.middleware.mbedtls3x
+  section_info:
+    description: mbedTLS port library for use in TFM NS
+    type: middleware
+    version: "${mbedtls3x_version}"
+    user_visible: never
+    full_name: MbedTLS 3x MCUX SDK TFM port layer
+    taxonomy:
+      csub: tfm
+      belong_to: mbedtls3x
+    display_name: mbedtls3x_tfm
+  dependency:
+    allOf:
+    - middleware.mbedtls3x.port.config
+    - middleware.mbedtls3x.no_psa
 
 middleware.mbedtls3x.tests:
   section-type: component
@@ -232,7 +262,7 @@ middleware.mbedtls3x.crypto_storage_fatfs:
     - middleware.fatfs.sd
     - middleware.fatfs
 
-middleware.mbedtls3x.crypto:
+middleware.mbedtls3x.crypto.no_psa:
   section-type: component
   contents:
     repo_base_path: middleware/mbedtls3x
@@ -402,6 +432,39 @@ middleware.mbedtls3x.crypto:
     - source: library/platform.c
     - source: library/platform_util.c
     - source: library/poly1305.c
+    - source: library/ripemd160.c
+    - source: library/rsa.c
+    - source: library/rsa_alt_helpers.c
+    - source: library/rsa_alt_helpers.h
+    - source: library/sha1.c
+    - source: library/sha3.c
+    - source: library/sha256.c
+    - source: library/sha512.c
+    - source: library/threading.c
+    - source: library/timing.c
+    - source: library/version.c
+    - source: library/version_features.c
+  belong_to: set.middleware.mbedtls3x
+  section_info:
+    description: mbedTLS crypto library without PSA
+    type: middleware
+    version: "${mbedtls3x_version}"
+    user_visible: never
+    full_name: MbedTLS open source Crypto library without PSA
+    taxonomy:
+      csub: crypto_no_psa
+      belong_to: mbedtls3x
+    display_name: mbedtls3x_crypto_no_psa
+
+middleware.mbedtls3x.crypto:
+  section-type: component
+  contents:
+    repo_base_path: middleware/mbedtls3x
+    project_base_path: mbedtls3x
+    cc-include:
+    - repo_relative_path: include
+    - repo_relative_path: library
+    files:
     - source: library/psa_crypto.c
     - source: library/psa_crypto_aead.c
     - source: library/psa_crypto_aead.h
@@ -436,18 +499,6 @@ middleware.mbedtls3x.crypto:
     - source: library/psa_crypto_storage.h
     - source: library/psa_util.c
     - source: library/psa_util_internal.h
-    - source: library/ripemd160.c
-    - source: library/rsa.c
-    - source: library/rsa_alt_helpers.c
-    - source: library/rsa_alt_helpers.h
-    - source: library/sha1.c
-    - source: library/sha3.c
-    - source: library/sha256.c
-    - source: library/sha512.c
-    - source: library/threading.c
-    - source: library/timing.c
-    - source: library/version.c
-    - source: library/version_features.c
   belong_to: set.middleware.mbedtls3x
   section_info:
     description: mbedTLS crypto library
@@ -459,6 +510,9 @@ middleware.mbedtls3x.crypto:
       csub: crypto
       belong_to: mbedtls3x
     display_name: mbedtls3x_crypto
+  dependency:
+    allOf:
+    - middleware.mbedtls3x.crypto.no_psa
 
 middleware.mbedtls3x.x509:
   section-type: component
@@ -495,7 +549,7 @@ middleware.mbedtls3x.x509:
       belong_to: mbedtls3x
     display_name: mbedtls3x_x509
 
-middleware.mbedtls3x.ssl:
+middleware.mbedtls3x.ssl.no_psa:
   section-type: component
   contents:
     repo_base_path: middleware/mbedtls3x
@@ -538,6 +592,30 @@ middleware.mbedtls3x.ssl:
     - source: library/ssl_tls13_server.c
   belong_to: set.middleware.mbedtls3x
   section_info:
+    description: mbedTLS SSL library without PSA
+    type: middleware
+    version: "${mbedtls3x_version}"
+    user_visible: never
+    full_name: MbedTLS open source SSL library without PSA
+    taxonomy:
+      csub: ssl_no_psa
+      belong_to: mbedtls3x
+    display_name: mbedtls3x_ssl_no_psa
+  dependency:
+    allOf:
+    - middleware.mbedtls3x.crypto.no_psa
+    - middleware.mbedtls3x.x509
+
+middleware.mbedtls3x.ssl:
+  section-type: component
+  contents:
+    repo_base_path: middleware/mbedtls3x
+    project_base_path: mbedtls3x
+    cc-include:
+    - repo_relative_path: include
+    - repo_relative_path: library
+  belong_to: set.middleware.mbedtls3x
+  section_info:
     description: mbedTLS SSL library
     type: middleware
     version: "${mbedtls3x_version}"
@@ -549,7 +627,58 @@ middleware.mbedtls3x.ssl:
     display_name: mbedtls3x_ssl
   dependency:
     allOf:
+    - middleware.mbedtls3x.ssl.no_psa
     - middleware.mbedtls3x.crypto
+    - middleware.mbedtls3x.x509
+
+middleware.mbedtls3x.header_files_only:
+  section-type: component
+  contents:
+    repo_base_path: middleware/mbedtls3x
+    project_base_path: mbedtls3x
+    cc-include:
+    - repo_relative_path: include
+    - repo_relative_path: library
+    files:
+    - source: include/mbedtls/*.h
+    - source: include/psa/*.h
+    - source: library/*.h
+  belong_to: set.middleware.mbedtls3x
+  section_info:
+    description: mbedTLS SSL library header files
+    type: middleware
+    version: "${mbedtls3x_version}"
+    user_visible: never
+    full_name: MbedTLS open source SSL library header files
+    taxonomy:
+      csub: header_files_only
+      belong_to: mbedtls3x
+    display_name: mbedtls3x_header_files_only
+
+middleware.mbedtls3x.no_psa:
+  section-type: component
+  contents:
+    repo_base_path: middleware/mbedtls3x
+    project_base_path: mbedtls3x
+    cc-include:
+    - repo_relative_path: include
+    - repo_relative_path: library
+  belong_to: set.middleware.mbedtls3x
+  section_info:
+    description: mbedTLS library v3.x without PSA
+    type: middleware
+    version: "${mbedtls3x_version}"
+    user_visible: never
+    full_name: MbedTLS open source SSL library without PSA
+    taxonomy:
+      csub: mbedtls3x_no_psa
+      belong_to: mbedtls3x
+    display_name: mbedtls3x_no_psa
+  dependency:
+    allOf:
+    - middleware.mbedtls3x.template
+    - middleware.mbedtls3x.crypto.no_psa
+    - middleware.mbedtls3x.ssl.no_psa
     - middleware.mbedtls3x.x509
 
 middleware.mbedtls3x:
@@ -805,6 +934,8 @@ set.middleware.mbedtls3x:
       - evkmimxrt1180
       - evkmimxrt685
       - mimxrt685audevk
+      - rdrw612bga
+      - rdrw612qfn
 
 license.mbedtls3x_license:
   section-type: license
