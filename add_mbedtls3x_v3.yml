@@ -262,6 +262,32 @@ middleware.mbedtls3x.crypto_storage_fatfs:
     - middleware.fatfs.sd
     - middleware.fatfs
 
+middleware.mbedtls3x.crypto_storage_ram:
+  section-type: component
+  contents:
+    repo_base_path: middleware/mbedtls3x
+    project_base_path: mbedtls3x
+    cc-include:
+    - repo_relative_path: include
+    - repo_relative_path: library
+    files:
+    - source: port/psa_its/psa_its_ram.c
+    - source: library/psa_crypto_its.h
+  belong_to: set.middleware.mbedtls3x
+  section_info:
+    description: PSA ITS simulator over objects in RAM.
+    type: middleware
+    version: "${mbedtls3x_version}"
+    user_visible: always
+    full_name: MbedTLS open source Crypto library
+    taxonomy:
+      csub: crypto_storage_ram
+      belong_to: mbedtls3x
+    display_name: mbedtls3x_crypto_storage_ram
+  dependency:
+    allOf:
+    - middleware.mbedtls3x.crypto
+
 middleware.mbedtls3x.crypto.no_psa:
   section-type: component
   contents:
