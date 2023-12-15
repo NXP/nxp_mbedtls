@@ -59,6 +59,32 @@ middleware.mbedtls3x.port.config:
       belong_to: mbedtls3x
     display_name: mbedtls3x_config
 
+middleware.mbedtls3x.port.psa_crypto_config:
+  section-type: component
+  contents:
+    repo_base_path: middleware/mbedtls3x
+    project_base_path: mbedtls3x
+    cc-include:
+    - repo_relative_path: port
+    files:
+    - source: port/mcux_mbedtls_psa_crypto_config.h
+    - source: port/mcux_mbedtls_accelerator_config.h
+    - source: port/mcux_psa_defines.h
+    configuration:
+      cc-define:
+        MBEDTLS_CONFIG_FILE: '"mcux_mbedtls_psa_crypto_config.h"'
+  belong_to: set.middleware.mbedtls3x
+  section_info:
+    description: mbedTLS port library common files for MCUX
+    type: middleware
+    version: "${mbedtls3x_version}"
+    user_visible: never
+    full_name: MbedTLS MCUX SDK port psa_crypto only config layer
+    taxonomy:
+      csub: psa_crypto_config
+      belong_to: mbedtls3x
+    display_name: mbedtls3x_psa_crypto_config
+    
 middleware.mbedtls3x.port.rng:
   section-type: component
   contents:
@@ -342,7 +368,6 @@ middleware.mbedtls3x.crypto.no_psa:
     - source: include/mbedtls/md.h
     - source: include/mbedtls/md5.h
     - source: include/mbedtls/memory_buffer_alloc.h
-    - source: include/mbedtls/net_sockets.h
     - source: include/mbedtls/nist_kw.h
     - source: include/mbedtls/oid.h
     - source: include/mbedtls/pem.h
@@ -593,6 +618,7 @@ middleware.mbedtls3x.ssl.no_psa:
     - source: include/mbedtls/ssl_ciphersuites.h
     - source: include/mbedtls/ssl_cookie.h
     - source: include/mbedtls/ssl_ticket.h
+    - source: include/mbedtls/net_sockets.h
     - source: library/debug.c
     - source: library/mps_common.h
     - source: library/mps_error.h
