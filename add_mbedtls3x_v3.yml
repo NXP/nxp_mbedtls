@@ -15,6 +15,7 @@ middleware.mbedtls3x.template:
       target_file:
       - mcux_mbedtls_config.h
       - mcux_mbedtls_accelerator_config.h
+      - mcux_psa_defines.h
     files:
     - source: port/mcux_mbedtls_config.h
       attribute: config
@@ -45,6 +46,7 @@ middleware.mbedtls3x.port.config:
     files:
     - source: port/mcux_mbedtls_config.h
     - source: port/mcux_mbedtls_accelerator_config.h
+    - source: port/mcux_psa_defines.h
   belong_to: set.middleware.mbedtls3x
   section_info:
     description: mbedTLS port library common files for MCUX
