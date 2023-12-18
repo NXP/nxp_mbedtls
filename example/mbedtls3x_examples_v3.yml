@@ -650,3 +650,98 @@ mbedtls3x_testsuite_generate:
           project_path: "${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}"
         - source: boards/${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}/app.h
           project_path: "${board}/mbedtls3x_examples/mbedtls3x_testsuite_generate/${multicore_foldername}"
+psa_crypto_opaque_key_examples:
+  section-type: application
+  dependency:
+  - middleware.mbedtls3x.crypto
+  - middleware.fatfs
+  - middleware.fatfs.sd
+  contents:
+    document:
+      name: psa_crypto_opaque_key_examples
+      readme:
+      - boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/board.readme
+      category: mbedtls3x_examples
+      brief: The PSA ceypto examples showing how to generate an opaque key and use it.
+    project-root-path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}
+    configuration:
+      tools:
+        __common__:
+          config:
+            __common__:
+              cc-define:
+                MBEDTLS_CONFIG_FILE: '"mcux_mbedtls_psa_crypto_opaque_config.h"'
+        mdk:
+          config:
+            __common__:
+              ad-flags:
+              - --predefine="-D__stack_size__=0x4000"
+              - --predefine="-D__heap_size__=0x1c000
+              cc-define:
+                MULADDC_CANNOT_USE_R7: 
+        iar:
+          config:
+            __common__:
+              ad-flags:
+              - __stack_size__=0x4000
+              - __heap_size__=0x1c000
+              cx-flags:
+              - "--diag_suppress Pe546,Pe188,Pe111,Pa084,Pe068,Pe177,Pe223"
+        armgcc:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x4000"
+              - "-Xlinker --defsym=__heap_size__=0x1c000"
+        mcux:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x4000"
+              - "-Xlinker --defsym=__heap_size__=0x1c000"
+    modules:
+      demo:
+        required: true
+        cc-include:
+        - path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}
+          project_path: board
+        - path: middleware/mbedtls3x/example/psa_crypto_opaque_key_examples
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}
+          project_path: board
+        - path: middleware/mbedtls3x/port
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}
+          project_path: board
+        files:
+        - source: middleware/mbedtls3x/example/psa_crypto_opaque_key_examples/psa_crypto_opaque_key_examples.c 
+          merge-to-main: main
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}
+          project_path: source
+        - source: middleware/mbedtls3x/example/psa_crypto_opaque_key_examples/ffconf.h
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/pin_mux.c
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/pin_mux.h
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}
+          project_path: board
+        - source: middleware/mbedtls3x/example/psa_crypto_opaque_key_examples/mcux_mbedtls_psa_crypto_opaque_config.h
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/sdmmc_config.c
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/sdmmc_config.h
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}
+          project_path: board
+      pinset:
+        required: true
+        cc-include:
+        - path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}
+          project_path: "${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}"
+        files:
+        - source: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}/hardware_init.c
+          project_path: "${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}"
+        - source: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}/app.h
+          project_path: "${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}"
