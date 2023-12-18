@@ -538,9 +538,9 @@ void generate_cipher_keys(void)
                                TEST_KEY_LOCATION);
     PRINT_STATUS(ok);
 
-    printf("196 bit AES key with encrypt/decrypt algo CBC_NO_PADDING:");
+    printf("192 bit AES key with encrypt/decrypt algo CBC_NO_PADDING:");
     ok = generate_and_test_key(PSA_KEY_TYPE_AES,
-                               196,
+                               192,
                                PSA_KEY_USAGE_ENCRYPT | PSA_KEY_USAGE_DECRYPT,
                                PSA_ALG_CBC_NO_PADDING,
                                PSA_KEY_LIFETIME_VOLATILE,
