@@ -125,7 +125,6 @@ static int exercise_single_part_cipher(mbedtls_svc_key_id_t key,
                                        psa_algorithm_t alg)
 {
     psa_cipher_operation_t operation = PSA_CIPHER_OPERATION_INIT;
-    unsigned char iv[PSA_CIPHER_IV_MAX_SIZE] = { 0 };
     psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
     const unsigned char plaintext[16] = "Hello, world...";
     unsigned char ciphertext[32] = "(wabblewebblewibblewobblewubble)";
@@ -485,7 +484,6 @@ exit:
 /* For RSA adding very limited testcases as these are time consuming */
 void generate_rsa_keys(void)
 {
-    psa_status_t status;
     int ok = 0;
 
     printf("2048 bit RSA key with sign/verify algo RSA_PKCS1V15(SHA256) :");
@@ -510,7 +508,6 @@ void generate_rsa_keys(void)
 
 void generate_mac_keys(void)
 {
-    psa_status_t status;
     int ok = 0;
 
     printf("256 bit PERSISTENT HMAC key with sign/verify algo HMAC(SHA-256):");
@@ -526,7 +523,6 @@ void generate_mac_keys(void)
 
 void generate_cipher_keys(void)
 {
-    psa_status_t status;
     int ok = 0;
 
     printf("128 bit PERSISTENT AES key with encrypt/decrypt algo ECB_NO_PADDING:");
@@ -587,7 +583,6 @@ void generate_cipher_keys(void)
 
 void generate_ecc_keys(void)
 {
-    psa_status_t status;
     int ok = 0;
 
     printf("224 bit PERSISTENT ECC_KEY_PAIR(SECP_R1) with sign/verify algo ECDSA(SHA224):");
