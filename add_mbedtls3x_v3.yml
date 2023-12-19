@@ -47,6 +47,9 @@ middleware.mbedtls3x.port.config:
     - source: port/mcux_mbedtls_config.h
     - source: port/mcux_mbedtls_accelerator_config.h
     - source: port/mcux_psa_defines.h
+    configuration:
+      cc-define:
+        MBEDTLS_CONFIG_FILE: '"mcux_mbedtls_config.h"'
   belong_to: set.middleware.mbedtls3x
   section_info:
     description: mbedTLS port library common files for MCUX
@@ -126,38 +129,7 @@ middleware.mbedtls3x.port.rng:
               - MIMXRT685S
               - RW610
               - RW612
-
-middleware.mbedtls3x.port.ele_s400:
-  section-type: component
-  contents:
-    repo_base_path: middleware/mbedtls3x
-    project_base_path: mbedtls3x
-    cc-include:
-    - repo_relative_path: port/ele_s400
-    files:
-    - source: port/ele_s400/psa_ele_mbedtls.c
-    - source: port/ele_s400/psa_ele_mbedtls.h
-    - source: port/ele_s400/ele_fw.h
-    - source: port/ele_s400/psa_ele_entropy.c
-    configuration:
-      cc-define:
-        MBEDTLS_MCUX_ELE_S400_API:
-  belong_to: set.middleware.mbedtls3x
-  section_info:
-    description: mbedTLS port library for ELE S40x
-    type: middleware
-    version: "${mbedtls3x_version}"
-    user_visible: always
-    full_name: MbedTLS 3x MCUX SDK port layer via ELE S400
-    taxonomy:
-      csub: ele_s400
-      belong_to: mbedtls3x
-    display_name: mbedtls3x_ele_s400
-  dependency:
-    allOf:
-    - middleware.mbedtls3x.port.config
-    - driver.s3mu
-    - component.ele_crypto
+              - MIMXRT1189
 
 middleware.mbedtls3x.port.tfm:
   section-type: component
@@ -226,7 +198,7 @@ middleware.mbedtls3x.tests:
     taxonomy:
       csub: tests
       belong_to: mbedtls3x
-    display_name: mbedtls3x_ele_testsuite
+    display_name: mbedtls3x_tests
 
 middleware.mbedtls3x.crypto_storage_default:
   section-type: component
@@ -244,7 +216,7 @@ middleware.mbedtls3x.crypto_storage_default:
     description: PSA ITS simulator over stdio files.
     type: middleware
     version: "${mbedtls3x_version}"
-    user_visible: always
+    user_visible: never
     full_name: MbedTLS open source Crypto library
     taxonomy:
       csub: crypto_storage_default
@@ -275,7 +247,7 @@ middleware.mbedtls3x.crypto_storage_fatfs:
     description: PSA ITS simulator over fatfs files.
     type: middleware
     version: "${mbedtls3x_version}"
-    user_visible: always
+    user_visible: never
     full_name: MbedTLS open source Crypto library
     taxonomy:
       csub: crypto_storage_fatfs
@@ -308,7 +280,7 @@ middleware.mbedtls3x.crypto_storage_ram:
     description: PSA ITS simulator over objects in RAM.
     type: middleware
     version: "${mbedtls3x_version}"
-    user_visible: always
+    user_visible: never
     full_name: MbedTLS open source Crypto library
     taxonomy:
       csub: crypto_storage_ram
@@ -751,7 +723,7 @@ middleware.mbedtls3x:
     type: middleware
     version: "${mbedtls3x_version}"
     user_visible: always
-    full_name: MbedTLS open source SSL library
+    full_name: MbedTLS open source SSL library (Crypto, SSL/TLS, X.509)
     taxonomy:
       csub: mbedtls3x
       belong_to: mbedtls3x
