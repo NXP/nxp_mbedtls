@@ -269,3 +269,18 @@ psa_status_t psa_its_remove(psa_storage_uid_t uid)
 
     return PSA_SUCCESS;
 }
+
+/* Create the top level directory for NVM storage */
+int sd_its_fs_initialize(void)
+{
+    FRESULT error;
+
+    error = f_mkdir(_T(PSA_ITS_STORAGE_PREFIX));
+    if (error) {
+        if (error != FR_EXIST) {
+            return -1;
+        }
+    }
+
+    return 0;
+}

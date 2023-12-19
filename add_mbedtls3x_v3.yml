@@ -236,8 +236,10 @@ middleware.mbedtls3x.crypto_storage_fatfs:
     cc-include:
     - repo_relative_path: include
     - repo_relative_path: library
+    - repo_relative_path: port/psa_its
     files:
     - source: port/psa_its/psa_its_fatfs.c
+    - source: port/psa_its/psa_its_fatfs.h
     - source: library/psa_crypto_its.h
     configuration:
       cc-define:
