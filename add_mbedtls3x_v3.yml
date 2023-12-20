@@ -275,6 +275,9 @@ middleware.mbedtls3x.crypto_storage_ram:
     files:
     - source: port/psa_its/psa_its_ram.c
     - source: library/psa_crypto_its.h
+    configuration:
+      cc-define:
+        MBEDTLS_PSA_ITS_RAM:
   belong_to: set.middleware.mbedtls3x
   section_info:
     description: PSA ITS simulator over objects in RAM.
