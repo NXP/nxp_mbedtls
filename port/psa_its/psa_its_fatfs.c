@@ -128,8 +128,8 @@ psa_status_t psa_its_get_info(psa_storage_uid_t uid,
     FIL *stream = NULL;
     status = psa_its_read_file(uid, p_info, &stream);
     if (stream != NULL) {
-        free(stream);
         f_close(stream);
+        free(stream);
     }
     return status;
 }
