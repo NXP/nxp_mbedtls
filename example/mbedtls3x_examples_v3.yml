@@ -661,6 +661,7 @@ psa_crypto_opaque_key_examples:
       name: psa_crypto_opaque_key_examples
       readme:
       - boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/board.readme
+      - middleware/mbedtls3x/example/psa_crypto_opaque_key_examples/psa_crypto_opaque_key_examples.readme
       category: mbedtls3x_examples
       brief: The PSA crypto examples demonstrating how to generate an opaque key and use it.
     project-root-path: boards/${board}/mbedtls3x_examples/psa_crypto_opaque_key_examples/${multicore_foldername}
