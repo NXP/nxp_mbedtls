@@ -123,10 +123,16 @@ middleware.mbedtls3x.port.rng:
             - MIMXRT685S
             - RW610
             - RW612
+        - allOf:
+          - middleware.secure-subsystem.elemu
+          - driver.elemu
+          - device:
+            - KW45B41Z83
         - not:
             device:
               - LPC55S16
               - MIMXRT685S
+              - KW45B41Z83
               - RW610
               - RW612
               - MIMXRT1189
@@ -965,6 +971,7 @@ set.middleware.mbedtls3x:
     allOf:
     - board:
       - lpcxpresso55s16
+      - kw45b41zevk
       - evkmimxrt1180
       - evkmimxrt685
       - mimxrt685audevk
