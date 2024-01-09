@@ -140,7 +140,8 @@ middleware.mbedtls3x.port.tfm:
     - repo_relative_path: port/tfm
     files:
     - source: port/tfm/entropy_poll_alt.c
-    - source: library/psa_crypto_client.c
+    - source: port/tfm/psa_crypto.c
+    - source: port/tfm/psa_crypto_client.c
   belong_to: set.middleware.mbedtls3x
   section_info:
     description: mbedTLS port library for use in TFM NS
@@ -155,7 +156,9 @@ middleware.mbedtls3x.port.tfm:
   dependency:
     allOf:
     - middleware.mbedtls3x.port.config
-    - middleware.mbedtls3x.no_psa
+    - anyOf:
+        - middleware.mbedtls3x.header_files_only
+        - middleware.mbedtls3x.no_psa
 
 middleware.mbedtls3x.tests:
   section-type: component
@@ -462,6 +465,10 @@ middleware.mbedtls3x.crypto.no_psa:
     - source: library/platform.c
     - source: library/platform_util.c
     - source: library/poly1305.c
+    - source: library/psa_crypto_core.h
+    - source: library/psa_crypto_core_common.h
+    - source: library/psa_util_internal.h
+    - source: library/psa_util.c
     - source: library/ripemd160.c
     - source: library/rsa.c
     - source: library/rsa_alt_helpers.c
@@ -501,8 +508,6 @@ middleware.mbedtls3x.crypto:
     - source: library/psa_crypto_cipher.c
     - source: library/psa_crypto_cipher.h
     - source: library/psa_crypto_client.c
-    - source: library/psa_crypto_core.h
-    - source: library/psa_crypto_core_common.h
     - source: library/psa_crypto_driver_wrappers_no_static.c
     - source: library/psa_crypto_driver_wrappers_no_static.h
     - source: library/psa_crypto_driver_wrappers.h
@@ -527,8 +532,6 @@ middleware.mbedtls3x.crypto:
     - source: library/psa_crypto_slot_management.h
     - source: library/psa_crypto_storage.c
     - source: library/psa_crypto_storage.h
-    - source: library/psa_util.c
-    - source: library/psa_util_internal.h
   belong_to: set.middleware.mbedtls3x
   section_info:
     description: mbedTLS crypto library

@@ -1,0 +1,11 @@
+These are helper files to get mbedtls3x to properly link against the TF-M NS PSA API without conflicting or missing symbols.
+The next major version of mbedtls is set to be decoupled from PSA completely, which will make this obsolete.
+
+entropy_poll_alt.c:
+Provides an alternative implementation for mbedtls' entropy polling that calls psa_generate_random(2) on the TF-M interface.
+
+psa_crypto.c:
+Based on library/psa_crypto.c, modified to only include mbedtls_ecc_group_to_psa(3) and mbedtls_ecc_group_of_psa(3).
+
+psa_crypto_client.c:
+Based on library/psa_crypto_client.c, modified to only include psa_set_key_domain_parameters(4) and psa_get_key_domain_parameters(4).
