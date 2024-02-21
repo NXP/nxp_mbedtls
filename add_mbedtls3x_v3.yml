@@ -969,14 +969,13 @@ set.middleware.mbedtls3x:
         cbundle_version: "${mbedtls3x_version}"
   dependency:
     allOf:
-    - board:
-      - lpcxpresso55s16
-      - kw45b41zevk
-      - evkmimxrt1180
-      - evkmimxrt685
-      - mimxrt685audevk
-      - rdrw612bga
-      - rdrw612qfn
+    - device: 
+      - LPC55S16
+      - KW45B41Z83
+      - MIMXRT1189
+      - MIMXRT685S
+      - RW610
+      - RW612
 
 license.mbedtls3x_license:
   section-type: license
