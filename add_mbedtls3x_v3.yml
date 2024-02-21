@@ -976,6 +976,12 @@ set.middleware.mbedtls3x:
       - MIMXRT685S
       - RW610
       - RW612
+      - MCXN235
+      - MCXN236
+      - MCXN546
+      - MCXN547
+      - MCXN946
+      - MCXN947
 
 license.mbedtls3x_license:
   section-type: license
