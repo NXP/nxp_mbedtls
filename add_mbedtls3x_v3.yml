@@ -128,6 +128,9 @@ middleware.mbedtls3x.port.rng:
           - driver.elemu
           - device:
             - KW45B41Z83
+            - K32W1480
+            - MCXW716C
+            - MCXW716A
         - not:
             device:
               - LPC55S16
@@ -136,6 +139,9 @@ middleware.mbedtls3x.port.rng:
               - RW610
               - RW612
               - MIMXRT1189
+              - K32W1480
+              - MCXW716C
+              - MCXW716A
 
 middleware.mbedtls3x.port.tfm:
   section-type: component
@@ -982,6 +988,9 @@ set.middleware.mbedtls3x:
       - MCXN547
       - MCXN946
       - MCXN947
+      - K32W1480
+      - MCXW716C
+      - MCXW716A
 
 license.mbedtls3x_license:
   section-type: license
