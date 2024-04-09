@@ -45,6 +45,11 @@
 #include "tfm_builtin_key_loader.h"
 
 #endif
+/* Headers for cc3xx transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_CC3XX)
+#include "cc3xx.h"
+
+#endif
 
 /* END-driver headers */
 
@@ -57,6 +62,7 @@
 #define MBEDTLS_TEST_TRANSPARENT_DRIVER_ID (3)
 #define P256_TRANSPARENT_DRIVER_ID (4)
 #define TFM_BUILTIN_KEY_TRANSPARENT_DRIVER_ID (5)
+#define CC3XX_TRANSPARENT_DRIVER_ID (6)
 
 /* END-driver id */
 
@@ -200,6 +206,20 @@ psa_status_t psa_driver_wrapper_export_public_key(
                 return( status );
 #endif
 
+
+#if (defined(PSA_CRYPTO_DRIVER_CC3XX) )
+            status = cc3xx_transparent_export_public_key
+                (attributes,
+                                key_buffer,
+                                key_buffer_size,
+                                data,
+                                data_size,
+                                data_length
+            );
+
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif
 
 
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
