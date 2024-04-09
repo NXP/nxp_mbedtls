@@ -1,1 +1,7 @@
-["mbedtls_test_opaque_driver.json","mbedtls_test_transparent_driver.json","p256_transparent_driver.json","tfm_builtinkeys_driver.json"]
+[
+    "mbedtls_test_opaque_driver.json",
+    "mbedtls_test_transparent_driver.json",
+    "p256_transparent_driver.json",
+    "tfm_builtinkeys_driver.json",
+    "cc3xx_transparent_driver.json"
+]
