@@ -186,8 +186,12 @@ middleware.mbedtls3x.tests:
     - source: tests/src/certs.c
     - source: tests/src/helpers.c
     - source: tests/src/psa_crypto_helpers.c
+    - source: tests/src/psa_crypto_stubs.c
     - source: tests/src/psa_exercise_key.c
+    - source: tests/src/psa_memory_poisoning_wrappers.c
+    - source: tests/src/psa_test_wrappers.c
     - source: tests/src/random.c
+    - source: tests/src/test_memory.c
     - source: tests/src/threading_helpers.c
     - source: tests/src/fake_external_rng_for_test.c
     - source: tests/src/test_helpers/ssl_helpers.c
@@ -198,11 +202,15 @@ middleware.mbedtls3x.tests:
     - source: tests/include/test/fake_external_rng_for_test.h
     - source: tests/include/test/helpers.h
     - source: tests/include/test/macros.h
+    - source: tests/include/test/memory.h
     - source: tests/include/test/psa_crypto_helpers.h
     - source: tests/include/test/psa_exercise_key.h
     - source: tests/include/test/psa_helpers.h
+    - source: tests/include/test/psa_memory_poisoning_wrappers.h
+    - source: tests/include/test/psa_test_wrappers.h
     - source: tests/include/test/random.h
     - source: tests/include/test/ssl_helpers.h
+    - source: tests/include/test/threading_helpers.h
   belong_to: set.middleware.mbedtls3x
   section_info:
     description: mbedTLS test suite
@@ -323,6 +331,7 @@ middleware.mbedtls3x.crypto.no_psa:
     - source: include/mbedtls/asn1write.h
     - source: include/mbedtls/base64.h
     - source: include/mbedtls/bignum.h
+    - source: include/mbedtls/block_cipher.h
     - source: include/mbedtls/build_info.h
     - source: include/mbedtls/camellia.h
     - source: include/mbedtls/ccm.h
@@ -420,6 +429,8 @@ middleware.mbedtls3x.crypto.no_psa:
     - source: library/bignum_mod_raw.c
     - source: library/bignum_mod_raw.h
     - source: library/bignum_mod_raw_invasive.h
+    - source: library/block_cipher.c
+    - source: library/block_cipher_internal.h
     - source: library/bn_mul.h
     - source: library/camellia.c
     - source: library/ccm.c
@@ -435,6 +446,7 @@ middleware.mbedtls3x.crypto.no_psa:
     - source: library/constant_time_impl.h
     - source: library/constant_time_internal.h
     - source: library/ctr_drbg.c
+    - source: library/ctr.h
     - source: library/des.c
     - source: library/dhm.c
     - source: library/ecdh.c
@@ -466,6 +478,7 @@ middleware.mbedtls3x.crypto.no_psa:
     - source: library/padlock.h
     - source: library/pem.c
     - source: library/pk.c
+    - source: library/pk_ecc.c
     - source: library/pk_internal.h
     - source: library/pk_wrap.c
     - source: library/pk_wrap.h
@@ -485,6 +498,7 @@ middleware.mbedtls3x.crypto.no_psa:
     - source: library/rsa.c
     - source: library/rsa_alt_helpers.c
     - source: library/rsa_alt_helpers.h
+    - source: library/rsa_internal.h
     - source: library/sha1.c
     - source: library/sha3.c
     - source: library/sha256.c
@@ -581,6 +595,7 @@ middleware.mbedtls3x.x509:
     - source: library/x509write.c
     - source: library/x509write_crt.c
     - source: library/x509write_csr.c
+    - source: library/x509_internal.h
     - source: library/pkcs7.c
   belong_to: set.middleware.mbedtls3x
   section_info:
@@ -610,6 +625,7 @@ middleware.mbedtls3x.ssl.no_psa:
     - source: include/mbedtls/ssl_ticket.h
     - source: include/mbedtls/net_sockets.h
     - source: library/debug.c
+    - source: library/debug_internal.h
     - source: library/mps_common.h
     - source: library/mps_error.h
     - source: library/mps_reader.c
@@ -619,6 +635,7 @@ middleware.mbedtls3x.ssl.no_psa:
     - source: library/net_sockets.c
     - source: library/ssl_cache.c
     - source: library/ssl_ciphersuites.c
+    - source: library/ssl_ciphersuites_internal.h
     - source: library/ssl_client.c
     - source: library/ssl_client.h
     - source: library/ssl_cookie.c
@@ -919,7 +936,7 @@ middleware.mbedtls3x.unused_files:
     - source: tests/suites/*.*
       hidden: true
       exclude: true
-    - source: visualc/VS2013/*.*
+    - source: visualc/VS2017/*.*
       hidden: true
       exclude: true
     - source: "*.*"
