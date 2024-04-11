@@ -53,12 +53,12 @@
 #endif
 /* Headers for ele_s4xx opaque driver */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
-#include "../port/ele_s4xx/ele_s4xx.h"
+#include "ele_s4xx.h"
 
 #endif
 /* Headers for ele_s4xx transparent driver */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
-#include "../port/ele_s4xx/ele_s4xx.h"
+#include "ele_s4xx.h"
 
 #endif
 /* Headers for els_pkc opaque driver */
@@ -1276,7 +1276,7 @@ static inline psa_status_t psa_driver_wrapper_destroy_key(
 {
     psa_status_t status = PSA_ERROR_CORRUPTION_DETECTED;
     psa_key_location_t location =
-        PSA_KEY_LIFETIME_GET_LOCATION(attributes->core.lifetime);
+        PSA_KEY_LIFETIME_GET_LOCATION(psa_get_key_lifetime(attributes));
 
     switch( location )
     {
