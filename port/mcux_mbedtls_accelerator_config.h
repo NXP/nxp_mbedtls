@@ -36,7 +36,7 @@
     (defined(FSL_FEATURE_SOC_LPC_RNG_COUNT) && (FSL_FEATURE_SOC_LPC_RNG_COUNT > 0)) ||                     \
     (defined(FSL_FEATURE_EDGELOCK) && (FSL_FEATURE_EDGELOCK > 0)) ||                     \
     (defined(FSL_FEATURE_SOC_LPC_RNG1_COUNT) && (FSL_FEATURE_SOC_LPC_RNG1_COUNT > 0)) || (defined(ELS)) || \
-    (defined(MBEDTLS_MCUX_ELE_S400_API)) /* Need to find some suitable feature for ELE 400 Crypto availability */
+    (defined(FSL_FEATURE_SOC_ELE_S4XX)) /* Need to find some suitable feature for ELE 400 Crypto availability */
 
 #ifndef MBEDTLS_MCUX_ENTROPY
 #define MBEDTLS_MCUX_ENTROPY (1)
