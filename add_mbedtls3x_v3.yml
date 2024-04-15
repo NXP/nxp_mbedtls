@@ -2,7 +2,7 @@
 # yaml-language-server: $schema=../../bin/generator/sdk_generator/data/sdk_data_schema/v3/software_set_and_project_schema.json
 
 __variable__:
-  mbedtls3x_version: 3.5.0
+  mbedtls3x_version: 3.6.0
   mbedtls3x_dir: middleware/mbedtls3x
 
 middleware.mbedtls3x.template:
