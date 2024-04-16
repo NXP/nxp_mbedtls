@@ -153,25 +153,22 @@ middleware.mbedtls3x.port.tfm:
     - repo_relative_path: port/tfm
     files:
     - source: port/tfm/entropy_poll_alt.c
-    - source: port/tfm/psa_crypto.c
-    - source: port/tfm/psa_crypto_client.c
   belong_to: set.middleware.mbedtls3x
   section_info:
     description: mbedTLS port library for use in TFM NS
     type: middleware
     version: "${mbedtls3x_version}"
     user_visible: never
-    full_name: MbedTLS 3x MCUX SDK TFM port layer
+    full_name: MbedTLS 3x MCUX SDK TFM NS port layer
     taxonomy:
       csub: tfm
       belong_to: mbedtls3x
     display_name: mbedtls3x_tfm
   dependency:
     allOf:
+    - middleware.tfm.ns.interface
     - middleware.mbedtls3x.port.config
-    - anyOf:
-        - middleware.mbedtls3x.header_files_only
-        - middleware.mbedtls3x.no_psa
+    - middleware.mbedtls3x.no_psa
 
 middleware.mbedtls3x.tests:
   section-type: component
@@ -491,8 +488,24 @@ middleware.mbedtls3x.crypto.no_psa:
     - source: library/platform.c
     - source: library/platform_util.c
     - source: library/poly1305.c
+    - source: library/psa_crypto_aead.h
+    - source: library/psa_crypto_cipher.h
     - source: library/psa_crypto_core.h
     - source: library/psa_crypto_core_common.h
+    - source: library/psa_crypto_driver_wrappers_no_static.h
+    - source: library/psa_crypto_driver_wrappers.h
+    - source: library/psa_crypto_ecp.h
+    - source: library/psa_crypto_ffdh.h
+    - source: library/psa_crypto_hash.h
+    - source: library/psa_crypto_invasive.h
+    - source: library/psa_crypto_its.h
+    - source: library/psa_crypto_mac.h
+    - source: library/psa_crypto_pake.h
+    - source: library/psa_crypto_random_impl.h
+    - source: library/psa_crypto_rsa.h
+    - source: library/psa_crypto_se.h
+    - source: library/psa_crypto_slot_management.h
+    - source: library/psa_crypto_storage.h
     - source: library/psa_util_internal.h
     - source: library/psa_util.c
     - source: library/ripemd160.c
@@ -531,34 +544,18 @@ middleware.mbedtls3x.crypto:
     files:
     - source: library/psa_crypto.c
     - source: library/psa_crypto_aead.c
-    - source: library/psa_crypto_aead.h
     - source: library/psa_crypto_cipher.c
-    - source: library/psa_crypto_cipher.h
     - source: library/psa_crypto_client.c
     - source: library/psa_crypto_driver_wrappers_no_static.c
-    - source: library/psa_crypto_driver_wrappers_no_static.h
-    - source: library/psa_crypto_driver_wrappers.h
     - source: library/psa_crypto_ecp.c
-    - source: library/psa_crypto_ecp.h
     - source: library/psa_crypto_ffdh.c
-    - source: library/psa_crypto_ffdh.h
     - source: library/psa_crypto_hash.c
-    - source: library/psa_crypto_hash.h
-    - source: library/psa_crypto_invasive.h
-    - source: library/psa_crypto_its.h
     - source: library/psa_crypto_mac.c
-    - source: library/psa_crypto_mac.h
-    - source: library/psa_crypto_pake.h
     - source: library/psa_crypto_pake.c
-    - source: library/psa_crypto_random_impl.h
     - source: library/psa_crypto_rsa.c
-    - source: library/psa_crypto_rsa.h
     - source: library/psa_crypto_se.c
-    - source: library/psa_crypto_se.h
     - source: library/psa_crypto_slot_management.c
-    - source: library/psa_crypto_slot_management.h
     - source: library/psa_crypto_storage.c
-    - source: library/psa_crypto_storage.h
   belong_to: set.middleware.mbedtls3x
   section_info:
     description: mbedTLS crypto library
@@ -694,30 +691,6 @@ middleware.mbedtls3x.ssl:
     - middleware.mbedtls3x.ssl.no_psa
     - middleware.mbedtls3x.crypto
     - middleware.mbedtls3x.x509
-
-middleware.mbedtls3x.header_files_only:
-  section-type: component
-  contents:
-    repo_base_path: middleware/mbedtls3x
-    project_base_path: mbedtls3x
-    cc-include:
-    - repo_relative_path: include
-    - repo_relative_path: library
-    files:
-    - source: include/mbedtls/*.h
-    - source: include/psa/*.h
-    - source: library/*.h
-  belong_to: set.middleware.mbedtls3x
-  section_info:
-    description: mbedTLS SSL library header files
-    type: middleware
-    version: "${mbedtls3x_version}"
-    user_visible: never
-    full_name: MbedTLS open source SSL library header files
-    taxonomy:
-      csub: header_files_only
-      belong_to: mbedtls3x
-    display_name: mbedtls3x_header_files_only
 
 middleware.mbedtls3x.no_psa:
   section-type: component
