@@ -50,6 +50,11 @@
 #include "cc3xx.h"
 
 #endif
+/* Headers for ele_s2xx transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+#include "ele_s2xx.h"
+
+#endif
 /* Headers for ele_s4xx opaque driver */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
 #include "ele_s4xx.h"
@@ -83,10 +88,11 @@
 #define P256_TRANSPARENT_DRIVER_ID (4)
 #define TFM_BUILTIN_KEY_TRANSPARENT_DRIVER_ID (5)
 #define CC3XX_TRANSPARENT_DRIVER_ID (6)
-#define ELE_S4XX_OPAQUE_DRIVER_ID (7)
-#define ELE_S4XX_TRANSPARENT_DRIVER_ID (8)
-#define ELS_PKC_OPAQUE_DRIVER_ID (9)
-#define ELS_PKC_TRANSPARENT_DRIVER_ID (10)
+#define ELE_S2XX_TRANSPARENT_DRIVER_ID (7)
+#define ELE_S4XX_OPAQUE_DRIVER_ID (8)
+#define ELE_S4XX_TRANSPARENT_DRIVER_ID (9)
+#define ELS_PKC_OPAQUE_DRIVER_ID (10)
+#define ELS_PKC_TRANSPARENT_DRIVER_ID (11)
 
 /* END-driver id */
 
