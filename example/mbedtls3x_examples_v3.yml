@@ -251,6 +251,99 @@ psa_crypto_examples:
           project_path: "${board}/mbedtls3x_examples/psa_crypto_examples/${multicore_foldername}"
         - source: boards/${board}/mbedtls3x_examples/psa_crypto_examples/${multicore_foldername}/app.h
           project_path: "${board}/mbedtls3x_examples/psa_crypto_examples/${multicore_foldername}"
+psa_crypto_examples_thread:
+  section-type: application
+  dependency:
+  - middleware.mbedtls3x
+  - middleware.freertos-kernel.heap_4
+  merge_segment:
+  - middleware.mbedtls.default_heap_stack
+  contents:
+    document:
+      name: psa_crypto_examples_thread
+      readme:
+      - boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/board.readme
+      - middleware/mbedtls3x/example/psa_crypto_examples_thread/psa_crypto_examples_thread.readme
+      category: mbedtls3x_examples
+      brief: PSA Crypto example to demonstrate cipher operation while using the threads.
+    project-root-path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}
+    configuration:
+      tools:
+        __common__:
+          config:
+            __common__:
+              cc-define:
+                MBEDTLS_CONFIG_FILE: '"mcux_mbedtls_config.h"'
+                MBEDTLS_PLATFORM_MEMORY:
+                MBEDTLS_THREADING_ALT:
+                MBEDTLS_THREADING_C:
+                PSA_CRYPTO_DRIVER_THREAD_EN:
+                FREESCALE_KSDK_BM:
+        mdk:
+          config:
+            __common__:
+              cc-define:
+                MULADDC_CANNOT_USE_R7: 
+        iar:
+          config:
+            __common__:
+              cx-flags:
+              - "--diag_suppress Pe546,Pe188,Pe111,Pa084,Pe068,Pe177,Pe223"
+    modules:
+      demo:
+        required: true
+        cc-include:
+        - path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}
+          project_path: board
+        files:
+        - source: middleware/mbedtls3x/example/psa_crypto_examples_thread/psa_crypto_examples_thread.c
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}
+          project_path: source
+        - source: middleware/mbedtls3x/example/psa_crypto_examples_thread/psa_crypto_examples_thread.c
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/pin_mux.c
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/pin_mux.h
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}
+          project_path: board
+      freertos_config:
+        required: true
+        cc-include:
+        - path: boards/${board}
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}
+          project_path: source
+        - path: middleware/mbedtls3x/example/psa_crypto_examples_thread
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}
+          project_path: source
+        as-include:
+        - path: middleware/mbedtls3x/example/psa_crypto_examples_thread
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}
+          project_path: source
+        files:
+        - source: middleware/mbedtls3x/example/psa_crypto_examples_thread/FreeRTOSConfig.h
+          merge-to-freertosconfig: main
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/FreeRTOSConfigBoard.h
+          merge-to-freertosconfig: sub
+          package_path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/multicore_foldername}
+          project_path: source
+      pinset:
+        required: true
+        cc-include:
+        - path: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}
+          project_path: "${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}"
+        files:
+        - source: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}/hardware_init.c
+          project_path: "${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}"
+        - source: boards/${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}/app.h
+          project_path: "${board}/mbedtls3x_examples/psa_crypto_examples_thread/${multicore_foldername}"
 mbedtls3x_psatest:
   section-type: application
   dependency:

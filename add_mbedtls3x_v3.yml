@@ -87,7 +87,29 @@ middleware.mbedtls3x.port.psa_crypto_config:
       csub: psa_crypto_config
       belong_to: mbedtls3x
     display_name: mbedtls3x_psa_crypto_config
-    
+
+middleware.mbedtls3x.port.hw_init:
+  section-type: component
+  contents:
+    repo_base_path: middleware/mbedtls3x
+    project_base_path: mbedtls3x
+    cc-include:
+    - repo_relative_path: port/hw_init
+    files:
+    - source: port/hw_init/hw_init.c
+    - source: port/hw_init/hw_init.h
+  belong_to: set.middleware.mbedtls3x
+  section_info:
+    description: mbedTLS port library for hw initialization of trng
+    type: middleware
+    version: "${mbedtls3x_version}"
+    user_visible: always
+    full_name: MbedTLS 3x MCUX SDK port layer for RNG hw Init
+    taxonomy:
+      csub: hw_init
+      belong_to: mbedtls3x
+    display_name: mbedtls3x_port_mcux_hw_init
+
 middleware.mbedtls3x.port.rng:
   section-type: component
   contents:
@@ -115,10 +137,12 @@ middleware.mbedtls3x.port.rng:
       - anyOf:
         - allOf:
           - driver.rng_1
+          - middleware.mbedtls3x.port.hw_init
           - device:
             - LPC55S16
         - allOf:
           - driver.trng
+          - middleware.mbedtls3x.port.hw_init
           - device:
             - MIMXRT685S
             - RW610
