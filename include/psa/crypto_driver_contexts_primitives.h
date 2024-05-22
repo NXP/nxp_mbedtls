@@ -37,10 +37,6 @@
 #include <libtestdriver1/include/psa/crypto.h>
 #endif
 
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)          //NXP
-#include "els_pkc_crypto_primitives.h"          //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */          //NXP
-
 #if defined(PSA_CRYPTO_DRIVER_TEST)
 
 #if defined(MBEDTLS_TEST_LIBTESTDRIVER1) && \
@@ -98,9 +94,6 @@ typedef union {
 #if defined(PSA_CRYPTO_DRIVER_TEST)
     mbedtls_transparent_test_driver_hash_operation_t test_driver_ctx;
 #endif
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                          //NXP
-    els_pkc_hash_operation_t els_pkc_driver_ctx;                //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
     cc3xx_hash_operation_t cc3xx_driver_ctx;
 #endif
@@ -113,10 +106,6 @@ typedef union {
     mbedtls_transparent_test_driver_cipher_operation_t transparent_test_driver_ctx;
     mbedtls_opaque_test_driver_cipher_operation_t opaque_test_driver_ctx;
 #endif
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-    els_pkc_transparent_cipher_operation_t transparent_els_pkc_driver_ctx;      //NXP
-    els_pkc_opaque_cipher_operation_t opaque_els_pkc_driver_ctx;                //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
     cc3xx_cipher_operation_t cc3xx_driver_ctx;
 #endif

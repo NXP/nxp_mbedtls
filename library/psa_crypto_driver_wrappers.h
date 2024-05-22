@@ -42,11 +42,6 @@
 
 #endif
 
-/* Include the ELS_PKC Driver*/                             //NXP
-#if defined (PSA_CRYPTO_DRIVER_ELS_PKC)                     //NXP
-#include "els_pkc_driver.h"                                 //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                      //NXP
-
 /* Include TF-M builtin key driver */
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
 #ifndef PSA_CRYPTO_DRIVER_PRESENT
@@ -85,10 +80,6 @@ enum {
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
     PSA_CRYPTO_CC3XX_DRIVER_ID,
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
-#if defined (PSA_CRYPTO_DRIVER_ELS_PKC)                     //NXP
-    ELS_PKC_OPAQUE_DRIVER_ID,
-    ELS_PKC_TRANSPARENT_DRIVER_ID,
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                      //NXP
 };
 
 /* END-driver id */
@@ -138,18 +129,6 @@ static inline psa_status_t psa_driver_wrapper_init( void )
     if (status != PSA_SUCCESS)
         return ( status );
 #endif
-
-#if defined (PSA_CRYPTO_DRIVER_ELS_PKC)                    //NXP
-    /* Initilize els_pkc harware here */                   //NXP
-    status = els_pkc_transparent_init();                   //NXP
-    if (status != PSA_SUCCESS)                             //NXP
-        return ( status );                                 //NXP
-                                                           //NXP
-    status = els_pkc_opaque_init();                        //NXP
-    if (status != PSA_SUCCESS)                             //NXP
-        return ( status );                                 //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                     //NXP
-
     (void) status;
     return( PSA_SUCCESS );
 }
@@ -170,11 +149,6 @@ static inline void psa_driver_wrapper_free( void )
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
     (void)cc3xx_free();
 #endif
-
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)          //NXP
-    (void)els_pkc_transparent_free();           //NXP
-    (void)els_pkc_opaque_free();                //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */          //NXP
 }
 
 /* Start delegation functions */
@@ -217,20 +191,6 @@ static inline psa_status_t psa_driver_wrapper_sign_message(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                          //NXP
-            status = els_pkc_transparent_sign_message(          //NXP
-                        attributes,                             //NXP
-                        key_buffer,                             //NXP
-                        key_buffer_size,                        //NXP
-                        alg,                                    //NXP
-                        input,                                  //NXP
-                        input_length,                           //NXP
-                        signature,                              //NXP
-                        signature_size,                         //NXP
-                        signature_length );                     //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )             //NXP
-                return( status );                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
             status = cc3xx_sign_message(
                         attributes,
@@ -274,25 +234,6 @@ static inline psa_status_t psa_driver_wrapper_sign_message(
             break;
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)              //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:   //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:      //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:   //NXP
-            status = els_pkc_opaque_sign_message(               //NXP
-                        attributes,                             //NXP
-                        key_buffer,                             //NXP
-                        key_buffer_size,                        //NXP
-                        alg,                                    //NXP
-                        input,                                  //NXP
-                        input_length,                           //NXP
-                        signature,                              //NXP
-                        signature_size,                         //NXP
-                        signature_length );                     //NXP
-            return( status );                                   //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                          //NXP
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */              //NXP
         default:
             /* Key is declared with a lifetime not known to us */
             (void)status;
@@ -337,20 +278,6 @@ static inline psa_status_t psa_driver_wrapper_verify_message(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                          //NXP
-            status = els_pkc_transparent_verify_message(        //NXP
-                        attributes,                             //NXP
-                        key_buffer,                             //NXP
-                        key_buffer_size,                        //NXP
-                        alg,                                    //NXP
-                        input,                                  //NXP
-                        input_length,                           //NXP
-                        signature,                              //NXP
-                        signature_length );                     //NXP
-            /* Declared with fallback == true */                //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )             //NXP
-                return( status );                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
             status = cc3xx_verify_message(
                         attributes,
@@ -391,32 +318,11 @@ static inline psa_status_t psa_driver_wrapper_verify_message(
             break;
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)                      //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:           //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:              //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:           //NXP
-            return( els_pkc_opaque_verify_message(                      //NXP
-                        attributes,                                     //NXP
-                        key_buffer,                                     //NXP
-                        key_buffer_size,                                //NXP
-                        alg,                                            //NXP
-                        input,                                          //NXP
-                        input_length,                                   //NXP
-                        signature,                                      //NXP
-                        signature_length ) );                           //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                     //NXP
-                return( status );                                       //NXP
-            break;                                                      //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */                      //NXP
         default:
             /* Key is declared with a lifetime not known to us */
             (void)status;
             return( PSA_ERROR_INVALID_ARGUMENT );
     }
-    return status;
 }
 
 static inline psa_status_t psa_driver_wrapper_sign_hash(
@@ -505,20 +411,6 @@ static inline psa_status_t psa_driver_wrapper_sign_hash(
             }
 #endif /* MBEDTLS_PSA_P256M_DRIVER_ENABLED */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                  //NXP
-            status = els_pkc_transparent_sign_hash(     //NXP
-                        attributes,                     //NXP
-                        key_buffer,                     //NXP
-                        key_buffer_size,                //NXP
-                        alg,                            //NXP
-                        hash,                           //NXP
-                        hash_length,                    //NXP
-                        signature,                      //NXP
-                        signature_size,                 //NXP
-                        signature_length );             //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )     //NXP
-                return( status );                       //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                  //NXP
             /* Fell through, meaning no accelerator supports this operation */
             return( psa_sign_hash_builtin( attributes,
                                            key_buffer,
@@ -545,23 +437,6 @@ static inline psa_status_t psa_driver_wrapper_sign_hash(
                                                              signature_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)                      //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:           //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:              //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:           //NXP
-            return( els_pkc_opaque_sign_hash( attributes,               //NXP
-                                               key_buffer,              //NXP
-                                               key_buffer_size,         //NXP
-                                               alg,                     //NXP
-                                               hash,                    //NXP
-                                               hash_length,             //NXP
-                                               signature,               //NXP
-                                               signature_size,          //NXP
-                                               signature_length ) );    //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */                      //NXP
         default:
             /* Key is declared with a lifetime not known to us */
             (void)status;
@@ -652,20 +527,6 @@ static inline psa_status_t psa_driver_wrapper_verify_hash(
                 return( status );
             }
 #endif /* MBEDTLS_PSA_P256M_DRIVER_ENABLED */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                          //NXP
-            status = els_pkc_transparent_verify_hash(           //NXP
-                         attributes,                            //NXP
-                         key_buffer,                            //NXP
-                         key_buffer_size,                       //NXP
-                         alg,                                   //NXP
-                         hash,                                  //NXP
-                         hash_length,                           //NXP
-                         signature,                             //NXP
-                         signature_length );                    //NXP
-            /* Declared with fallback == true */                //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )             //NXP
-                return( status );                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                          //NXP
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
             return( psa_verify_hash_builtin( attributes,
@@ -691,22 +552,6 @@ static inline psa_status_t psa_driver_wrapper_verify_hash(
                                                                signature_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)                      //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:           //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:              //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:           //NXP
-            return( els_pkc_opaque_verify_hash( attributes,             //NXP
-                                                 key_buffer,            //NXP
-                                                 key_buffer_size,       //NXP
-                                                 alg,                   //NXP
-                                                 hash,                  //NXP
-                                                 hash_length,           //NXP
-                                                 signature,             //NXP
-                                                 signature_length ) );  //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */                      //NXP
         default:
             /* Key is declared with a lifetime not known to us */
             (void)status;
@@ -973,17 +818,7 @@ static inline psa_status_t psa_driver_wrapper_get_key_buffer_size_from_key_data(
             return( ( *key_buffer_size != 0 ) ?
                     PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:                   //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:                      //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:                   //NXP
-            *key_buffer_size = els_pkc_opaque_size_function( attributes,        //NXP
-                                                 data,                          //NXP
-                                                 data_length);                  //NXP
-            return( ( *key_buffer_size != 0 ) ?                                 //NXP
-                    PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );                    //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
+
         default:
             (void)key_type;
             (void)data;
@@ -1060,14 +895,6 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
                 }
 
 #endif /* MBEDTLS_PSA_P256M_DRIVER_ENABLED */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                  //NXP
-                status = els_pkc_transparent_generate_key(              //NXP
-                    attributes, key_buffer, key_buffer_size,            //NXP
-                    key_buffer_length );                                //NXP
-                /* Declared with fallback == true */                    //NXP
-                if( status != PSA_ERROR_NOT_SUPPORTED )                 //NXP
-                    break;                                              //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
             }
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
@@ -1085,53 +912,10 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
             break;
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)                              //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:                   //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:                      //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:                   //NXP
-            status = els_pkc_opaque_generate_key(                               //NXP
-                attributes, key_buffer, key_buffer_size, key_buffer_length );   //NXP
-            break;                                                              //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */                              //NXP
+
         default:
             /* Key is declared with a lifetime not known to us */
             status = PSA_ERROR_INVALID_ARGUMENT;
-            break;
-    }
-
-    return( status );
-}
-
-/* This is a temporary placeholder for destroy till full stateful destroy is added in upstream */
-static inline psa_status_t psa_driver_wrapper_destroy_key(
-    const psa_key_attributes_t *attributes,
-    uint8_t *key_buffer, size_t key_buffer_size)
-{
-    psa_status_t status = PSA_ERROR_CORRUPTION_DETECTED;
-    psa_key_location_t location =
-        PSA_KEY_LIFETIME_GET_LOCATION(attributes->core.lifetime);
-
-    switch( location )
-    {
-        /* Add cases for opaque driver here */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:
-            status = els_pkc_opaque_destroy_key(
-                attributes, key_buffer, key_buffer_size);
-            break;
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
-
-        /* Drivers which may not have any state to change for destruction of key */
-        default:
-            status = PSA_SUCCESS;
             break;
     }
 
@@ -1220,17 +1004,8 @@ static inline psa_status_t psa_driver_wrapper_import_key(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif
-#if (defined(PSA_CRYPTO_DRIVER_ELS_PKC) )                               //NXP
-            status = els_pkc_transparent_import_key(attributes,         //NXP
-                                                    data,               //NXP
-                                                    data_length,        //NXP
-                                                    key_buffer,         //NXP
-                                                    key_buffer_size,    //NXP
-                                                    key_buffer_length,  //NXP
-                                                    bits);              //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                     //NXP
-                return( status );                                       //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
+
+
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
             /* Fell through, meaning no accelerator supports this operation */
@@ -1253,19 +1028,8 @@ static inline psa_status_t psa_driver_wrapper_import_key(
                             bits
         ));
 #endif
-#if (defined(PSA_CRYPTO_DRIVER_ELS_PKC) )                               //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:           //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:              //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:           //NXP
-            return( els_pkc_opaque_import_key(attributes,               //NXP
-                                              data,                     //NXP
-                                              data_length,              //NXP
-                                              key_buffer,               //NXP
-                                              key_buffer_size,          //NXP
-                                              key_buffer_length,        //NXP
-                                              bits));                   //NXP
-#endif  /* PSA_CRYPTO_DRIVER_ELS_PKC */                                 //NXP
+
+
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             (void)status;
@@ -1311,20 +1075,6 @@ static inline psa_status_t psa_driver_wrapper_export_key(
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
         case TFM_BUILTIN_KEY_LOADER_KEY_LOCATION:
 #endif /* defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER) */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)
-#if (defined(PSA_CRYPTO_DRIVER_ELS_PKC) )
-            status = els_pkc_transparent_export_key                     //NXP
-            (attributes,                                                //NXP
-                            key_buffer,                                 //NXP
-                            key_buffer_size,                            //NXP
-                            data,                                       //NXP
-                            data_size,                                  //NXP
-                            data_length                                 //NXP
-            );                                                          //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                     //NXP
-                    return( status );                                   //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
             return( psa_export_key_internal( attributes,
                                              key_buffer,
                                              key_buffer_size,
@@ -1346,18 +1096,8 @@ static inline psa_status_t psa_driver_wrapper_export_key(
                             data_length
         ));
 #endif
-#if (defined(PSA_CRYPTO_DRIVER_ELS_PKC) )                               //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:           //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:              //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:           //NXP
-            return( els_pkc_opaque_export_key(attributes,               //NXP
-                                              key_buffer,               //NXP
-                                              key_buffer_size,          //NXP
-                                              data,                     //NXP
-                                              data_size,                //NXP
-                                              data_length));            //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+
+
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             /* Key is declared with a lifetime not known to us */
@@ -1463,22 +1203,6 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-            status = els_pkc_transparent_cipher_encrypt( attributes,            //NXP
-                                                          key_buffer,           //NXP
-                                                          key_buffer_size,      //NXP
-                                                          alg,                  //NXP
-                                                          iv,                   //NXP
-                                                          iv_length,            //NXP
-                                                          input,                //NXP
-                                                          input_length,         //NXP
-                                                          output,               //NXP
-                                                          output_size,          //NXP
-                                                          output_length );      //NXP
-            /* Declared with fallback == true */                                //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                             //NXP
-                return( status );                                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
             status = cc3xx_cipher_encrypt( attributes,
                                            key_buffer,
@@ -1528,26 +1252,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt(
                                                         output_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)                              //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:                   //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:                      //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:                   //NXP
-            return (els_pkc_opaque_cipher_encrypt( attributes,                  //NXP
-                                                    key_buffer,                 //NXP
-                                                    key_buffer_size,            //NXP
-                                                    alg,                        //NXP
-                                                    iv,                         //NXP
-                                                    iv_length,                  //NXP
-                                                    input,                      //NXP
-                                                    input_length,               //NXP
-                                                    output,                     //NXP
-                                                    output_size,                //NXP
-                                                    output_length ) );          //NXP
-                                                                                //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */                              //NXP
+
         default:
             /* Key is declared with a lifetime not known to us */
             (void)status;
@@ -1603,20 +1308,6 @@ static inline psa_status_t psa_driver_wrapper_cipher_decrypt(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-            status = els_pkc_transparent_cipher_decrypt( attributes,            //NXP
-                                                          key_buffer,           //NXP
-                                                          key_buffer_size,      //NXP
-                                                          alg,                  //NXP
-                                                          input,                //NXP
-                                                          input_length,         //NXP
-                                                          output,               //NXP
-                                                          output_size,          //NXP
-                                                          output_length );      //NXP
-            /* Declared with fallback == true */                                //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                             //NXP
-                return( status );                                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
             status = cc3xx_cipher_decrypt( attributes,
                                            key_buffer,
@@ -1659,22 +1350,6 @@ static inline psa_status_t psa_driver_wrapper_cipher_decrypt(
                                                         output_size,
                                                         output_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:           //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:              //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:           //NXP
-           return ( els_pkc_opaque_cipher_decrypt( attributes,          //NXP
-                                                   key_buffer,          //NXP
-                                                   key_buffer_size,     //NXP
-                                                   alg,                 //NXP
-                                                   input,               //NXP
-                                                   input_length,        //NXP
-                                                   output,              //NXP
-                                                   output_size,         //NXP
-                                                   output_length ) );   //NXP
-                                                                        //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
         default:
@@ -1725,20 +1400,6 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt_setup(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-            status = els_pkc_transparent_cipher_encrypt_setup(                  //NXP
-                &operation->ctx.transparent_els_pkc_driver_ctx,                 //NXP
-                attributes,                                                     //NXP
-                key_buffer,                                                     //NXP
-                key_buffer_size,                                                //NXP
-                alg );                                                          //NXP
-            /* Declared with fallback == true */                                //NXP
-            if( status == PSA_SUCCESS )                                         //NXP
-                operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;       //NXP
-                                                                                //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                             //NXP
-                return( status );                                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
             status = cc3xx_cipher_encrypt_setup(
                 &operation->ctx.cc3xx_driver_ctx,
@@ -1780,22 +1441,6 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt_setup(
 
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:           //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:              //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:           //NXP
-            status = els_pkc_opaque_cipher_encrypt_setup(               //NXP
-                &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                attributes,                                             //NXP
-                key_buffer, key_buffer_size,                            //NXP
-                alg );                                                  //NXP
-                                                                        //NXP
-            if( status == PSA_SUCCESS )                                 //NXP
-                operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;    //NXP
-                                                                        //NXP
-            return( status );                                           //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             /* Key is declared with a lifetime not known to us */
@@ -1841,20 +1486,6 @@ static inline psa_status_t psa_driver_wrapper_cipher_decrypt_setup(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-            status = els_pkc_transparent_cipher_decrypt_setup(                  //NXP
-                &operation->ctx.transparent_els_pkc_driver_ctx,                 //NXP
-                attributes,                                                     //NXP
-                key_buffer,                                                     //NXP
-                key_buffer_size,                                                //NXP
-                alg );                                                          //NXP
-            /* Declared with fallback == true */                                //NXP
-            if( status == PSA_SUCCESS )                                         //NXP
-                operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;       //NXP
-                                                                                //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                             //NXP
-                return( status );                                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
             status = cc3xx_cipher_decrypt_setup(
                 &operation->ctx.cc3xx_driver_ctx,
@@ -1896,22 +1527,6 @@ static inline psa_status_t psa_driver_wrapper_cipher_decrypt_setup(
 
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:           //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:              //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:           //NXP
-            status = els_pkc_opaque_cipher_decrypt_setup(               //NXP
-                         &operation->ctx.opaque_els_pkc_driver_ctx,     //NXP
-                         attributes,                                    //NXP
-                         key_buffer, key_buffer_size,                   //NXP
-                         alg );                                         //NXP
-                                                                        //NXP
-            if( status == PSA_SUCCESS )                                 //NXP
-                operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;    //NXP
-                                                                        //NXP
-            return( status );                                           //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             /* Key is declared with a lifetime not known to us */
@@ -1950,17 +1565,6 @@ static inline psa_status_t psa_driver_wrapper_cipher_set_iv(
                         &operation->ctx.opaque_test_driver_ctx,
                         iv, iv_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_cipher_set_iv(                          //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx,         //NXP
-                        iv, iv_length ) );                                      //NXP
-                                                                                //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_cipher_set_iv(                               //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                        iv, iv_length ) );                                      //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return( cc3xx_cipher_set_iv(
@@ -2010,19 +1614,6 @@ static inline psa_status_t psa_driver_wrapper_cipher_update(
                         input, input_length,
                         output, output_size, output_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_cipher_update(                          //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx,         //NXP
-                        input, input_length,                                    //NXP
-                        output, output_size, output_length ) );                 //NXP
-                                                                                //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_cipher_update(                               //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                        input, input_length,                                    //NXP
-                        output, output_size, output_length ) );                 //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return( cc3xx_cipher_update(
@@ -2070,17 +1661,6 @@ static inline psa_status_t psa_driver_wrapper_cipher_finish(
                         &operation->ctx.opaque_test_driver_ctx,
                         output, output_size, output_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_cipher_finish(                          //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx,         //NXP
-                        output, output_size, output_length ) );                 //NXP
-                                                                                //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_cipher_finish(                               //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                        output, output_size, output_length ) );                 //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return( cc3xx_cipher_finish(
@@ -2127,15 +1707,6 @@ static inline psa_status_t psa_driver_wrapper_cipher_abort(
                 sizeof( operation->ctx.opaque_test_driver_ctx ) );
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return els_pkc_transparent_cipher_abort(                            //NXP
-                         &operation->ctx.transparent_els_pkc_driver_ctx );      //NXP
-                                                                                //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return els_pkc_opaque_cipher_abort(                                 //NXP
-                         &operation->ctx.opaque_els_pkc_driver_ctx );           //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             status = cc3xx_cipher_abort(
@@ -2173,12 +1744,6 @@ static inline psa_status_t psa_driver_wrapper_hash_compute(
     if( status != PSA_ERROR_NOT_SUPPORTED )
         return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                                          //NXP
-    status = els_pkc_transparent_hash_compute(alg, input, input_length, hash, hash_size,        //NXP
-                              hash_length);                                                     //NXP
-    if( status != PSA_ERROR_NOT_SUPPORTED )                                                     //NXP
-        return( status );                                                                       //NXP
-#endif /* defined(PSA_CRYPTO_DRIVER_ELS_PKC) */                                                 //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
     status = cc3xx_hash_compute(alg, input, input_length, hash, hash_size,
             hash_length);
@@ -2221,14 +1786,6 @@ static inline psa_status_t psa_driver_wrapper_hash_setup(
     if( status != PSA_ERROR_NOT_SUPPORTED )
         return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                                          //NXP
-    status = els_pkc_transparent_hash_setup( &operation->ctx.els_pkc_driver_ctx, alg );         //NXP
-    if( status == PSA_SUCCESS )                                                                 //NXP
-        operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;                               //NXP
-                                                                                                //NXP
-    if( status != PSA_ERROR_NOT_SUPPORTED )                                                     //NXP
-        return( status );                                                                       //NXP
-#endif /* defined(PSA_CRYPTO_DRIVER_ELS_PKC) */                                                 //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
     status = cc3xx_hash_setup(&operation->ctx.cc3xx_driver_ctx, alg);
     operation->id = PSA_CRYPTO_CC3XX_DRIVER_ID;
@@ -2272,12 +1829,6 @@ static inline psa_status_t psa_driver_wrapper_hash_clone(
                         &source_operation->ctx.test_driver_ctx,
                         &target_operation->ctx.test_driver_ctx ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                                                  //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                                                  //NXP
-            target_operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;                            //NXP
-            return( els_pkc_transparent_hash_clone( &source_operation->ctx.els_pkc_driver_ctx,          //NXP
-                                    &target_operation->ctx.els_pkc_driver_ctx ) );                      //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                                                  //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             target_operation->id = PSA_CRYPTO_CC3XX_DRIVER_ID;
@@ -2312,11 +1863,6 @@ static inline psa_status_t psa_driver_wrapper_hash_update(
                         &operation->ctx.test_driver_ctx,
                         input, input_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                                          //NXP
-            return( els_pkc_transparent_hash_update( &operation->ctx.els_pkc_driver_ctx,        //NXP
-                                     input, input_length ) );                                   //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return( cc3xx_hash_update(
@@ -2351,11 +1897,6 @@ static inline psa_status_t psa_driver_wrapper_hash_finish(
                         &operation->ctx.test_driver_ctx,
                         hash, hash_size, hash_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                                          //NXP
-            return( els_pkc_transparent_hash_finish( &operation->ctx.els_pkc_driver_ctx,        //NXP
-                                     hash, hash_size, hash_length ) );                          //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return( cc3xx_hash_finish(
@@ -2386,10 +1927,6 @@ static inline psa_status_t psa_driver_wrapper_hash_abort(
             return( mbedtls_test_transparent_hash_abort(
                         &operation->ctx.test_driver_ctx ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                                                  //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                                                  //NXP
-            return( els_pkc_transparent_hash_abort( &operation->ctx.els_pkc_driver_ctx ) );             //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                                                  //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return( cc3xx_hash_abort(
@@ -2436,18 +1973,6 @@ static inline psa_status_t psa_driver_wrapper_aead_encrypt(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-            status = els_pkc_transparent_aead_encrypt(                          //NXP
-                         attributes, key_buffer, key_buffer_size,               //NXP
-                         alg,                                                   //NXP
-                         nonce, nonce_length,                                   //NXP
-                         additional_data, additional_data_length,               //NXP
-                         plaintext, plaintext_length,                           //NXP
-                         ciphertext, ciphertext_size, ciphertext_length );      //NXP
-            /* Declared with fallback == true */                                //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                             //NXP
-                return( status );                                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
             status = cc3xx_aead_encrypt(
                         attributes, key_buffer, key_buffer_size,
@@ -2471,24 +1996,7 @@ static inline psa_status_t psa_driver_wrapper_aead_encrypt(
                         ciphertext, ciphertext_size, ciphertext_length ) );
 
         /* Add cases for opaque driver here */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)                              //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:                   //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:                      //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:                   //NXP
-            status = els_pkc_opaque_aead_encrypt(                               //NXP
-                         attributes, key_buffer, key_buffer_size,               //NXP
-                         alg,                                                   //NXP
-                         nonce, nonce_length,                                   //NXP
-                         additional_data, additional_data_length,               //NXP
-                         plaintext, plaintext_length,                           //NXP
-                         ciphertext, ciphertext_size, ciphertext_length );      //NXP
-                                                                                //NXP
-            return( status );                                                   //NXP
-                                                                                //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */                              //NXP
+
         default:
             /* Key is declared with a lifetime not known to us */
             (void)status;
@@ -2531,18 +2039,6 @@ static inline psa_status_t psa_driver_wrapper_aead_decrypt(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-            status = els_pkc_transparent_aead_decrypt(                          //NXP
-                        attributes, key_buffer, key_buffer_size,                //NXP
-                        alg,                                                    //NXP
-                        nonce, nonce_length,                                    //NXP
-                        additional_data, additional_data_length,                //NXP
-                        ciphertext, ciphertext_length,                          //NXP
-                        plaintext, plaintext_size, plaintext_length );          //NXP
-            /* Declared with fallback == true */                                //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                             //NXP
-                return( status );                                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
             status = cc3xx_aead_decrypt(
                         attributes, key_buffer, key_buffer_size,
@@ -2566,24 +2062,7 @@ static inline psa_status_t psa_driver_wrapper_aead_decrypt(
                         plaintext, plaintext_size, plaintext_length ) );
 
         /* Add cases for opaque driver here */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)                              //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:                   //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:                      //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:                   //NXP
-            status = els_pkc_opaque_aead_decrypt(                               //NXP
-                         attributes, key_buffer, key_buffer_size,               //NXP
-                         alg,                                                   //NXP
-                         nonce, nonce_length,                                   //NXP
-                         additional_data, additional_data_length,               //NXP
-                         ciphertext, ciphertext_length,                         //NXP
-                         plaintext, plaintext_size, plaintext_length );         //NXP
-                                                                                //NXP
-            return( status );                                                   //NXP
-                                                                                //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */                              //NXP
+
         default:
             /* Key is declared with a lifetime not known to us */
             (void)status;
@@ -2622,17 +2101,6 @@ static inline psa_status_t psa_driver_wrapper_aead_encrypt_setup(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-            operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;           //NXP
-            status = els_pkc_transparent_aead_encrypt_setup(                    //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx,         //NXP
-                        attributes, key_buffer, key_buffer_size,                //NXP
-                        alg );                                                  //NXP
-                                                                                //NXP
-            /* Declared with fallback == true */                                //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                             //NXP
-                return( status );                                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
             operation->id = PSA_CRYPTO_CC3XX_DRIVER_ID;
             status = cc3xx_aead_encrypt_setup(
@@ -2654,18 +2122,7 @@ static inline psa_status_t psa_driver_wrapper_aead_encrypt_setup(
             return( status );
 
         /* Add cases for opaque driver here */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:                   //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:                      //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:                   //NXP
-            operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;                //NXP
-            status = els_pkc_opaque_aead_encrypt_setup(                         //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                        attributes, key_buffer, key_buffer_size,                //NXP
-                        alg );                                                  //NXP
-            return( status );                                                   //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
+
         default:
             /* Key is declared with a lifetime not known to us */
             (void)status;
@@ -2705,18 +2162,6 @@ static inline psa_status_t psa_driver_wrapper_aead_decrypt_setup(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-            operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;           //NXP
-            status = els_pkc_transparent_aead_decrypt_setup(                    //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx,         //NXP
-                        attributes,                                             //NXP
-                        key_buffer, key_buffer_size,                            //NXP
-                        alg );                                                  //NXP
-                                                                                //NXP
-            /* Declared with fallback == true */                                //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                             //NXP
-                return( status );                                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
             operation->id = PSA_CRYPTO_CC3XX_DRIVER_ID;
             status = cc3xx_aead_decrypt_setup(
@@ -2740,21 +2185,7 @@ static inline psa_status_t psa_driver_wrapper_aead_decrypt_setup(
             return( status );
 
         /* Add cases for opaque driver here */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)                      //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:           //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:              //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:           //NXP
-            operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;        //NXP
-            status = els_pkc_opaque_aead_decrypt_setup(                 //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx,      //NXP
-                        attributes,                                     //NXP
-                        key_buffer, key_buffer_size,                    //NXP
-                        alg );                                          //NXP
-            return( status );                                           //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */                      //NXP
+
         default:
             /* Key is declared with a lifetime not known to us */
             (void)status;
@@ -2787,20 +2218,6 @@ static inline psa_status_t psa_driver_wrapper_aead_set_nonce(
         /* Add cases for opaque driver here */
 
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_aead_set_nonce(                         //NXP
-                         &operation->ctx.transparent_els_pkc_driver_ctx,        //NXP
-                         nonce, nonce_length ) );                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-                                                                                //NXP
-        /* Add cases for opaque driver here */                                  //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_aead_set_nonce(                              //NXP
-                         &operation->ctx.opaque_els_pkc_driver_ctx,             //NXP
-                         nonce, nonce_length ) );                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return( cc3xx_aead_set_nonce(
@@ -2841,20 +2258,6 @@ static inline psa_status_t psa_driver_wrapper_aead_set_lengths(
         /* Add cases for opaque driver here */
 
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_aead_set_lengths(                       //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx,         //NXP
-                        ad_length, plaintext_length ) );                        //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-                                                                                //NXP
-        /* Add cases for opaque driver here */                                  //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_aead_set_lengths(                            //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                        ad_length, plaintext_length ) );                        //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return( cc3xx_aead_set_lengths(
@@ -2895,20 +2298,6 @@ static inline psa_status_t psa_driver_wrapper_aead_update_ad(
         /* Add cases for opaque driver here */
 
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_aead_update_ad(                         //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx,         //NXP
-                        input, input_length ) );                                //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-                                                                                //NXP
-        /* Add cases for opaque driver here */                                  //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_aead_update_ad(                              //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                        input, input_length ) );                                //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return( cc3xx_aead_update_ad(
@@ -2954,22 +2343,6 @@ static inline psa_status_t psa_driver_wrapper_aead_update(
         /* Add cases for opaque driver here */
 
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_aead_update(                            //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx,         //NXP
-                        input, input_length, output, output_size,               //NXP
-                        output_length ) );                                      //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-                                                                                //NXP
-        /* Add cases for opaque driver here */                                  //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_aead_update(                                 //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                        input, input_length, output, output_size,               //NXP
-                        output_length ) );                                      //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return( cc3xx_aead_update(
@@ -3021,22 +2394,6 @@ static inline psa_status_t psa_driver_wrapper_aead_finish(
         /* Add cases for opaque driver here */
 
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_aead_finish(                            //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx,         //NXP
-                        ciphertext, ciphertext_size,                            //NXP
-                        ciphertext_length, tag, tag_size, tag_length ) );       //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-                                                                                //NXP
-        /* Add cases for opaque driver here */                                  //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_aead_finish(                                 //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                        ciphertext, ciphertext_size,                            //NXP
-                        ciphertext_length, tag, tag_size, tag_length ) );       //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return( cc3xx_aead_finish(
@@ -3108,22 +2465,6 @@ static inline psa_status_t psa_driver_wrapper_aead_verify(
         /* Add cases for opaque driver here */
 
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_aead_verify(                            //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx,         //NXP
-                        plaintext, plaintext_size,                              //NXP
-                        plaintext_length, tag, tag_length ) );                  //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-                                                                                //NXP
-        /* Add cases for opaque driver here */                                  //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_aead_verify(                                 //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                        plaintext, plaintext_size,                              //NXP
-                        plaintext_length, tag, tag_length ) );                  //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return( cc3xx_aead_verify(
@@ -3163,18 +2504,6 @@ static inline psa_status_t psa_driver_wrapper_aead_abort(
         /* Add cases for opaque driver here */
 
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_aead_abort(                             //NXP
-               &operation->ctx.transparent_els_pkc_driver_ctx ) );              //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-                                                                                //NXP
-        /* Add cases for opaque driver here */                                  //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_aead_abort(                                  //NXP
-               &operation->ctx.opaque_els_pkc_driver_ctx ) );                   //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return( cc3xx_aead_abort(
@@ -3222,15 +2551,6 @@ static inline psa_status_t psa_driver_wrapper_mac_compute(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                  //NXP
-            status = els_pkc_transparent_mac_compute(                   //NXP
-                attributes, key_buffer, key_buffer_size, alg,           //NXP
-                input, input_length,                                    //NXP
-                mac, mac_size, mac_length );                            //NXP
-            /* Declared with fallback == true */                        //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                     //NXP
-                return( status );                                       //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
             status = cc3xx_mac_compute(attributes, key_buffer, key_buffer_size, alg,
                 input, input_length,
@@ -3259,19 +2579,6 @@ static inline psa_status_t psa_driver_wrapper_mac_compute(
                 mac, mac_size, mac_length );
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:           //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:              //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:           //NXP
-            status = els_pkc_opaque_mac_compute(                        //NXP
-                attributes, key_buffer, key_buffer_size, alg,           //NXP
-                input, input_length,                                    //NXP
-                mac, mac_size, mac_length );                            //NXP
-            return( status );                                           //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             /* Key is declared with a lifetime not known to us */
@@ -3321,19 +2628,6 @@ static inline psa_status_t psa_driver_wrapper_mac_sign_setup(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-            status = els_pkc_transparent_mac_sign_setup(                        //NXP
-                &operation->ctx.transparent_els_pkc_driver_ctx,                 //NXP
-                attributes,                                                     //NXP
-                key_buffer, key_buffer_size,                                    //NXP
-                alg );                                                          //NXP
-            /* Declared with fallback == true */                                //NXP
-            if( status == PSA_SUCCESS )                                         //NXP
-                operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;       //NXP
-                                                                                //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                             //NXP
-                return( status );                                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
             status = cc3xx_mac_sign_setup(
                     &operation->ctx.cc3xx_driver_ctx,
@@ -3374,23 +2668,6 @@ static inline psa_status_t psa_driver_wrapper_mac_sign_setup(
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)                      //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:           //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:              //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:           //NXP
-            status = els_pkc_opaque_mac_sign_setup(                     //NXP
-                &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                attributes,                                             //NXP
-                key_buffer, key_buffer_size,                            //NXP
-                alg );                                                  //NXP
-            /* Declared with fallback == true */                        //NXP
-            if( status == PSA_SUCCESS )                                 //NXP
-                operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;    //NXP
-            return( status );                                           //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */                      //NXP
         default:
             /* Key is declared with a lifetime not known to us */
             (void) status;
@@ -3435,19 +2712,6 @@ static inline psa_status_t psa_driver_wrapper_mac_verify_setup(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-            status = els_pkc_transparent_mac_verify_setup(                      //NXP
-                &operation->ctx.transparent_els_pkc_driver_ctx,                 //NXP
-                attributes,                                                     //NXP
-                key_buffer, key_buffer_size,                                    //NXP
-                alg );                                                          //NXP
-            /* Declared with fallback == true */                                //NXP
-            if( status == PSA_SUCCESS )                                         //NXP
-                operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;       //NXP
-                                                                                //NXP
-            if( status != PSA_ERROR_NOT_SUPPORTED )                             //NXP
-                return( status );                                               //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
             status = cc3xx_mac_verify_setup(
                 &operation->ctx.cc3xx_driver_ctx,
@@ -3488,23 +2752,6 @@ static inline psa_status_t psa_driver_wrapper_mac_verify_setup(
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
-#if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)                      //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                  //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:           //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:          //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:              //NXP
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:           //NXP
-            status = els_pkc_opaque_mac_verify_setup(                   //NXP
-                &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                attributes,                                             //NXP
-                key_buffer, key_buffer_size,                            //NXP
-                alg );                                                  //NXP
-            /* Declared with fallback == true */                        //NXP
-            if( status == PSA_SUCCESS )                                 //NXP
-                operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;    //NXP
-            return( status );                                           //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                  //NXP
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */                      //NXP
         default:
             /* Key is declared with a lifetime not known to us */
             (void) status;
@@ -3541,19 +2788,6 @@ static inline psa_status_t psa_driver_wrapper_mac_update(
                         &operation->ctx.opaque_test_driver_ctx,
                         input, input_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_mac_update(                             //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx,         //NXP
-                        input, input_length ) );                                //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-                                                                                //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_mac_update(                                  //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                        input, input_length ) );                                //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return(cc3xx_mac_update(&operation->ctx.cc3xx_driver_ctx, input, input_length));
@@ -3592,19 +2826,6 @@ static inline psa_status_t psa_driver_wrapper_mac_sign_finish(
                         &operation->ctx.opaque_test_driver_ctx,
                         mac, mac_size, mac_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_mac_sign_finish(                        //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx,         //NXP
-                        mac, mac_size, mac_length ) );                          //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-                                                                                //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_mac_sign_finish(                             //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                        mac, mac_size, mac_length ) );                          //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return(cc3xx_mac_sign_finish(&operation->ctx.cc3xx_driver_ctx,
@@ -3644,19 +2865,6 @@ static inline psa_status_t psa_driver_wrapper_mac_verify_finish(
                         &operation->ctx.opaque_test_driver_ctx,
                         mac, mac_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_mac_verify_finish(                      //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx,         //NXP
-                        mac, mac_length ) );                                    //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-                                                                                //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_mac_verify_finish(                           //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx,              //NXP
-                        mac, mac_length ) );                                    //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return(cc3xx_mac_verify_finish(
@@ -3690,17 +2898,6 @@ static inline psa_status_t psa_driver_wrapper_mac_abort(
             return( mbedtls_test_opaque_mac_abort(
                         &operation->ctx.opaque_test_driver_ctx ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:                          //NXP
-            return( els_pkc_transparent_mac_abort(                              //NXP
-                        &operation->ctx.transparent_els_pkc_driver_ctx ) );     //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
-                                                                                //NXP
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)                                          //NXP
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:                               //NXP
-            return( els_pkc_opaque_mac_abort(                                   //NXP
-                        &operation->ctx.opaque_els_pkc_driver_ctx ) );          //NXP
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */                                          //NXP
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
         case PSA_CRYPTO_CC3XX_DRIVER_ID:
             return(cc3xx_mac_abort(&operation->ctx.cc3xx_driver_ctx));
