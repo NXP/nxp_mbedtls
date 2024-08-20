@@ -17,22 +17,22 @@ menu "mbedtls3x"
         if MCUX_COMPONENT_middleware.mbedtls3x.port.rng
             choice
                 prompt "Component middleware.mbedtls3x.port.rng anyOf 1"
-                default MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF1_OPTION_1
+                default MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF_1_OPTION_1
                 
-                config MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF1_OPTION_1
-                    bool "Component MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF1_OPTION_1"
+                config MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF_1_OPTION_1
+                    bool "Component MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF_1_OPTION_1"
                     select MCUX_COMPONENT_driver.rng_1
                     select MCUX_COMPONENT_middleware.mbedtls3x.port.hw_init
                     depends on MCUX_HW_DEVICE_LPC55S16
                 
-                config MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF1_OPTION_2
-                    bool "Component MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF1_OPTION_2"
+                config MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF_1_OPTION_2
+                    bool "Component MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF_1_OPTION_2"
                     select MCUX_COMPONENT_driver.trng
                     select MCUX_COMPONENT_middleware.mbedtls3x.port.hw_init
                     depends on MCUX_HW_DEVICE_MIMXRT685S || MCUX_HW_DEVICE_RW610 || MCUX_HW_DEVICE_RW612
                 
-                config MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF1_OPTION_3
-                    bool "Component MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF1_OPTION_3"
+                config MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF_1_OPTION_3
+                    bool "Component MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF_1_OPTION_3"
                     select MCUX_COMPONENT_middleware.secure-subsystem.elemu
                     select MCUX_COMPONENT_driver.elemu
                     depends on MCUX_HW_DEVICE_KW45B41Z83 || MCUX_HW_DEVICE_K32W1480 || MCUX_HW_DEVICE_MCXW716C || MCUX_HW_DEVICE_MCXW716A
@@ -99,4 +99,6 @@ menu "mbedtls3x"
         select MCUX_COMPONENT_middleware.mbedtls3x.crypto
         select MCUX_COMPONENT_middleware.mbedtls3x.ssl
         select MCUX_COMPONENT_middleware.mbedtls3x.x509
+    config MCUX_PRJSEG_middleware.mbedtls3x.default_heap_stack
+        bool "Select middleware.mbedtls3x.default_heap_stack"
 endmenu
