@@ -35,7 +35,7 @@ menu "mbedtls3x"
                     bool "Component MCUX_DEPENDENCY_COMPONENT_middleware.mbedtls3x.port.rng_DEPEND_ANYOF_1_OPTION_3"
                     select MCUX_COMPONENT_middleware.secure-subsystem.elemu
                     select MCUX_COMPONENT_driver.elemu
-                    depends on MCUX_HW_DEVICE_KW45B41Z83 || MCUX_HW_DEVICE_K32W1480 || MCUX_HW_DEVICE_MCXW716C || MCUX_HW_DEVICE_MCXW716A
+                    depends on MCUX_HW_DEVICE_KW45B41Z83 || MCUX_HW_DEVICE_K32W1480 || MCUX_HW_DEVICE_MCXW716C || MCUX_HW_DEVICE_MCXW716A || MCUX_HW_DEVICE_KW47B42ZB7
             endchoice
         endif
         

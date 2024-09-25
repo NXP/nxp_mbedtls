@@ -1,5 +1,6 @@
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.template)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_configuration(
         CC  "-DMBEDTLS_CONFIG_FILE=\\\"mcux_mbedtls_config.h\\\""
     )
@@ -18,6 +19,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.template)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.config)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_configuration(
         CC  "-DMBEDTLS_CONFIG_FILE=\\\"mcux_mbedtls_config.h\\\""
     )
@@ -34,6 +36,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.config)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.psa_crypto_config)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_configuration(
         CC  "-DMBEDTLS_CONFIG_FILE=\\\"mcux_mbedtls_psa_crypto_config.h\\\""
     )
@@ -50,6 +53,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.psa_crypto_config)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.hw_init)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_source(
         SOURCES port/hw_init/hw_init.c
                 port/hw_init/hw_init.h
@@ -62,6 +66,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.hw_init)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.rng)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_source(
         SOURCES port/rng/psa_mcux_entropy.c
         BASE_PATH ${SdkRootDirPath}/middleware/mbedtls3x/
@@ -73,6 +78,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.rng)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.tfm)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_source(
         SOURCES port/tfm/entropy_poll_alt.c
         BASE_PATH ${SdkRootDirPath}/middleware/mbedtls3x/
@@ -84,6 +90,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.tfm)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.tests)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_source(
         SOURCES tests/src/asn1_helpers.c
                 tests/src/bignum_helpers.c
@@ -125,6 +132,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.tests)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto_storage_default)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_source(
         SOURCES library/psa_its_file.c
                 library/psa_crypto_its.h
@@ -138,6 +146,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto_storage_default)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto_storage_fatfs)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_configuration(
         CC  "-DMBEDTLS_PSA_ITS_FILE_FATFS"
     )
@@ -156,6 +165,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto_storage_fatfs)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto_storage_ram)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_configuration(
         CC  "-DMBEDTLS_PSA_ITS_RAM"
     )
@@ -172,6 +182,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto_storage_ram)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_source(
         SOURCES include/mbedtls/aes.h
                 include/mbedtls/aria.h
@@ -381,6 +392,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_source(
         SOURCES library/psa_crypto.c
                 library/psa_crypto_aead.c
@@ -406,6 +418,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.x509)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_source(
         SOURCES include/mbedtls/pkcs7.h
                 include/mbedtls/x509.h
@@ -432,6 +445,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.x509)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.ssl.no_psa)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_source(
         SOURCES include/mbedtls/ssl.h
                 include/mbedtls/ssl_cache.h
@@ -478,6 +492,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.ssl.no_psa)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.ssl)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_include(
         INCLUDES include
                  library
@@ -486,6 +501,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.ssl)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.no_psa)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_include(
         INCLUDES include
                  library
@@ -494,6 +510,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.no_psa)
 endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x)
+    mcux_component_version(${mbedtls3x_version})
     mcux_add_include(
         INCLUDES include
                  library
