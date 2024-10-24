@@ -553,6 +553,7 @@ int mbedtls_gcm_finish(mbedtls_gcm_context *ctx,
     return 0;
 }
 
+#if !defined(MBEDTLS_GCM_CRYPT_ALT) //NXP
 int mbedtls_gcm_crypt_and_tag(mbedtls_gcm_context *ctx,
                               int mode,
                               size_t length,
@@ -622,6 +623,7 @@ int mbedtls_gcm_auth_decrypt(mbedtls_gcm_context *ctx,
 
     return 0;
 }
+#endif /* !MBEDTLS_GCM_CRYPT_ALT */ //NXP
 
 void mbedtls_gcm_free(mbedtls_gcm_context *ctx)
 {
@@ -645,7 +647,7 @@ void mbedtls_gcm_free(mbedtls_gcm_context *ctx)
 static const int key_index_test_data[MAX_TESTS] =
 { 0, 0, 1, 1, 1, 1 };
 
-static const unsigned char key_test_data[MAX_TESTS][32] =
+static const unsigned char key_test_data[MAX_TESTS][32] __attribute__((aligned)) = //NXP
 {
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -886,6 +888,19 @@ int mbedtls_gcm_self_test(int verbose)
 
     for (j = 0; j < 3; j++) {
         int key_len = 128 + 64 * j;
+
+        #ifdef MBEDTLS_AES_ALT_NO_192 //NXP
+        if (j == 1)
+        {
+            continue;
+        }
+        #endif //NXP
+        #ifdef MBEDTLS_AES_ALT_NO_256 //NXP
+        if (j == 2)
+        {
+            continue;
+        }
+        #endif //NXP
 
         for (i = 0; i < MAX_TESTS; i++) {
             mbedtls_gcm_init(&ctx);

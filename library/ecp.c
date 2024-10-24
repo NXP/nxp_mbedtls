@@ -788,7 +788,7 @@ int mbedtls_ecp_point_read_binary(const mbedtls_ecp_group *grp,
         mbedtls_mpi_free(&pt->Y);
 
         if (grp->id == MBEDTLS_ECP_DP_CURVE25519) {
-            /* Set most significant bit to 0 as prescribed in RFC7748 ยง5 */
+            /* Set most significant bit to 0 as prescribed in RFC7748 ง5 */
             MBEDTLS_MPI_CHK(mbedtls_mpi_set_bit(&pt->X, plen * 8 - 1, 0));
         }
 
@@ -1319,6 +1319,7 @@ cleanup:
  * Normalize jacobian coordinates so that Z == 0 || Z == 1  (GECC 3.2.1)
  * Cost: 1N := 1I + 3M + 1S
  */
+#if !defined(MBEDTLS_ECP_MUL_COMB_ALT) || !defined(MBEDTLS_ECP_ADD_ALT) //NXP
 static int ecp_normalize_jac(const mbedtls_ecp_group *grp, mbedtls_ecp_point *pt)
 {
     if (MPI_ECP_CMP_INT(&pt->Z, 0) == 0) {
@@ -1353,6 +1354,7 @@ cleanup:
     return ret;
 #endif /* !defined(MBEDTLS_ECP_NO_FALLBACK) || !defined(MBEDTLS_ECP_NORMALIZE_JAC_ALT) */
 }
+#endif /*!MBEDTLS_ECP_MUL_COMB_ALT || !MBEDTLS_ECP_ADD_ALT */ //NXP
 
 /*
  * Normalize jacobian coordinates of an array of (pointers to) points,
@@ -1365,6 +1367,7 @@ cleanup:
  *
  * Cost: 1N(t) := 1I + (6t - 3)M + 1S
  */
+#if !defined(MBEDTLS_ECP_MUL_COMB_ALT) //NXP
 static int ecp_normalize_jac_many(const mbedtls_ecp_group *grp,
                                   mbedtls_ecp_point *T[], size_t T_size)
 {
@@ -1457,11 +1460,13 @@ cleanup:
     return ret;
 #endif /* !defined(MBEDTLS_ECP_NO_FALLBACK) || !defined(MBEDTLS_ECP_NORMALIZE_JAC_MANY_ALT) */
 }
+#endif /*!MBEDTLS_ECP_MUL_COMB_ALT*/ //NXP
 
 /*
  * Conditional point inversion: Q -> -Q = (Q.X, -Q.Y, Q.Z) without leak.
  * "inv" must be 0 (don't invert) or 1 (invert) or the result will be invalid
  */
+#if !defined(MBEDTLS_ECP_MUL_COMB_ALT) //NXP
 static int ecp_safe_invert_jac(const mbedtls_ecp_group *grp,
                                mbedtls_ecp_point *Q,
                                unsigned char inv)
@@ -1476,6 +1481,7 @@ cleanup:
     mbedtls_mpi_free(&tmp);
     return ret;
 }
+#endif /*!MBEDTLS_ECP_MUL_COMB_ALT*/ //NXP
 
 /*
  * Point doubling R = 2 P, Jacobian coordinates
@@ -1491,6 +1497,7 @@ cleanup:
  *             4M + 4S          (A == -3)
  *             3M + 6S + 1a     otherwise
  */
+#if !defined(MBEDTLS_ECP_MUL_COMB_ALT) || !defined(MBEDTLS_ECP_ADD_ALT)//NXP
 static int ecp_double_jac(const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
                           const mbedtls_ecp_point *P,
                           mbedtls_mpi tmp[4])
@@ -1567,6 +1574,7 @@ cleanup:
     return ret;
 #endif /* !defined(MBEDTLS_ECP_NO_FALLBACK) || !defined(MBEDTLS_ECP_DOUBLE_JAC_ALT) */
 }
+#endif /*!MBEDTLS_ECP_MUL_COMB_ALT*/ //NXP
 
 /*
  * Addition: R = P + Q, mixed affine-Jacobian coordinates (GECC 3.22)
@@ -1588,6 +1596,7 @@ cleanup:
  *
  * Cost: 1A := 8M + 3S
  */
+#if !defined(MBEDTLS_ECP_MUL_COMB_ALT) || !defined(MBEDTLS_ECP_ADD_ALT) //NXP
 static int ecp_add_mixed(const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
                          const mbedtls_ecp_point *P, const mbedtls_ecp_point *Q,
                          mbedtls_mpi tmp[4])
@@ -1678,6 +1687,7 @@ cleanup:
     return ret;
 #endif /* !defined(MBEDTLS_ECP_NO_FALLBACK) || !defined(MBEDTLS_ECP_ADD_MIXED_ALT) */
 }
+#endif /*!MBEDTLS_ECP_MUL_COMB_ALT*/ //NXP
 
 /*
  * Randomize jacobian coordinates:
@@ -1686,6 +1696,7 @@ cleanup:
  *
  * This countermeasure was first suggested in [2].
  */
+#if !defined(MBEDTLS_ECP_MUL_COMB_ALT) //NXP
 static int ecp_randomize_jac(const mbedtls_ecp_group *grp, mbedtls_ecp_point *pt,
                              int (*f_rng)(void *, unsigned char *, size_t), void *p_rng)
 {
@@ -1728,6 +1739,7 @@ cleanup:
     return ret;
 #endif /* !defined(MBEDTLS_ECP_NO_FALLBACK) || !defined(MBEDTLS_ECP_RANDOMIZE_JAC_ALT) */
 }
+#endif /*!MBEDTLS_ECP_MUL_COMB_ALT*/ //NXP
 
 /*
  * Check and define parameters used by the comb method (see below for details)
@@ -1789,6 +1801,7 @@ cleanup:
  * - m is the MPI, expected to be odd and such that bitlength(m) <= w * d
  *   (the result will be incorrect if these assumptions are not satisfied)
  */
+#if !defined(MBEDTLS_ECP_MUL_COMB_ALT) //NXP
 static void ecp_comb_recode_core(unsigned char x[], size_t d,
                                  unsigned char w, const mbedtls_mpi *m)
 {
@@ -1819,6 +1832,7 @@ static void ecp_comb_recode_core(unsigned char x[], size_t d,
         x[i-1] |= adjust << 7;
     }
 }
+#endif /*!MBEDTLS_ECP_MUL_COMB_ALT*/ //NXP
 
 /*
  * Precompute points for the adapted comb method
@@ -1854,6 +1868,7 @@ static void ecp_comb_recode_core(unsigned char x[], size_t d,
  * value, it's useful to set MBEDTLS_ECP_WINDOW_SIZE to a lower value in order
  * to minimize maximum blocking time.
  */
+#if !defined(MBEDTLS_ECP_MUL_COMB_ALT) //NXP
 static int ecp_precompute_comb(const mbedtls_ecp_group *grp,
                                mbedtls_ecp_point T[], const mbedtls_ecp_point *P,
                                unsigned char w, size_t d,
@@ -2011,12 +2026,14 @@ cleanup:
 
     return ret;
 }
+#endif /*!MBEDTLS_ECP_MUL_COMB_ALT*/ //NXP
 
 /*
  * Select precomputed point: R = sign(i) * T[ abs(i) / 2 ]
  *
  * See ecp_comb_recode_core() for background
  */
+#if !defined(MBEDTLS_ECP_MUL_COMB_ALT) //NXP
 static int ecp_select_comb(const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
                            const mbedtls_ecp_point T[], unsigned char T_size,
                            unsigned char i)
@@ -2041,6 +2058,7 @@ static int ecp_select_comb(const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
 cleanup:
     return ret;
 }
+#endif /*!MBEDTLS_ECP_MUL_COMB_ALT*/ //NXP
 
 /*
  * Core multiplication algorithm for the (modified) comb method.
@@ -2048,6 +2066,7 @@ cleanup:
  *
  * Cost: d A + d D + 1 R
  */
+#if !defined(MBEDTLS_ECP_MUL_COMB_ALT) //NXP
 static int ecp_mul_comb_core(const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
                              const mbedtls_ecp_point T[], unsigned char T_size,
                              const unsigned char x[], size_t d,
@@ -2113,7 +2132,9 @@ cleanup:
 
     return ret;
 }
+#endif /*!MBEDTLS_ECP_MUL_COMB_ALT*/ //NXP
 
+#if !defined(MBEDTLS_ECP_MUL_COMB_ALT) //NXP
 /*
  * Recode the scalar to get constant-time comb multiplication
  *
@@ -2412,6 +2433,13 @@ cleanup:
 
     return ret;
 }
+#else //NXP
+int ecp_mul_comb( mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
+                         const mbedtls_mpi *m, const mbedtls_ecp_point *P,
+                         int (*f_rng)(void *, unsigned char *, size_t),
+                         void *p_rng,
+                         mbedtls_ecp_restart_ctx *rs_ctx );
+#endif /*!MBEDTLS_ECP_MUL_COMB_ALT*/ //NXP
 
 #endif /* MBEDTLS_ECP_SHORT_WEIERSTRASS_ENABLED */
 
@@ -2550,6 +2578,7 @@ cleanup:
  * Multiplication with Montgomery ladder in x/z coordinates,
  * for curves in Montgomery form
  */
+#if !defined(MBEDTLS_ECP_MUL_MXZ_ALT) //NXP
 static int ecp_mul_mxz(mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
                        const mbedtls_mpi *m, const mbedtls_ecp_point *P,
                        int (*f_rng)(void *, unsigned char *, size_t),
@@ -2622,6 +2651,13 @@ cleanup:
     mpi_free_many(tmp, sizeof(tmp) / sizeof(mbedtls_mpi));
     return ret;
 }
+
+#else //NXP
+int ecp_mul_mxz( mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
+                 const mbedtls_mpi *m, const mbedtls_ecp_point *P,
+                 int (*f_rng)(void *, unsigned char *, size_t),
+                 void *p_rng );
+#endif /* MBEDTLS_ECP_MUL_MXZ_ALT */ //NXP
 
 #endif /* MBEDTLS_ECP_MONTGOMERY_ENABLED */
 
@@ -2768,6 +2804,7 @@ cleanup:
  * R = m * P with shortcuts for m == 0, m == 1 and m == -1
  * NOT constant-time - ONLY for short Weierstrass!
  */
+#if !defined(MBEDTLS_ECP_MULADD_ALT) //NXP
 static int mbedtls_ecp_mul_shortcuts(mbedtls_ecp_group *grp,
                                      mbedtls_ecp_point *R,
                                      const mbedtls_mpi *m,
@@ -2798,11 +2835,35 @@ cleanup:
 
     return ret;
 }
+#endif /* !MBEDTLS_ECP_MULADD_ALT */ //NXP
+
+/*
+ * Addition: R = P + Q, result's coordinates normalized
+ */
+#if !defined(MBEDTLS_ECP_ADD_ALT) //NXP
+int ecp_add( const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,  const mbedtls_ecp_point *P, const mbedtls_ecp_point *Q )
+{
+    int ret;
+    mbedtls_mpi tmp[4];
+
+    if( mbedtls_ecp_get_type( grp ) != MBEDTLS_ECP_TYPE_SHORT_WEIERSTRASS )
+        return( MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE );
+
+    MBEDTLS_MPI_CHK( ecp_add_mixed( grp, R, P, Q, tmp ) );
+    MBEDTLS_MPI_CHK( ecp_normalize_jac( grp, R ) );
+
+cleanup:
+    return( ret );
+}
+#else
+int ecp_add( const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,  const mbedtls_ecp_point *P, const mbedtls_ecp_point *Q );
+#endif /* MBEDTLS_ECP_ADD_ALT */ //NXP
 
 /*
  * Restartable linear combination
  * NOT constant-time
  */
+#if !defined(MBEDTLS_ECP_MULADD_ALT) //NXP
 int mbedtls_ecp_muladd_restartable(
     mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
     const mbedtls_mpi *m, const mbedtls_ecp_point *P,
@@ -2860,7 +2921,7 @@ mul2:
         MBEDTLS_MPI_CHK(mbedtls_internal_ecp_init(grp));
     }
 #endif /* MBEDTLS_ECP_INTERNAL_ALT */
-
+#if !defined(MBEDTLS_ECP_ADD_ALT) //NXP
 #if defined(MBEDTLS_ECP_RESTARTABLE)
     if (rs_ctx != NULL && rs_ctx->ma != NULL) {
         rs_ctx->ma->state = ecp_rsma_add;
@@ -2885,6 +2946,10 @@ norm:
         MBEDTLS_MPI_CHK(mbedtls_ecp_copy(R, pR));
     }
 #endif
+
+#else //NXP
+    MBEDTLS_MPI_CHK(ecp_add(grp, R, &mP, R ));
+#endif //NXP
 
 cleanup:
 
@@ -2913,6 +2978,7 @@ int mbedtls_ecp_muladd(mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
 {
     return mbedtls_ecp_muladd_restartable(grp, R, m, P, n, Q, NULL);
 }
+#endif /* MBEDTLS_ECP_MULADD_ALT */ //NXP
 #endif /* MBEDTLS_ECP_SHORT_WEIERSTRASS_ENABLED */
 
 #if defined(MBEDTLS_ECP_MONTGOMERY_ENABLED)

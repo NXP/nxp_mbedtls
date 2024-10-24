@@ -470,11 +470,15 @@ int mbedtls_ccm_finish(mbedtls_ccm_context *ctx,
 /*
  * Authenticated encryption or decryption
  */
-static int ccm_auth_crypt(mbedtls_ccm_context *ctx, int mode, size_t length,
-                          const unsigned char *iv, size_t iv_len,
-                          const unsigned char *add, size_t add_len,
-                          const unsigned char *input, unsigned char *output,
-                          unsigned char *tag, size_t tag_len)
+/* CCM selftest fails on ARM Cortex M with IAR 8.11 with common subexpression elimination optimalization enabled */ //NXP
+#if defined(__ICCARM__)
+#pragma optimize=no_cse
+#endif
+static int ccm_auth_crypt( mbedtls_ccm_context *ctx, int mode, size_t length,
+                           const unsigned char *iv, size_t iv_len,
+                           const unsigned char *add, size_t add_len,
+                           const unsigned char *input, unsigned char *output,
+                           unsigned char *tag, size_t tag_len )
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     size_t olen;
@@ -605,7 +609,7 @@ int mbedtls_ccm_auth_decrypt(mbedtls_ccm_context *ctx, size_t length,
 /*
  * The data is the same for all tests, only the used length changes
  */
-static const unsigned char key_test_data[] = {
+static const unsigned char key_test_data[] __attribute__((aligned)) = { //NXP
     0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47,
     0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f
 };

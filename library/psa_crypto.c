@@ -82,6 +82,11 @@
 #include "mbedtls/sha512.h"
 #include "hash_info.h"
 
+#if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)          //NXP TFM
+#include "tfm_crypto_defs.h"                                   //NXP TFM
+#include "tfm_builtin_key_loader.h"                            //NXP TFM
+#endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */          //NXP TFM
+
 #define ARRAY_LENGTH(array) (sizeof(array) / sizeof(*(array)))
 
 #if defined(MBEDTLS_PSA_BUILTIN_ALG_HKDF) ||          \
@@ -1011,7 +1016,12 @@ static psa_status_t psa_get_and_lock_transparent_key_slot_with_policy(
         return status;
     }
 
-    if (psa_key_lifetime_is_external((*p_slot)->attr.lifetime)) {
+    //NXP TFM, was if( psa_key_lifetime_is_external( (*p_slot)->attr.lifetime ) )
+    if( psa_key_lifetime_is_external( (*p_slot)->attr.lifetime )                                                          //NXP TFM
+#if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)                                                                     //NXP TFM
+        && PSA_KEY_LIFETIME_GET_LOCATION((*p_slot)->attr.lifetime) != TFM_BUILTIN_KEY_LOADER_KEY_LOCATION                 //NXP TFM
+#endif /* defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER) */                                                            //NXP TFM
+    ) {
         psa_unlock_key_slot(*p_slot);
         *p_slot = NULL;
         return PSA_ERROR_NOT_SUPPORTED;
@@ -1564,7 +1574,11 @@ static psa_status_t psa_validate_key_attributes(
             return PSA_ERROR_INVALID_ARGUMENT;
         }
     } else {
-        if (!psa_is_valid_key_id(psa_get_key_id(attributes), 0)) {
+#ifdef MBEDTLS_PSA_CRYPTO_SE_C                                           //NXP TFM  --- BEGIN ---
+        if( !psa_is_valid_key_id( psa_get_key_id( attributes ), 1 ) ) {
+#else
+        if( !psa_is_valid_key_id( psa_get_key_id( attributes ), 0 ) ) {
+#endif                                                                   //NXP TFM  --- END ---
             return PSA_ERROR_INVALID_ARGUMENT;
         }
     }
@@ -6611,8 +6625,13 @@ static psa_status_t psa_key_agreement_internal(psa_key_derivation_operation_t *o
                                                size_t peer_key_length)
 {
     psa_status_t status;
+#if PSA_RAW_KEY_AGREEMENT_OUTPUT_MAX_SIZE != 0                             //NXP TFM  --- BEGIN ---
     uint8_t shared_secret[PSA_RAW_KEY_AGREEMENT_OUTPUT_MAX_SIZE];
+    size_t shared_secret_length = sizeof(shared_secret);
+#else
+    uint8_t *shared_secret = NULL;
     size_t shared_secret_length = 0;
+#endif
     psa_algorithm_t ka_alg = PSA_ALG_KEY_AGREEMENT_GET_BASE(operation->alg);
 
     /* Step 1: run the secret agreement algorithm to generate the shared
@@ -6621,8 +6640,8 @@ static psa_status_t psa_key_agreement_internal(psa_key_derivation_operation_t *o
                                             private_key,
                                             peer_key, peer_key_length,
                                             shared_secret,
-                                            sizeof(shared_secret),
-                                            &shared_secret_length);
+                                            shared_secret_length,
+                                            &shared_secret_length);        //NXP TFM  --- END ---
     if (status != PSA_SUCCESS) {
         goto exit;
     }
@@ -6652,7 +6671,7 @@ psa_status_t psa_key_derivation_key_agreement(psa_key_derivation_operation_t *op
     if (!PSA_ALG_IS_KEY_AGREEMENT(operation->alg)) {
         return PSA_ERROR_INVALID_ARGUMENT;
     }
-    status = psa_get_and_lock_transparent_key_slot_with_policy(
+    status = psa_get_and_lock_key_slot_with_policy(                 //NXP TFM
         private_key, &slot, PSA_KEY_USAGE_DERIVE, operation->alg);
     if (status != PSA_SUCCESS) {
         return status;
@@ -6691,7 +6710,7 @@ psa_status_t psa_raw_key_agreement(psa_algorithm_t alg,
         status = PSA_ERROR_INVALID_ARGUMENT;
         goto exit;
     }
-    status = psa_get_and_lock_transparent_key_slot_with_policy(
+    status = psa_get_and_lock_key_slot_with_policy(                 //NXP TFM
         private_key, &slot, PSA_KEY_USAGE_DERIVE, alg);
     if (status != PSA_SUCCESS) {
         goto exit;
@@ -7139,6 +7158,11 @@ psa_status_t psa_crypto_init(void)
         return PSA_SUCCESS;
     }
 
+    status = psa_initialize_key_slots();             //NXP TFM
+    if (status != PSA_SUCCESS) {
+        goto exit;
+    }
+
     /* Init drivers */
     status = psa_driver_wrapper_init();
     if (status != PSA_SUCCESS) {
@@ -7154,11 +7178,6 @@ psa_status_t psa_crypto_init(void)
         goto exit;
     }
     global_data.rng_state = RNG_SEEDED;
-
-    status = psa_initialize_key_slots();
-    if (status != PSA_SUCCESS) {
-        goto exit;
-    }
 
 #if defined(PSA_CRYPTO_STORAGE_HAS_TRANSACTIONS)
     status = psa_crypto_load_transaction();

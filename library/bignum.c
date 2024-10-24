@@ -922,7 +922,11 @@ int mbedtls_mpi_cmp_int(const mbedtls_mpi *X, mbedtls_mpi_sint z)
 /*
  * Unsigned addition: X = |A| + |B|  (HAC 14.7)
  */
-int mbedtls_mpi_add_abs(mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *B)
+#if defined(MBEDTLS_MPI_ADD_ABS_ALT) //NXP
+int mbedtls_mpi_add_abs_orig( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *B )
+#else
+int mbedtls_mpi_add_abs( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *B )
+#endif /* MBEDTLS_MPI_ADD_ABS_ALT */ //NXP
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     size_t j;
@@ -984,7 +988,11 @@ cleanup:
 /*
  * Unsigned subtraction: X = |A| - |B|  (HAC 14.9, 14.10)
  */
-int mbedtls_mpi_sub_abs(mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *B)
+#if defined(MBEDTLS_MPI_SUB_ABS_ALT) //NXP
+int mbedtls_mpi_sub_abs_orig( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *B )
+#else
+int mbedtls_mpi_sub_abs( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *B )
+#endif /* MBEDTLS_MPI_SUB_ABS_ALT */ //NXP
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     size_t n;
@@ -1126,7 +1134,11 @@ int mbedtls_mpi_sub_int(mbedtls_mpi *X, const mbedtls_mpi *A, mbedtls_mpi_sint b
 /*
  * Baseline multiplication: X = A * B  (HAC 14.12)
  */
-int mbedtls_mpi_mul_mpi(mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *B)
+#if defined(MBEDTLS_MPI_MUL_MPI_ALT) //NXP
+int mbedtls_mpi_mul_mpi_orig( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *B )
+#else
+int mbedtls_mpi_mul_mpi( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *B )
+#endif /* MBEDTLS_MPI_MUL_MPI_ALT */ //NXP
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     size_t i, j;
@@ -1481,7 +1493,12 @@ int mbedtls_mpi_div_int(mbedtls_mpi *Q, mbedtls_mpi *R,
 /*
  * Modulo: R = A mod B
  */
-int mbedtls_mpi_mod_mpi(mbedtls_mpi *R, const mbedtls_mpi *A, const mbedtls_mpi *B)
+#if defined(MBEDTLS_MPI_MOD_MPI_ALT) //NXP
+int mbedtls_mpi_mod_mpi_orig( mbedtls_mpi *R, const mbedtls_mpi *A, const mbedtls_mpi *B )
+#else
+
+int mbedtls_mpi_mod_mpi( mbedtls_mpi *R, const mbedtls_mpi *A, const mbedtls_mpi *B )
+#endif /* MBEDTLS_MPI_MOD_MPI_ALT */ //NXP
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     MPI_VALIDATE_RET(R != NULL);
@@ -1648,9 +1665,13 @@ cleanup:
 /*
  * Sliding-window exponentiation: X = A^E mod N  (HAC 14.85)
  */
-int mbedtls_mpi_exp_mod(mbedtls_mpi *X, const mbedtls_mpi *A,
-                        const mbedtls_mpi *E, const mbedtls_mpi *N,
-                        mbedtls_mpi *prec_RR)
+#if defined(MBEDTLS_MPI_EXP_MOD_ALT) //NXP
+int mbedtls_mpi_exp_mod_orig( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *E, const mbedtls_mpi *N, mbedtls_mpi *prec_RR )
+#else
+int mbedtls_mpi_exp_mod( mbedtls_mpi *X, const mbedtls_mpi *A,
+                         const mbedtls_mpi *E, const mbedtls_mpi *N,
+                         mbedtls_mpi *prec_RR )
+#endif /* MBEDTLS_MPI_EXP_MOD_ALT */ //NXP
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     size_t window_bitsize;
@@ -1948,7 +1969,11 @@ cleanup:
 /*
  * Greatest common divisor: G = gcd(A, B)  (HAC 14.54)
  */
-int mbedtls_mpi_gcd(mbedtls_mpi *G, const mbedtls_mpi *A, const mbedtls_mpi *B)
+#if defined(MBEDTLS_MPI_GCD_ALT) //NXP
+int mbedtls_mpi_gcd_orig( mbedtls_mpi *G, const mbedtls_mpi *A, const mbedtls_mpi *B )
+#else
+int mbedtls_mpi_gcd( mbedtls_mpi *G, const mbedtls_mpi *A, const mbedtls_mpi *B )
+#endif /* MBEDTLS_MPI_GCD_ALT */ //NXP
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     size_t lz, lzt;
@@ -2110,7 +2135,11 @@ int mbedtls_mpi_random(mbedtls_mpi *X,
 /*
  * Modular inverse: X = A^-1 mod N  (HAC 14.61 / 14.64)
  */
-int mbedtls_mpi_inv_mod(mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *N)
+#if defined(MBEDTLS_MPI_INV_MOD_ALT) //NXP
+int mbedtls_mpi_inv_mod_orig( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *N )
+#else
+int mbedtls_mpi_inv_mod( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *N )
+#endif /* MBEDTLS_MPI_INV_MOD_ALT */ //NXP
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     mbedtls_mpi G, TA, TU, U1, U2, TB, TV, V1, V2;

@@ -28,7 +28,7 @@
 #include <mbedtls/psa_util.h>
 #include <mbedtls/error.h>
 #include <mbedtls/lms.h>
-#include <mbedtls/ssl.h>
+//NXP //DM #include <mbedtls/ssl.h>
 #include <mbedtls/rsa.h>
 
 /* PSA_SUCCESS is kept at the top of each error table since

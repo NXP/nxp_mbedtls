@@ -356,6 +356,7 @@ int mbedtls_cipher_cmac_reset(mbedtls_cipher_context_t *ctx)
     return 0;
 }
 
+#if !defined(MBEDTLS_CIPHER_CMAC_ALT) //NXP
 int mbedtls_cipher_cmac(const mbedtls_cipher_info_t *cipher_info,
                         const unsigned char *key, size_t keylen,
                         const unsigned char *input, size_t ilen,
@@ -391,6 +392,7 @@ exit:
 
     return ret;
 }
+#endif /* MBEDTLS_CIPHER_CMAC_ALT */ //NXP
 
 #if defined(MBEDTLS_AES_C)
 /*
@@ -520,6 +522,7 @@ static const unsigned char aes_128_expected_result[NB_CMAC_TESTS_PER_KEY][MBEDTL
     }
 };
 
+#if defined(MBEDTLS_CIPHER_CMAC_ALT) && !defined(MBEDTLS_AES_ALT_NO_192) //NXP
 /* CMAC-AES192 Test Data */
 static const unsigned char aes_192_key[24] = {
     0x8e, 0x73, 0xb0, 0xf7,     0xda, 0x0e, 0x64, 0x52,
@@ -561,8 +564,10 @@ static const unsigned char aes_192_expected_result[NB_CMAC_TESTS_PER_KEY][MBEDTL
         0x4d, 0x77, 0x58, 0x96,     0x59, 0xf3, 0x9a, 0x11
     }
 };
+#endif /* MBEDTLS_AES_ALT_NO_192 */ //NXP
 
 /* CMAC-AES256 Test Data */
+#if defined(MBEDTLS_CIPHER_CMAC_ALT) //NXP
 static const unsigned char aes_256_key[32] = {
     0x60, 0x3d, 0xeb, 0x10,     0x15, 0xca, 0x71, 0xbe,
     0x2b, 0x73, 0xae, 0xf0,     0x85, 0x7d, 0x77, 0x81,
@@ -604,9 +609,11 @@ static const unsigned char aes_256_expected_result[NB_CMAC_TESTS_PER_KEY][MBEDTL
         0x69, 0x6a, 0x2c, 0x05,     0x6c, 0x31, 0x54, 0x10
     }
 };
+#endif /* MBEDTLS_CIPHER_CMAC_ALT */ //NXP
 #endif /* MBEDTLS_AES_C */
 
 #if defined(MBEDTLS_DES_C)
+#if defined(MBEDTLS_CIPHER_CMAC_ALT) && defined(MBEDTLS_CIPHER_CMAC_TDES_ENABLED) //NXP
 /* Truncation point of message for 3DES CMAC tests  */
 static const unsigned int des3_message_lengths[NB_CMAC_TESTS_PER_KEY] = {
     0,
@@ -692,7 +699,7 @@ static const unsigned char des3_3key_expected_result[NB_CMAC_TESTS_PER_KEY][MBED
         0x99, 0x42, 0x9b, 0xd0,     0xbF, 0x79, 0x04, 0xe5
     }
     };
-
+#endif /* MBEDTLS_CIPHER_CMAC_ALT && MBEDTLS_CIPHER_CMAC_TDES_ENABLED */ //NXP
 #endif /* MBEDTLS_DES_C */
 
 #if defined(MBEDTLS_AES_C)
@@ -949,7 +956,7 @@ int mbedtls_cmac_self_test(int verbose)
                                     NB_CMAC_TESTS_PER_KEY)) != 0) {
         return ret;
     }
-
+#if defined(MBEDTLS_CIPHER_CMAC_ALT) && !defined(MBEDTLS_AES_ALT_NO_192) //NXP
     /* AES-192 */
     if ((ret = cmac_test_subkeys(verbose,
                                  "AES 192",
@@ -974,7 +981,9 @@ int mbedtls_cmac_self_test(int verbose)
                                     NB_CMAC_TESTS_PER_KEY)) != 0) {
         return ret;
     }
+#endif /* MBEDTLS_CIPHER_CMAC_ALT && !MBEDTLS_AES_ALT_NO_192 */ //NXP
 
+#if defined(MBEDTLS_CIPHER_CMAC_ALT) && defined(MBEDTLS_CIPHER_CMAC_AES_256_ENABLED) //NXP
     /* AES-256 */
     if ((ret = cmac_test_subkeys(verbose,
                                  "AES 256",
@@ -999,9 +1008,11 @@ int mbedtls_cmac_self_test(int verbose)
                                     NB_CMAC_TESTS_PER_KEY)) != 0) {
         return ret;
     }
+#endif /* MBEDTLS_CIPHER_CMAC_ALT && MBEDTLS_CIPHER_CMAC_AES_256_ENABLED */ //NXP
 #endif /* MBEDTLS_AES_C */
 
 #if defined(MBEDTLS_DES_C)
+#if defined(MBEDTLS_CIPHER_CMAC_ALT) && defined(MBEDTLS_CIPHER_CMAC_TDES_ENABLED) //NXP
     /* 3DES 2 key */
     if ((ret = cmac_test_subkeys(verbose,
                                  "3DES 2 key",
@@ -1051,6 +1062,7 @@ int mbedtls_cmac_self_test(int verbose)
                                     NB_CMAC_TESTS_PER_KEY)) != 0) {
         return ret;
     }
+#endif /* MBEDTLS_CIPHER_CMAC_ALT && MBEDTLS_CIPHER_CMAC_TDES_ENABLED */ //NXP
 #endif /* MBEDTLS_DES_C */
 
 #if defined(MBEDTLS_AES_C)

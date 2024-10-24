@@ -40,10 +40,17 @@
 
 /* Include the context structure definitions for those drivers that were
  * declared during the autogeneration process. */
+#if defined(PSA_CRYPTO_DRIVER_CC3XX)
+#include "cc3xx_crypto_primitives_private.h"
+#endif /* PSA_CRYPTO_DRIVER_CC3XX */       //NXP TFM
 
 #if defined(MBEDTLS_TEST_LIBTESTDRIVER1)
 #include <libtestdriver1/include/psa/crypto.h>
 #endif
+
+#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
+#include "els_pkc_crypto_primitives.h"
+#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 
 #if defined(PSA_CRYPTO_DRIVER_TEST)
 
@@ -102,6 +109,12 @@ typedef union {
 #if defined(PSA_CRYPTO_DRIVER_TEST)
     mbedtls_transparent_test_driver_hash_operation_t test_driver_ctx;
 #endif
+#if defined(PSA_CRYPTO_DRIVER_CC3XX)           //NXP TFM
+    cc3xx_hash_operation_t cc3xx_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
+    els_pkc_hash_operation_t els_pkc_driver_ctx;
+#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 } psa_driver_hash_context_t;
 
 typedef union {
@@ -111,6 +124,13 @@ typedef union {
     mbedtls_transparent_test_driver_cipher_operation_t transparent_test_driver_ctx;
     mbedtls_opaque_test_driver_cipher_operation_t opaque_test_driver_ctx;
 #endif
+#if defined(PSA_CRYPTO_DRIVER_CC3XX)          //NXP TFM
+    cc3xx_cipher_operation_t cc3xx_driver_ctx;	
+#endif
+#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
+    els_pkc_transparent_cipher_operation_t transparent_els_pkc_driver_ctx;
+    els_pkc_opaque_cipher_operation_t opaque_els_pkc_driver_ctx;
+#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 } psa_driver_cipher_context_t;
 
 #endif /* PSA_CRYPTO_DRIVER_CONTEXTS_PRIMITIVES_H */
