@@ -73,6 +73,10 @@
 #include "mbedtls/psa_util.h"
 #include "mbedtls/threading.h"
 
+#if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
+#include "tfm_builtin_key_loader.h"
+#endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
+
 #if defined(MBEDTLS_PSA_BUILTIN_ALG_HKDF) ||          \
     defined(MBEDTLS_PSA_BUILTIN_ALG_HKDF_EXTRACT) ||  \
     defined(MBEDTLS_PSA_BUILTIN_ALG_HKDF_EXPAND)
@@ -284,7 +288,8 @@ static uint8_t psa_get_drivers_initialized(void)
 int psa_can_do_hash(psa_algorithm_t hash_alg)
 {
     (void) hash_alg;
-    return psa_get_drivers_initialized();
+    /* Workaround for the legacy CryptoCell driver requiring hash during init */
+    return 1; //psa_get_drivers_initialized();
 }
 
 int psa_can_do_cipher(psa_key_type_t key_type, psa_algorithm_t cipher_alg)
@@ -1166,7 +1171,11 @@ static psa_status_t psa_get_and_lock_transparent_key_slot_with_policy(
         return status;
     }
 
-    if (psa_key_lifetime_is_external((*p_slot)->attr.lifetime)) {
+    if (psa_key_lifetime_is_external((*p_slot)->attr.lifetime)
+#if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
+        && PSA_KEY_LIFETIME_GET_LOCATION((*p_slot)->attr.lifetime) != TFM_BUILTIN_KEY_LOADER_KEY_LOCATION
+#endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
+        ) {
         psa_unregister_read_under_mutex(*p_slot);
         *p_slot = NULL;
         return PSA_ERROR_NOT_SUPPORTED;
@@ -1313,6 +1322,9 @@ psa_status_t psa_destroy_key(mbedtls_svc_key_id_t key)
         overall_status = PSA_ERROR_NOT_PERMITTED;
         goto exit;
     }
+    
+    status = psa_driver_wrapper_destroy_key(&slot->attr,
+                                            slot->key.data, slot->key.bytes);
 
 #if defined(MBEDTLS_PSA_CRYPTO_SE_C)
     driver = psa_get_se_driver_entry(slot->attr.lifetime);
@@ -1695,7 +1707,11 @@ static psa_status_t psa_validate_key_attributes(
             return PSA_ERROR_INVALID_ARGUMENT;
         }
     } else {
+#ifdef MBEDTLS_PSA_CRYPTO_SE_C
+        if (!psa_is_valid_key_id(psa_get_key_id(attributes), 1)) {
+#else
         if (!psa_is_valid_key_id(psa_get_key_id(attributes), 0)) {
+#endif
             return PSA_ERROR_INVALID_ARGUMENT;
         }
     }
@@ -7580,7 +7596,7 @@ psa_status_t psa_key_derivation_key_agreement(psa_key_derivation_operation_t *op
     if (!PSA_ALG_IS_KEY_AGREEMENT(operation->alg)) {
         return PSA_ERROR_INVALID_ARGUMENT;
     }
-    status = psa_get_and_lock_transparent_key_slot_with_policy(
+    status = psa_get_and_lock_key_slot_with_policy(
         private_key, &slot, PSA_KEY_USAGE_DERIVE, operation->alg);
     if (status != PSA_SUCCESS) {
         return status;
@@ -7630,7 +7646,7 @@ psa_status_t psa_raw_key_agreement(psa_algorithm_t alg,
         status = PSA_ERROR_INVALID_ARGUMENT;
         goto exit;
     }
-    status = psa_get_and_lock_transparent_key_slot_with_policy(
+    status = psa_get_and_lock_key_slot_with_policy(
         private_key, &slot, PSA_KEY_USAGE_DERIVE, alg);
     if (status != PSA_SUCCESS) {
         goto exit;
@@ -8262,12 +8278,12 @@ psa_status_t psa_crypto_init(void)
         return PSA_SUCCESS;
     }
 
-    status = mbedtls_psa_crypto_init_subsystem(PSA_CRYPTO_SUBSYSTEM_DRIVER_WRAPPERS);
+    status = mbedtls_psa_crypto_init_subsystem(PSA_CRYPTO_SUBSYSTEM_KEY_SLOTS);
     if (status != PSA_SUCCESS) {
         goto exit;
     }
 
-    status = mbedtls_psa_crypto_init_subsystem(PSA_CRYPTO_SUBSYSTEM_KEY_SLOTS);
+    status = mbedtls_psa_crypto_init_subsystem(PSA_CRYPTO_SUBSYSTEM_DRIVER_WRAPPERS);
     if (status != PSA_SUCCESS) {
         goto exit;
     }
