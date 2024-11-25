@@ -5,10 +5,19 @@
 
 #include "psa/crypto.h"
 #include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
 
-#define ASSERT(predicate)                                                   \
+/* NXP change */
+/* KSDK */
+#if defined(MCUX_MBEDTLS)
+#include "app.h"
+#include "fsl_debug_console.h"
+#define printf PRINTF
+#else
+#include <stdio.h>
+#endif
+
+#define ASSERT( predicate )                                                   \
     do                                                                        \
     {                                                                         \
         if (!(predicate))                                                 \
@@ -311,8 +320,13 @@ static void cipher_examples(void)
 
 int main(void)
 {
-    ASSERT(psa_crypto_init() == PSA_SUCCESS);
-    cipher_examples();
+#if defined(MCUX_MBEDTLS)
+    /* HW init */
+    BOARD_InitHardware();
+#endif
+    
+    ASSERT( psa_crypto_init( ) == PSA_SUCCESS );
+    cipher_examples( );
 exit:
     mbedtls_psa_crypto_free();
     return 0;

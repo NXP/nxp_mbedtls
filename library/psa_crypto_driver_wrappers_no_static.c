@@ -40,6 +40,41 @@
 #include "../3rdparty/p256-m/p256-m_driver_entrypoints.h"
 
 #endif
+/* Headers for tfm_builtin_key transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
+#include "tfm_builtin_key_loader.h"
+
+#endif
+/* Headers for cc3xx transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_CC3XX)
+#include "cc3xx.h"
+
+#endif
+/* Headers for ele_s2xx transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+#include "ele_s2xx.h"
+
+#endif
+/* Headers for ele_s4xx opaque driver */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
+#include "ele_s4xx.h"
+
+#endif
+/* Headers for ele_s4xx transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
+#include "ele_s4xx.h"
+
+#endif
+/* Headers for els_pkc opaque driver */
+#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
+#include "els_pkc_driver.h"
+
+#endif
+/* Headers for els_pkc transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
+#include "els_pkc_driver.h"
+
+#endif
 
 /* END-driver headers */
 
@@ -51,6 +86,13 @@
 #define MBEDTLS_TEST_OPAQUE_DRIVER_ID (2)
 #define MBEDTLS_TEST_TRANSPARENT_DRIVER_ID (3)
 #define P256_TRANSPARENT_DRIVER_ID (4)
+#define TFM_BUILTIN_KEY_TRANSPARENT_DRIVER_ID (5)
+#define CC3XX_TRANSPARENT_DRIVER_ID (6)
+#define ELE_S2XX_TRANSPARENT_DRIVER_ID (7)
+#define ELE_S4XX_OPAQUE_DRIVER_ID (8)
+#define ELE_S4XX_TRANSPARENT_DRIVER_ID (9)
+#define ELS_PKC_OPAQUE_DRIVER_ID (10)
+#define ELS_PKC_TRANSPARENT_DRIVER_ID (11)
 
 /* END-driver id */
 
@@ -112,6 +154,33 @@ psa_status_t psa_driver_wrapper_get_key_buffer_size(
                     PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 
+#if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
+        case TFM_BUILTIN_KEY_LOADER_KEY_LOCATION:
+            return tfm_builtin_key_loader_get_key_buffer_size(psa_get_key_id(attributes),
+                                                              key_buffer_size);
+#endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
+
+#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
+        case 0x000001:
+            *key_buffer_size = ele_s4xx_opaque_size_function(key_type,
+                                                           key_bits );
+            return( ( *key_buffer_size != 0 ) ?
+                    PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
+            break;
+#endif /* PSA_CRYPTO_DRIVER_ELE_S4XX */
+
+#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_RFC3394_STORAGE:
+            *key_buffer_size = els_pkc_opaque_size_function_key_buff_size( 
+                               attributes);
+            return( ( *key_buffer_size != 0 ) ?
+                    PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
+#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+
         default:
             (void)key_type;
             (void)key_bits;
@@ -153,6 +222,9 @@ psa_status_t psa_driver_wrapper_export_public_key(
     switch( location )
     {
         case PSA_KEY_LOCATION_LOCAL_STORAGE:
+#if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
+        case TFM_BUILTIN_KEY_LOADER_KEY_LOCATION:
+#endif /* defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER) */
             /* Key is stored in the slot in export representation, so
              * cycle through all known transparent accelerators */
 #if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)
@@ -173,6 +245,37 @@ psa_status_t psa_driver_wrapper_export_public_key(
 
 #if (defined(MBEDTLS_PSA_P256M_DRIVER_ENABLED) )
             status = p256_transparent_export_public_key
+                (attributes,
+                                key_buffer,
+                                key_buffer_size,
+                                data,
+                                data_size,
+                                data_length
+            );
+
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif
+
+
+#if (defined(PSA_CRYPTO_DRIVER_CC3XX) )
+            status = cc3xx_transparent_export_public_key
+                (attributes,
+                                key_buffer,
+                                key_buffer_size,
+                                data,
+                                data_size,
+                                data_length
+            );
+
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif
+
+
+
+#if (defined(PSA_CRYPTO_DRIVER_ELS_PKC) )
+            status = els_pkc_transparent_export_public_key
                 (attributes,
                                 key_buffer,
                                 key_buffer_size,
@@ -210,7 +313,35 @@ psa_status_t psa_driver_wrapper_export_public_key(
         ));
 #endif
 
+#if (defined(PSA_CRYPTO_DRIVER_ELE_S4XX) )
+        case 0x000001:
+            return( ele_s4xx_opaque_export_public_key
+            (attributes,
+                            key_buffer,
+                            key_buffer_size,
+                            data,
+                            data_size,
+                            data_length
+        ));
+#endif
 
+
+
+#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_RFC3394_STORAGE:
+            return( els_pkc_opaque_export_public_key
+            (attributes,
+                            key_buffer,
+                            key_buffer_size,
+                            data,
+                            data_size,
+                            data_length
+        ));
+#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             /* Key is declared with a lifetime not known to us */
@@ -242,6 +373,29 @@ psa_status_t psa_driver_wrapper_get_builtin_key(
 #endif
 
 
+
+
+#if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
+        case TFM_BUILTIN_KEY_LOADER_KEY_LOCATION:
+            return( tfm_builtin_key_loader_get_builtin_key(
+                        slot_number,
+                        attributes,
+                        key_buffer, key_buffer_size, key_buffer_length ) );
+#endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
+#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_RFC3394_STORAGE:
+            return( els_pkc_opaque_get_builtin_key
+            (slot_number,
+                            attributes,
+                            key_buffer,
+                            key_buffer_size,
+                            key_buffer_length
+        ));
+#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             (void) slot_number;

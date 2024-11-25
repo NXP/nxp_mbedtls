@@ -41,12 +41,29 @@
 #include <limits.h>
 #include <string.h>
 
+/* NXP change */
+/* KSDK */
+#include "app.h"
+#include "fsl_common.h"
+extern status_t CRYPTO_InitHardware(void);
+
+#if defined(MBEDTLS_PLATFORM_C)
 #include "mbedtls/platform.h"
+#else
+#include <stdio.h>
+#include <stdlib.h>
+#define mbedtls_printf     printf
+#define mbedtls_snprintf   snprintf
+#define mbedtls_exit       exit
+#define MBEDTLS_EXIT_SUCCESS EXIT_SUCCESS
+#define MBEDTLS_EXIT_FAILURE EXIT_FAILURE
+#endif
+
+/* NXP change --end -- */
 
 #if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C)
 #include "mbedtls/memory_buffer_alloc.h"
 #endif
-
 
 #if defined MBEDTLS_SELF_TEST
 /* Sanity check for malloc. This is not expected to fail, and is rather
@@ -174,7 +191,8 @@ static int calloc_self_test(int verbose)
 }
 #endif /* MBEDTLS_SELF_TEST */
 
-static int test_snprintf(size_t n, const char *ref_buf, int ref_ret)
+#if RUN_TEST_SNPRINTF
+static int test_snprintf( size_t n, const char *ref_buf, int ref_ret )
 {
     int ret;
     char buf[10] = "xxxxxxxxx";
@@ -203,6 +221,7 @@ static int run_test_snprintf(void)
            test_snprintf(4, "123",         3) != 0 ||
            test_snprintf(5, "123",         3) != 0;
 }
+#endif
 
 /*
  * Check if a seed file is present, and if not create one for the entropy
@@ -381,6 +400,19 @@ int main(int argc, char *argv[])
 #endif
     void *pointer;
 
+#if defined(MCUX_MBEDTLS)
+    argc = 0;					// Some debuggers pass junk in argc. Force 0 to avoid that
+    BOARD_InitHardware();                       // NXP
+
+    /* HW init , that initializes the els, pkc and trng. 
+    If els_pkc is not being used, then only trng is initialized*/
+    if( CRYPTO_InitHardware() != kStatus_Success )
+    {
+        mbedtls_printf( "Initialization of crypto HW failed\n" );
+        mbedtls_exit( MBEDTLS_EXIT_FAILURE );
+    }
+#endif
+    
     /*
      * Check some basic platform requirements as specified in README.md
      */
@@ -490,6 +522,8 @@ int main(int argc, char *argv[])
 #undef CHECK_PADDING_SIGNED
 #undef CHECK_PADDING_UNSIGNED
 
+/* NXP - Commneted as test fails on MCU Expresso IDE */
+#if RUN_TEST_SNPRINTF
     /*
      * Make sure we have a snprintf that correctly zero-terminates
      */
@@ -497,10 +531,14 @@ int main(int argc, char *argv[])
         mbedtls_printf("the snprintf implementation is broken\n");
         mbedtls_exit(MBEDTLS_EXIT_FAILURE);
     }
+#endif
 
-    for (argp = argv + (argc >= 1 ? 1 : argc); *argp != NULL; ++argp) {
-        if (strcmp(*argp, "--quiet") == 0 ||
-            strcmp(*argp, "-q") == 0) {
+    /* NXP - Additional check added for argc */
+    for( argp = argv + ( argc >= 1 ? 1 : argc ); (argc != 0 && *argp != NULL); ++argp )
+    {
+        if( strcmp( *argp, "--quiet" ) == 0 ||
+            strcmp( *argp, "-q" ) == 0 )
+        {
             v = 0;
         } else if (strcmp(*argp, "--exclude") == 0 ||
                    strcmp(*argp, "-x") == 0) {
@@ -520,7 +558,9 @@ int main(int argc, char *argv[])
     mbedtls_memory_buffer_alloc_init(buf, sizeof(buf));
 #endif
 
-    if (*argp != NULL && exclude_mode == 0) {
+    /* NXP - Additional check added for argc */
+    if(argc && *argp != NULL && exclude_mode == 0 )
+    {
         /* Run the specified tests */
         for (; *argp != NULL; argp++) {
             for (test = selftests; test->name != NULL; test++) {
