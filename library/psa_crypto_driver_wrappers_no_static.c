@@ -175,8 +175,8 @@ psa_status_t psa_driver_wrapper_get_key_buffer_size(
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_RFC3394_STORAGE:
-            *key_buffer_size = els_pkc_opaque_size_function_key_buff_size( 
-                               attributes);
+            *key_buffer_size = els_pkc_opaque_size_function_key_buff_size(
+                                                                attributes);
             return( ( *key_buffer_size != 0 ) ?
                     PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
