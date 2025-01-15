@@ -1475,6 +1475,20 @@ static inline psa_status_t psa_driver_wrapper_import_key(
                             bits
         ));
 #endif  /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if (defined(PSA_CRYPTO_DRIVER_ELE_S2XX) )
+        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_KEY:
+        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_DATA:
+        case PSA_CRYPTO_LOCATION_S200_BLOB_STORAGE:
+            return( s2xx_opaque_import_key
+            (attributes,
+                            data,
+                            data_length,
+                            key_buffer,
+                            key_buffer_size,
+                            key_buffer_length,
+                            bits
+        ));
+#endif  /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             (void)status;
