@@ -1134,6 +1134,16 @@ static inline psa_status_t psa_driver_wrapper_get_key_buffer_size_from_key_data(
             return( ( *key_buffer_size != 0 ) ?
                     PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_KEY:
+        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_DATA:
+        case PSA_CRYPTO_LOCATION_S200_BLOB_STORAGE:
+            *key_buffer_size = ele_s2xx_opaque_size_function( attributes,
+                                                 data,
+                                                 data_length);
+            return( ( *key_buffer_size != 0 ) ?
+                    PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
+#endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 
         default:
             (void)key_type;
@@ -1319,6 +1329,14 @@ static inline psa_status_t psa_driver_wrapper_destroy_key(
                 attributes, key_buffer, key_buffer_size);
             break;
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_KEY:
+        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_DATA:
+        case PSA_CRYPTO_LOCATION_S200_BLOB_STORAGE:
+            status = ele_s2xx_opaque_destroy_key(
+                attributes, key_buffer, key_buffer_size);
+            break;
+#endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
         /* Drivers which may not have any state to change for destruction of key */
@@ -1811,8 +1829,24 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt(
                                          output_length ) );
 
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */            
-            
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_KEY:
+        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_DATA:
+        case PSA_CRYPTO_LOCATION_S200_BLOB_STORAGE:
+            return ( ele_s2xx_opaque_cipher_encrypt( attributes,
+                                                     key_buffer,
+                                                     key_buffer_size,
+                                                     alg,
+                                                     iv,
+                                                     iv_length,
+                                                     input,
+                                                     input_length,
+                                                     output,
+                                                     output_size,
+                                                     output_length ) );
+#endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
+
         default:
             /* Key is declared with a lifetime not known to us */
             (void)status;
@@ -1981,6 +2015,20 @@ static inline psa_status_t psa_driver_wrapper_cipher_decrypt(
                                                      output_size,
                                                      output_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_KEY:
+        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_DATA:
+        case PSA_CRYPTO_LOCATION_S200_BLOB_STORAGE:
+           return ( ele_s2xx_opaque_cipher_decrypt( attributes,
+                                                    key_buffer,
+                                                    key_buffer_size,
+                                                    alg,
+                                                    input,
+                                                    input_length,
+                                                    output,
+                                                    output_size,
+                                                    output_length ) );
+#endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
         default:
