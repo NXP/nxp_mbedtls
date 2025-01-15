@@ -1479,7 +1479,7 @@ static inline psa_status_t psa_driver_wrapper_import_key(
         case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_KEY:
         case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_DATA:
         case PSA_CRYPTO_LOCATION_S200_BLOB_STORAGE:
-            return( s2xx_opaque_import_key
+            return( ele_s2xx_opaque_import_key
             (attributes,
                             data,
                             data_length,
