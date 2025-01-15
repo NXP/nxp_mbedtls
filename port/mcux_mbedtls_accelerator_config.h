@@ -52,6 +52,17 @@
 #define MBEDTLS_PSA_CRYPTO_STORAGE_C
 #endif
 
+/*
+ * For ELE_S2XX, enable crypto storage with littlefs.
+ * // TODO Request feature macro for s2xx - use FSL_FEATURE_ELEMU_HAS_SEMA4_STATUS_REGISTER for now.
+ *         Also add an SECURE_STORAGE_ITS_LITTLEFS (or similar) macro for checking enablement.
+ */
+#if (defined(FSL_FEATURE_EDGELOCK) && (FSL_FEATURE_EDGELOCK > 0)) &&                                               \
+    (defined(FSL_FEATURE_ELEMU_HAS_SEMA4_STATUS_REGISTER) && (FSL_FEATURE_ELEMU_HAS_SEMA4_STATUS_REGISTER > 0)) && \
+    (defined(CONFIG_SECURE_STORAGE_ITS_MAX_DATA_SIZE))
+#define MBEDTLS_PSA_CRYPTO_STORAGE_C
+#endif
+
 /* ======== Define ALT functions ====================================== */
 
 /* For PSA Crypto drivers entropy is not supported currently so enable hardware alt */
