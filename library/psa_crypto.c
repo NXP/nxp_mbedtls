@@ -921,6 +921,12 @@ static int psa_key_algorithm_permits(psa_key_type_t key_type,
     if (requested_alg == policy_alg) {
         return 1;
     }
+
+    // Let vendor check the policy for vendor defined algos
+    if (PSA_ALG_IS_VENDOR_DEFINED(policy_alg)) {
+        return 1;
+    }
+
     /* If policy_alg is a hash-and-sign with a wildcard for the hash,
      * and requested_alg is the same hash-and-sign family with any hash,
      * then requested_alg is compliant with policy_alg. */
