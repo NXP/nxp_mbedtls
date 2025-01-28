@@ -1096,9 +1096,8 @@ static inline psa_status_t psa_driver_wrapper_get_key_buffer_size_from_key_data(
                     PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
-        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_KEY:
-        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_DATA:
-        case PSA_CRYPTO_LOCATION_S200_BLOB_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_DATA_STORAGE:
             *key_buffer_size = ele_s2xx_opaque_size_function( attributes,
                                                  data,
                                                  data_length);
@@ -1290,9 +1289,8 @@ static inline psa_status_t psa_driver_wrapper_destroy_key(
             break;
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
-        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_KEY:
-        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_DATA:
-        case PSA_CRYPTO_LOCATION_S200_BLOB_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_DATA_STORAGE:
             status = ele_s2xx_opaque_destroy_key(
                 attributes, key_buffer, key_buffer_size);
             break;
@@ -1401,9 +1399,8 @@ bits
         ));
 #endif  /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if (defined(PSA_CRYPTO_DRIVER_ELE_S2XX) )
-        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_KEY:
-        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_DATA:
-        case PSA_CRYPTO_LOCATION_S200_BLOB_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_DATA_STORAGE:
             return( ele_s2xx_opaque_import_key
             (attributes,
                             data,
@@ -1727,9 +1724,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt(
 
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
-        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_KEY:
-        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_DATA:
-        case PSA_CRYPTO_LOCATION_S200_BLOB_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
             return ( ele_s2xx_opaque_cipher_encrypt( attributes,
                                                      key_buffer,
                                                      key_buffer_size,
@@ -1913,9 +1908,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_decrypt(
                                                      output_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
-        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_KEY:
-        case PSA_CRYPTO_LOCATION_S200_ENC_STORAGE_DATA:
-        case PSA_CRYPTO_LOCATION_S200_BLOB_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
            return ( ele_s2xx_opaque_cipher_decrypt( attributes,
                                                     key_buffer,
                                                     key_buffer_size,
