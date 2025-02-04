@@ -2930,9 +2930,21 @@ static inline psa_status_t psa_driver_wrapper_aead_encrypt(
                          additional_data, additional_data_length,
                          plaintext, plaintext_length,
                          ciphertext, ciphertext_size, ciphertext_length );
-            
+
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+            status = ele_s2xx_opaque_aead_encrypt(
+                         attributes, key_buffer, key_buffer_size,
+                         alg,
+                         nonce, nonce_length,
+                         additional_data, additional_data_length,
+                         plaintext, plaintext_length,
+                         ciphertext, ciphertext_size, ciphertext_length );
+
+            return( status );
+#endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
         default:
@@ -3062,10 +3074,22 @@ static inline psa_status_t psa_driver_wrapper_aead_decrypt(
                          additional_data, additional_data_length,
                          ciphertext, ciphertext_length,
                          plaintext, plaintext_size, plaintext_length );
-            
+
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
-#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */     
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+            status = ele_s2xx_opaque_aead_decrypt(
+                         attributes, key_buffer, key_buffer_size,
+                         alg,
+                         nonce, nonce_length,
+                         additional_data, additional_data_length,
+                         ciphertext, ciphertext_length,
+                         plaintext, plaintext_size, plaintext_length );
+
+            return( status );
+#endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
         default:
             /* Key is declared with a lifetime not known to us */
