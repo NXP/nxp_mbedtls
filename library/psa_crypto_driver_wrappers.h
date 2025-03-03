@@ -1413,7 +1413,6 @@ static inline psa_status_t psa_driver_wrapper_destroy_key(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
-        case PSA_CRYPTO_LOCATION_S200_DATA_STORAGE:
             status = ele_s2xx_opaque_destroy_key(
                 attributes, key_buffer, key_buffer_size);
             break;
@@ -1672,6 +1671,18 @@ static inline psa_status_t psa_driver_wrapper_export_key(
                             data_length
         ));
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if (defined(PSA_CRYPTO_DRIVER_ELE_S2XX) )
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_DATA_STORAGE:
+            return( ele_s2xx_opaque_export_key
+            (attributes,
+                            key_buffer,
+                            key_buffer_size,
+                            data,
+                            data_size,
+                            data_length
+        ));
+#endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             /* Key is declared with a lifetime not known to us */
