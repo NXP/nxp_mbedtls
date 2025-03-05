@@ -449,8 +449,10 @@ static inline psa_status_t psa_driver_wrapper_verify_message(
                         input_length,
                         signature,
                         signature_length ) );
-            if( status != PSA_ERROR_NOT_SUPPORTED )
-                return( status );
+            /* Below code is unreachable - fix by example of psa_driver_wrapper_sign_message()
+               and test functionality. */
+//            if( status != PSA_ERROR_NOT_SUPPORTED )
+//                return( status );
             break;
 #endif /* PSA_CRYPTO_DRIVER_ELE_S4XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
@@ -468,8 +470,10 @@ static inline psa_status_t psa_driver_wrapper_verify_message(
                         input_length,
                         signature,
                         signature_length ) );
-            if( status != PSA_ERROR_NOT_SUPPORTED )
-                return( status );
+            /* Below code is unreachable - fix by example of psa_driver_wrapper_sign_message()
+               and test functionality. */
+//            if( status != PSA_ERROR_NOT_SUPPORTED )
+//                return( status );
             break;
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
@@ -483,8 +487,10 @@ static inline psa_status_t psa_driver_wrapper_verify_message(
                         input_length,
                         signature,
                         signature_length ) );
-            if( status != PSA_ERROR_NOT_SUPPORTED )
-                return( status );
+            /* Below code is unreachable - fix by example of psa_driver_wrapper_sign_message()
+               and test functionality. */
+//            if( status != PSA_ERROR_NOT_SUPPORTED )
+//                return( status );
             break;
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
@@ -1763,6 +1769,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt(
                                                 output,
                                                 output_size,
                                                 output_length ) );
+#else
             return( PSA_ERROR_NOT_SUPPORTED );
 #endif /* MBEDTLS_PSA_BUILTIN_CIPHER */
 
