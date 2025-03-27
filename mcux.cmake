@@ -250,6 +250,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa)
                 include/psa/build_info.h
                 include/psa/crypto.h
                 include/psa/crypto_adjust_auto_enabled.h
+                include/psa/crypto_adjust_config_dependencies.h
                 include/psa/crypto_adjust_config_key_pair_types.h
                 include/psa/crypto_adjust_config_synonyms.h
                 include/psa/crypto_builtin_composites.h
@@ -283,6 +284,8 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa)
                 library/bignum.c
                 library/bignum_core.h
                 library/bignum_core.c
+                library/bignum_core_invasive.h
+                library/bignum_internal.h
                 library/bignum_mod.c
                 library/bignum_mod.h
                 library/bignum_mod_raw.c
