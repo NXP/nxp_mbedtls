@@ -3,3 +3,15 @@ The next major version of mbedtls is set to be decoupled from PSA completely, wh
 
 entropy_poll_alt.c:
 Provides an alternative implementation for mbedtls' entropy polling that calls psa_generate_random(2) on the TF-M interface.
+
+psa_can_do_apis.c
+Provides psa_can_do_hash definition on TF-M NS end. File can be extended if definition is required for psa_can_do_cipher.
+As per release notes of Mbedtls 3.6.3:
+MD module can now perform PSA dispatching also when
+MBEDTLS_PSA_CRYPTO_CLIENT && !MBEDTLS_PSA_CRYPTO_C, even though this
+configuration is not officially supported. This requires that a
+PSA Crypto provider library which:
+ - supports the required PSA_WANT_ALG_xxx and
+ - implements psa_can_do_hash() on the client interface
+   is linked against Mbed TLS and that psa_crypto_init() is called before
+   performing any PSA call.

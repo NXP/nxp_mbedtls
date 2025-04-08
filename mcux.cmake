@@ -81,6 +81,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.tfm)
     mcux_component_version(${mbedtls3x_version})
     mcux_add_source(
         SOURCES port/tfm/entropy_poll_alt.c
+        port/tfm/psa_can_do_apis.c
         BASE_PATH ${SdkRootDirPath}/middleware/mbedtls3x/
     )
     mcux_add_include(
