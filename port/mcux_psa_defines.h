@@ -21,4 +21,8 @@
 #include "mcux_psa_s2xx_key_locations.h"
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 
+#if defined(PSA_CRYPTO_DRIVER_CAAM)
+#define PSA_CRYPTO_CAAM_LOCATION 			0x000001
+#endif /* PSA_CRYPTO_DRIVER_CAAM */
+
 #endif /* MCUX_PSA_DEFINES_H */

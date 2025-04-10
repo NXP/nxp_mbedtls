@@ -8,5 +8,7 @@
     "ele_s4xx_opaque_driver.json",
     "ele_s4xx_transparent_driver.json",
     "els_pkc_opaque_driver.json",
-    "els_pkc_transparent_driver.json"
+    "els_pkc_transparent_driver.json",
+    "caam_opaque_driver.json",
+    "caam_transparent_driver.json"
 ]
