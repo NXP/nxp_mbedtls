@@ -33,6 +33,10 @@
 #include "cc3xx_crypto_primitives_private.h"
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 
+#if defined(PSA_CRYPTO_DRIVER_DCP)
+#include "dcp_crypto_primitives.h"
+#endif /* PSA_CRYPTO_DRIVER_DCP */
+
 #if defined(MBEDTLS_TEST_LIBTESTDRIVER1)
 #include <libtestdriver1/include/psa/crypto.h>
 #endif
@@ -109,6 +113,9 @@ typedef union {
 #endif
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
     cc3xx_hash_operation_t cc3xx_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_DCP)
+    mcux_dcp_hash_operation_t dcp_driver_ctx;
 #endif
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
     ele_s2xx_hash_operation_t ele_driver_ctx;
