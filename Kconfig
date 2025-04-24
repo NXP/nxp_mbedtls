@@ -6,6 +6,9 @@ menu "mbedtls3x"
         bool "Component middleware.mbedtls3x.port.config"
     config MCUX_COMPONENT_middleware.mbedtls3x.port.psa_crypto_config
         bool "Component middleware.mbedtls3x.port.psa_crypto_config"
+    config MCUX_COMPONENT_middleware.mbedtls3x.port.only_accelerator_config
+        bool "Component middleware.mbedtls3x.port.psa_crypto_config"
+
     config MCUX_COMPONENT_middleware.mbedtls3x.port.hw_init
         bool "Component middleware.mbedtls3x.port.hw_init"
 
