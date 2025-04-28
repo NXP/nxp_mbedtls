@@ -57,6 +57,10 @@
 #include "caam_crypto_primitives.h"
 #endif
 
+#if defined(PSA_CRYPTO_DRIVER_HASHCRYPT)
+#include "hashcrypt_crypto_primitives.h"
+#endif
+
 #if defined(PSA_CRYPTO_DRIVER_TEST)
 
 #if defined(MBEDTLS_TEST_LIBTESTDRIVER1) && \
@@ -132,6 +136,9 @@ typedef union {
 #endif
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
     mcux_caam_hash_operation_t caam_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_HASHCRYPT)
+    mcux_hashcrypt_hash_operation_t hashcrypt_driver_ctx;
 #endif
 } psa_driver_hash_context_t;
 
