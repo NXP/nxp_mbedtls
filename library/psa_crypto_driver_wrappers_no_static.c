@@ -95,6 +95,16 @@
 #include "caam.h"
 
 #endif
+/* Headers for hashcrypt transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_HASHCRYPT)
+#include "hashcrypt.h"
+
+#endif
+/* Headers for casper transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_CASPER)
+#include "casper.h"
+
+#endif
 
 /* END-driver headers */
 
@@ -117,6 +127,8 @@
 #define ELS_PKC_TRANSPARENT_DRIVER_ID (13)
 #define CAAM_OPAQUE_DRIVER_ID (14)
 #define CAAM_TRANSPARENT_DRIVER_ID (15)
+#define HASHCRYPT_TRANSPARENT_DRIVER_ID (16)
+#define CASPER_TRANSPARENT_DRIVER_ID (17)
 
 /* END-driver id */
 
@@ -322,6 +334,8 @@ psa_status_t psa_driver_wrapper_export_public_key(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif
+
+
 
 
 
