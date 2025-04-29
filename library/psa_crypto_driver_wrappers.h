@@ -56,6 +56,11 @@
 #include "dcp.h"
 
 #endif
+/* Headers for ela_csec transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_ELA_CSEC)
+#include "ela_csec.h"
+
+#endif
 /* Headers for ele_s2xx transparent driver */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
 #include "ele_s2xx.h"
@@ -105,13 +110,14 @@
 #define TFM_BUILTIN_KEY_TRANSPARENT_DRIVER_ID (5)
 #define CC3XX_TRANSPARENT_DRIVER_ID (6)
 #define DCP_TRANSPARENT_DRIVER_ID (7)
-#define ELE_S2XX_TRANSPARENT_DRIVER_ID (8)
-#define ELE_S4XX_OPAQUE_DRIVER_ID (9)
-#define ELE_S4XX_TRANSPARENT_DRIVER_ID (10)
-#define ELS_PKC_OPAQUE_DRIVER_ID (11)
-#define ELS_PKC_TRANSPARENT_DRIVER_ID (12)
-#define CAAM_OPAQUE_DRIVER_ID (13)
-#define CAAM_TRANSPARENT_DRIVER_ID (14)
+#define ELA_CSEC_TRANSPARENT_DRIVER_ID (8)
+#define ELE_S2XX_TRANSPARENT_DRIVER_ID (9)
+#define ELE_S4XX_OPAQUE_DRIVER_ID (10)
+#define ELE_S4XX_TRANSPARENT_DRIVER_ID (11)
+#define ELS_PKC_OPAQUE_DRIVER_ID (12)
+#define ELS_PKC_TRANSPARENT_DRIVER_ID (13)
+#define CAAM_OPAQUE_DRIVER_ID (14)
+#define CAAM_TRANSPARENT_DRIVER_ID (15)
 
 /* END-driver id */
 
@@ -166,6 +172,12 @@ static inline psa_status_t psa_driver_wrapper_init( void )
     if (status != PSA_SUCCESS)
         return ( status );
 #endif /* PSA_CRYPTO_DRIVER_DCP */
+
+#if defined(PSA_CRYPTO_DRIVER_ELA_CSEC)
+    status = ela_csec_transparent_init();
+    if (status != PSA_SUCCESS)
+        return ( status );
+#endif /* PSA_CRYPTO_DRIVER_ELA_CSEC */
 
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
     status = ele_s2xx_transparent_init();
@@ -223,6 +235,10 @@ static inline void psa_driver_wrapper_free( void )
 #if defined(PSA_CRYPTO_DRIVER_DCP)
     (void)dcp_common_free();
 #endif /* PSA_CRYPTO_DRIVER_DCP */
+
+#if defined(PSA_CRYPTO_DRIVER_ELA_CSEC)
+    (void)ela_csec_transparent_free();
+#endif
 
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
     (void)ele_s2xx_transparent_free();
@@ -1697,6 +1713,7 @@ static inline psa_status_t psa_driver_wrapper_import_key(
 
 
 
+
 #if (defined(PSA_CRYPTO_DRIVER_ELS_PKC) )
             status = els_pkc_transparent_import_key
                 (attributes,
@@ -2007,6 +2024,22 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_DCP */
+#if defined(PSA_CRYPTO_DRIVER_ELA_CSEC)
+            status = ela_csec_transparent_cipher_encrypt( attributes,
+                                         key_buffer,
+                                         key_buffer_size,
+                                         alg,
+                                         iv,
+                                         iv_length,
+                                         input,
+                                         input_length,
+                                         output,
+                                         output_size,
+                                         output_length );
+            /* Declared with fallback == true */
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_ELA_CSEC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
             status = ele_s2xx_transparent_cipher_encrypt( attributes,
                                          key_buffer,
@@ -2252,6 +2285,20 @@ static inline psa_status_t psa_driver_wrapper_cipher_decrypt(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_DCP */
+#if defined(PSA_CRYPTO_DRIVER_ELA_CSEC)
+            status = ela_csec_transparent_cipher_decrypt( attributes,
+                                         key_buffer,
+                                         key_buffer_size,
+                                         alg,
+                                         input,
+                                         input_length,
+                                         output,
+                                         output_size,
+                                         output_length );
+            /* Declared with fallback == true */
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_ELA_CSEC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
             status = ele_s2xx_transparent_cipher_decrypt( attributes,
                                          key_buffer,
@@ -4217,6 +4264,15 @@ static inline psa_status_t psa_driver_wrapper_mac_compute(
                 mac, mac_size, mac_length);
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
+#if defined(PSA_CRYPTO_DRIVER_ELA_CSEC)
+            status = ela_csec_transparent_mac_compute(
+                attributes, key_buffer, key_buffer_size, alg,
+                input, input_length,
+                mac, mac_size, mac_length );
+            /* Declared with fallback == true */
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_ELA_CSEC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
             status = ele_s2xx_transparent_mac_compute(
                 attributes, key_buffer, key_buffer_size, alg,
