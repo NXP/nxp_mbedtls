@@ -80,10 +80,14 @@
 #include "els_pkc_driver.h"
 
 #endif
-/* Headers for caam opaque and transparent driver */
+/* Headers for caam opaque driver */
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
 #include "caam.h"
 
+#endif
+/* Headers for caam transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_CAAM)
+#include "caam.h"
 
 #endif
 
@@ -368,7 +372,6 @@ psa_status_t psa_driver_wrapper_export_public_key(
                             data_length
         ));
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
-
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
             return( ele_s2xx_opaque_export_public_key
@@ -380,7 +383,6 @@ psa_status_t psa_driver_wrapper_export_public_key(
                             data_length
         ));
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
-
 #if (defined(PSA_CRYPTO_DRIVER_CAAM) )
         case 0x000001:
             return( caam_common_export_public_key
@@ -391,7 +393,7 @@ psa_status_t psa_driver_wrapper_export_public_key(
                             data_size,
                             data_length
         ));
-#endif
+#endif /* PSA_CRYPTO_DRIVER_CAAM */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             /* Key is declared with a lifetime not known to us */
