@@ -55,6 +55,11 @@
 #include "dcp.h"
 
 #endif
+/* Headers for ela_csec transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_ELA_CSEC)
+#include "ela_csec.h"
+
+#endif
 /* Headers for ele_s2xx transparent driver */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
 #include "ele_s2xx.h"
@@ -104,13 +109,14 @@
 #define TFM_BUILTIN_KEY_TRANSPARENT_DRIVER_ID (5)
 #define CC3XX_TRANSPARENT_DRIVER_ID (6)
 #define DCP_TRANSPARENT_DRIVER_ID (7)
-#define ELE_S2XX_TRANSPARENT_DRIVER_ID (8)
-#define ELE_S4XX_OPAQUE_DRIVER_ID (9)
-#define ELE_S4XX_TRANSPARENT_DRIVER_ID (10)
-#define ELS_PKC_OPAQUE_DRIVER_ID (11)
-#define ELS_PKC_TRANSPARENT_DRIVER_ID (12)
-#define CAAM_OPAQUE_DRIVER_ID (13)
-#define CAAM_TRANSPARENT_DRIVER_ID (14)
+#define ELA_CSEC_TRANSPARENT_DRIVER_ID (8)
+#define ELE_S2XX_TRANSPARENT_DRIVER_ID (9)
+#define ELE_S4XX_OPAQUE_DRIVER_ID (10)
+#define ELE_S4XX_TRANSPARENT_DRIVER_ID (11)
+#define ELS_PKC_OPAQUE_DRIVER_ID (12)
+#define ELS_PKC_TRANSPARENT_DRIVER_ID (13)
+#define CAAM_OPAQUE_DRIVER_ID (14)
+#define CAAM_TRANSPARENT_DRIVER_ID (15)
 
 /* END-driver id */
 
@@ -298,6 +304,7 @@ psa_status_t psa_driver_wrapper_export_public_key(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif
+
 
 
 
