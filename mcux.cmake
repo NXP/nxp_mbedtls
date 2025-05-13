@@ -91,6 +91,19 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.rng)
     )
 endif()
 
+if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.only_entropy)
+    mcux_component_version(${mbedtls3x_version})
+
+    mcux_add_source(
+        SOURCES port/rng/psa_mcux_entropy.c
+        BASE_PATH ${SdkRootDirPath}/middleware/mbedtls3x/
+    )
+    mcux_add_include(
+        INCLUDES port/rng
+        BASE_PATH ${SdkRootDirPath}/middleware/mbedtls3x/
+    )
+endif()
+
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.tfm)
     mcux_component_version(${mbedtls3x_version})
     mcux_add_source(

@@ -56,6 +56,9 @@ menu "Mbed TLS 3.x"
         config MCUX_COMPONENT_middleware.mbedtls3x.port.hw_init
             bool "Hardware initialization"
 
+        config MCUX_COMPONENT_middleware.mbedtls3x.port.only_entropy
+            bool "Only Entropy sources"
+
         config MCUX_COMPONENT_middleware.mbedtls3x.port.rng
             bool "Random Number Generator"
             select MCUX_COMPONENT_middleware.mbedtls3x
