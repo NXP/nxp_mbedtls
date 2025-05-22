@@ -9,6 +9,9 @@ menu "Mbed TLS 3.x"
     config MCUX_COMPONENT_middleware.mbedtls3x.x509
         bool "X.509"
 
+    config MCUX_COMPONENT_middleware.mbedtls3x.p256m
+        bool "p256-m"
+
     config MCUX_COMPONENT_middleware.mbedtls3x.ssl.no_psa
         bool "SSL (No PSA)"
         select MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa
