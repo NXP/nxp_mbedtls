@@ -451,6 +451,22 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto)
     )
 endif()
 
+if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.p256m)
+    mcux_component_version(${mbedtls3x_version})
+    mcux_add_source(
+        SOURCES 3rdparty/p256-m/p256-m/p256-m.h
+                3rdparty/p256-m/p256-m/p256-m.c
+                3rdparty/p256-m/p256-m_driver_entrypoints.h
+                3rdparty/p256-m/p256-m_driver_entrypoints.c
+        BASE_PATH ${SdkRootDirPath}/middleware/mbedtls3x/
+    )
+    mcux_add_include(
+        INCLUDES 3rdparty/p256-m/p256-m/
+                 3rdparty/p256-m/
+        BASE_PATH ${SdkRootDirPath}/middleware/mbedtls3x/
+    )
+endif()
+
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.x509)
     mcux_component_version(${mbedtls3x_version})
     mcux_add_source(
