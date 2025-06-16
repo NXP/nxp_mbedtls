@@ -14,5 +14,6 @@
     "caam_opaque_driver.json",
     "caam_transparent_driver.json",
     "hashcrypt_transparent_driver.json",
-    "casper_transparent_driver.json"
+    "casper_transparent_driver.json",
+    "sgi_transparent_driver.json"
 ]
