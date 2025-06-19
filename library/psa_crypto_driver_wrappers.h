@@ -3979,9 +3979,8 @@ static inline psa_status_t psa_driver_wrapper_aead_encrypt_setup(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         attributes, key_buffer, key_buffer_size,
                         alg );
-            /* Declared with fallback == true */
-            if( status != PSA_ERROR_NOT_SUPPORTED )
-                return( status );
+
+            return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
@@ -4072,9 +4071,8 @@ static inline psa_status_t psa_driver_wrapper_aead_decrypt_setup(
                         attributes,
                         key_buffer, key_buffer_size,
                         alg );
-            /* Declared with fallback == true */
-            if( status != PSA_ERROR_NOT_SUPPORTED )
-                return( status );
+
+            return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
@@ -4756,12 +4754,11 @@ static inline psa_status_t psa_driver_wrapper_mac_sign_setup(
                 attributes,
                 key_buffer, key_buffer_size,
                 alg );
-            /* Declared with fallback == true */
+
             if( status == PSA_SUCCESS )
                 operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;
 
-            if( status != PSA_ERROR_NOT_SUPPORTED )
-                return( status );
+            return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
@@ -4884,12 +4881,11 @@ static inline psa_status_t psa_driver_wrapper_mac_verify_setup(
                 attributes,
                 key_buffer, key_buffer_size,
                 alg );
-            /* Declared with fallback == true */
+
             if( status == PSA_SUCCESS )
                 operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;
 
-            if( status != PSA_ERROR_NOT_SUPPORTED )
-                return( status );
+            return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
