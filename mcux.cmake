@@ -120,36 +120,51 @@ endif()
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.tests)
     mcux_component_version(${mbedtls3x_version})
     mcux_add_source(
-        SOURCES tests/src/asn1_helpers.c
-                tests/src/bignum_helpers.c
-                tests/src/certs.c
-                tests/src/helpers.c
-                tests/src/psa_crypto_helpers.c
-                tests/src/psa_crypto_stubs.c
-                tests/src/psa_exercise_key.c
-                tests/src/psa_memory_poisoning_wrappers.c
-                tests/src/psa_test_wrappers.c
-                tests/src/random.c
-                tests/src/test_memory.c
-                tests/src/threading_helpers.c
-                tests/src/fake_external_rng_for_test.c
-                tests/src/test_helpers/ssl_helpers.c
-                tests/include/test/asn1_helpers.h
-                tests/include/test/bignum_helpers.h
+        SOURCES framework/tests/include/test/asn1_helpers.h
+                framework/tests/include/test/bignum_helpers.h
+                framework/tests/include/test/constant_flow.h
+                framework/tests/include/test/fake_external_rng_for_test.h
+                framework/tests/include/test/helpers.h
+                framework/tests/include/test/macros.h
+                framework/tests/include/test/memory.h
+                framework/tests/include/test/psa_crypto_helpers.h
+                framework/tests/include/test/psa_exercise_key.h
+                framework/tests/include/test/psa_helpers.h
+                framework/tests/include/test/psa_memory_poisoning_wrappers.h
+                framework/tests/include/test/random.h
+                framework/tests/src/asn1_helpers.c
+                framework/tests/src/bignum_helpers.c
+                framework/tests/src/fake_external_rng_for_test.c
+                framework/tests/src/helpers.c
+                framework/tests/src/psa_crypto_helpers.c
+                framework/tests/src/psa_crypto_stubs.c
+                framework/tests/src/psa_exercise_key.c
+                framework/tests/src/psa_memory_poisoning_wrappers.c
+                framework/tests/src/random.c
+                framework/tests/src/test_memory.c
+                framework/tests/src/threading_helpers.c
                 tests/include/test/certs.h
-                tests/include/test/constant_flow.h
-                tests/include/test/fake_external_rng_for_test.h
-                tests/include/test/helpers.h
-                tests/include/test/macros.h
-                tests/include/test/memory.h
-                tests/include/test/psa_crypto_helpers.h
-                tests/include/test/psa_exercise_key.h
-                tests/include/test/psa_helpers.h
-                tests/include/test/psa_memory_poisoning_wrappers.h
                 tests/include/test/psa_test_wrappers.h
-                tests/include/test/random.h
                 tests/include/test/ssl_helpers.h
-                tests/include/test/threading_helpers.h
+                tests/src/certs.c
+                tests/src/psa_test_wrappers.c
+                tests/src/test_helpers/ssl_helpers.c
+        BASE_PATH ${SdkRootDirPath}/middleware/mbedtls3x/
+    )
+    mcux_add_include(
+        INCLUDES framework/tests/include/test
+                 framework/tests/include/
+                 tests/include/test
+                 tests/include
+        BASE_PATH ${SdkRootDirPath}/middleware/mbedtls3x/
+    )
+endif()
+
+if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.tests_certs_only)
+    mcux_component_version(${mbedtls3x_version})
+    mcux_add_source(
+        SOURCES tests/include/test/certs.h
+                tests/src/certs.c
         BASE_PATH ${SdkRootDirPath}/middleware/mbedtls3x/
     )
     mcux_add_include(
