@@ -40,6 +40,9 @@ menu "Mbed TLS 3.x"
     config MCUX_COMPONENT_middleware.mbedtls3x.tests
         bool "Tests"
 
+    config MCUX_COMPONENT_middleware.mbedtls3x.tests_certs_only
+        bool "Test certificates only"
+
     config MCUX_PRJSEG_middleware.mbedtls3x.default_heap_stack
         bool "Default Heap/Stack Configuration"
 
