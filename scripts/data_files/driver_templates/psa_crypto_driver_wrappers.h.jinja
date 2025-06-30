@@ -1653,6 +1653,8 @@ static inline psa_status_t psa_driver_wrapper_destroy_key(
 
         /* Drivers which may not have any state to change for destruction of key */
         default:
+            (void)key_buffer;
+            (void)key_buffer_size;
             status = PSA_SUCCESS;
             break;
     }
