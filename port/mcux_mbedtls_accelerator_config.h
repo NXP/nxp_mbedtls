@@ -38,7 +38,8 @@
     (defined(FSL_FEATURE_SOC_LPC_RNG1_COUNT) && (FSL_FEATURE_SOC_LPC_RNG1_COUNT > 0)) || (defined(ELS)) || \
     (defined(FSL_FEATURE_ELE_S4XX) && (FSL_FEATURE_ELE_S4XX > 0)) ||                                       \
     (defined(FSL_FEATURE_SOC_CAAM_COUNT) && (FSL_FEATURE_SOC_CAAM_COUNT > 0)) ||                           \
-    (defined(FSL_FEATURE_SOC_ELA_CSEC_COUNT ) && (FSL_FEATURE_SOC_ELA_CSEC_COUNT > 0))
+    (defined(FSL_FEATURE_SOC_ELA_CSEC_COUNT ) && (FSL_FEATURE_SOC_ELA_CSEC_COUNT > 0)) ||                  \
+    (defined(ELE_HSEB) && (ELE_HSEB > 0))
 
 #ifndef MBEDTLS_MCUX_ENTROPY
 #define MBEDTLS_MCUX_ENTROPY (1)
