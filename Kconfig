@@ -25,14 +25,14 @@ menu "Mbed TLS 3.x"
 
     config MCUX_COMPONENT_middleware.mbedtls3x.no_psa
         bool "Mbed TLS (No PSA)"
-        select MCUX_COMPONENT_middleware.mbedtls3x.template
+        imply MCUX_COMPONENT_middleware.mbedtls3x.template
         select MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa
         select MCUX_COMPONENT_middleware.mbedtls3x.ssl.no_psa
         select MCUX_COMPONENT_middleware.mbedtls3x.x509
 
     config MCUX_COMPONENT_middleware.mbedtls3x
         bool "Mbed TLS"
-        select MCUX_COMPONENT_middleware.mbedtls3x.template
+        imply MCUX_COMPONENT_middleware.mbedtls3x.template
         select MCUX_COMPONENT_middleware.mbedtls3x.crypto
         select MCUX_COMPONENT_middleware.mbedtls3x.ssl
         select MCUX_COMPONENT_middleware.mbedtls3x.x509
