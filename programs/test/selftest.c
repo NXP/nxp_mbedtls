@@ -406,11 +406,13 @@ int main(int argc, char *argv[])
 
     /* HW init , that initializes the els, pkc and trng. 
     If els_pkc is not being used, then only trng is initialized*/
-    if( CRYPTO_InitHardware() != kStatus_Success )
+
+    if( psa_crypto_init() != PSA_SUCCESS )
     {
         mbedtls_printf( "Initialization of crypto HW failed\n" );
         mbedtls_exit( MBEDTLS_EXIT_FAILURE );
     }
+
 #endif
     
     /*
