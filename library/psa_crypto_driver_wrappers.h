@@ -66,6 +66,11 @@
 #include "ele_hseb.h"
 
 #endif
+/* Headers for ele_s2xx opaque driver */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+#include "ele_s2xx.h"
+
+#endif
 /* Headers for ele_s2xx transparent driver */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
 #include "ele_s2xx.h"
@@ -132,16 +137,17 @@
 #define DCP_TRANSPARENT_DRIVER_ID (7)
 #define ELA_CSEC_TRANSPARENT_DRIVER_ID (8)
 #define ELE_HSEB_TRANSPARENT_DRIVER_ID (9)
-#define ELE_S2XX_TRANSPARENT_DRIVER_ID (10)
-#define ELE_S4XX_OPAQUE_DRIVER_ID (11)
-#define ELE_S4XX_TRANSPARENT_DRIVER_ID (12)
-#define ELS_PKC_OPAQUE_DRIVER_ID (13)
-#define ELS_PKC_TRANSPARENT_DRIVER_ID (14)
-#define CAAM_OPAQUE_DRIVER_ID (15)
-#define CAAM_TRANSPARENT_DRIVER_ID (16)
-#define HASHCRYPT_TRANSPARENT_DRIVER_ID (17)
-#define CASPER_TRANSPARENT_DRIVER_ID (18)
-#define SGI_TRANSPARENT_DRIVER_ID (19)
+#define ELE_S2XX_OPAQUE_DRIVER_ID (10)
+#define ELE_S2XX_TRANSPARENT_DRIVER_ID (11)
+#define ELE_S4XX_OPAQUE_DRIVER_ID (12)
+#define ELE_S4XX_TRANSPARENT_DRIVER_ID (13)
+#define ELS_PKC_OPAQUE_DRIVER_ID (14)
+#define ELS_PKC_TRANSPARENT_DRIVER_ID (15)
+#define CAAM_OPAQUE_DRIVER_ID (16)
+#define CAAM_TRANSPARENT_DRIVER_ID (17)
+#define HASHCRYPT_TRANSPARENT_DRIVER_ID (18)
+#define CASPER_TRANSPARENT_DRIVER_ID (19)
+#define SGI_TRANSPARENT_DRIVER_ID (20)
 
 /* END-driver id */
 
@@ -1688,6 +1694,14 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
                 if( status != PSA_ERROR_NOT_SUPPORTED )
                     break;
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+                status = ele_s2xx_transparent_generate_key(
+                    attributes, key_buffer, key_buffer_size,
+                    key_buffer_length );
+                /* Declared with fallback == true */
+                if( status != PSA_ERROR_NOT_SUPPORTED )
+                    break;
+#endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
                 status = caam_common_generate_key(MCUX_PSA_CAAM_KEY_TYPE_NONE,
                     attributes, key_buffer, key_buffer_size,
@@ -1955,6 +1969,7 @@ static inline psa_status_t psa_driver_wrapper_import_key(
 
 
 
+
 #if (defined(PSA_CRYPTO_DRIVER_ELS_PKC) )
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:
@@ -2055,6 +2070,7 @@ static inline psa_status_t psa_driver_wrapper_export_key(
 
 
 
+
 #if (defined(PSA_CRYPTO_DRIVER_ELS_PKC) )
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:
@@ -2127,6 +2143,7 @@ static inline psa_status_t psa_driver_wrapper_copy_key(
                             target_key_buffer_length
         ));
 #endif
+
 
 
 
@@ -5596,6 +5613,20 @@ static inline psa_status_t psa_driver_wrapper_key_agreement(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+            status = ele_s2xx_transparent_key_agreement( attributes,
+                                          key_buffer,
+                                          key_buffer_size,
+                                          alg,
+                                          peer_key,
+                                          peer_key_length,
+                                          shared_secret,
+                                          shared_secret_size,
+                                          shared_secret_length);
+
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
             /* Software Fallback */

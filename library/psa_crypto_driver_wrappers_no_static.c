@@ -65,6 +65,11 @@
 #include "ele_hseb.h"
 
 #endif
+/* Headers for ele_s2xx opaque driver */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+#include "ele_s2xx.h"
+
+#endif
 /* Headers for ele_s2xx transparent driver */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
 #include "ele_s2xx.h"
@@ -131,16 +136,17 @@
 #define DCP_TRANSPARENT_DRIVER_ID (7)
 #define ELA_CSEC_TRANSPARENT_DRIVER_ID (8)
 #define ELE_HSEB_TRANSPARENT_DRIVER_ID (9)
-#define ELE_S2XX_TRANSPARENT_DRIVER_ID (10)
-#define ELE_S4XX_OPAQUE_DRIVER_ID (11)
-#define ELE_S4XX_TRANSPARENT_DRIVER_ID (12)
-#define ELS_PKC_OPAQUE_DRIVER_ID (13)
-#define ELS_PKC_TRANSPARENT_DRIVER_ID (14)
-#define CAAM_OPAQUE_DRIVER_ID (15)
-#define CAAM_TRANSPARENT_DRIVER_ID (16)
-#define HASHCRYPT_TRANSPARENT_DRIVER_ID (17)
-#define CASPER_TRANSPARENT_DRIVER_ID (18)
-#define SGI_TRANSPARENT_DRIVER_ID (19)
+#define ELE_S2XX_OPAQUE_DRIVER_ID (10)
+#define ELE_S2XX_TRANSPARENT_DRIVER_ID (11)
+#define ELE_S4XX_OPAQUE_DRIVER_ID (12)
+#define ELE_S4XX_TRANSPARENT_DRIVER_ID (13)
+#define ELS_PKC_OPAQUE_DRIVER_ID (14)
+#define ELS_PKC_TRANSPARENT_DRIVER_ID (15)
+#define CAAM_OPAQUE_DRIVER_ID (16)
+#define CAAM_TRANSPARENT_DRIVER_ID (17)
+#define HASHCRYPT_TRANSPARENT_DRIVER_ID (18)
+#define CASPER_TRANSPARENT_DRIVER_ID (19)
+#define SGI_TRANSPARENT_DRIVER_ID (20)
 
 /* END-driver id */
 
@@ -377,6 +383,7 @@ psa_status_t psa_driver_wrapper_export_public_key(
         ));
 #endif
 
+
 #if (defined(PSA_CRYPTO_DRIVER_ELE_S4XX) )
         case 0x000001:
             return( ele_s4xx_opaque_export_public_key
@@ -458,6 +465,7 @@ psa_status_t psa_driver_wrapper_get_builtin_key(
                             key_buffer_length
         ));
 #endif
+
 
 
 
