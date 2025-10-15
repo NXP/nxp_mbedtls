@@ -149,6 +149,14 @@ psa_status_t psa_driver_wrapper_get_key_buffer_size(
             break;
 #endif /* PSA_CRYPTO_DRIVER_CAAM */
 
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
+            *key_buffer_size = ele_s2xx_opaque_get_key_buffer_size( attributes );
+            return( ( *key_buffer_size != 0 ) ?
+                    PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
+            break;
+#endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+
         default:
             (void)key_type;
             (void)key_bits;
@@ -238,6 +246,7 @@ data_length
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
             return( ele_s2xx_opaque_export_public_key
             (attributes,
                             key_buffer,

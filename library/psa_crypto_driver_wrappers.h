@@ -505,6 +505,7 @@ static inline psa_status_t psa_driver_wrapper_sign_message(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
             status = ele_s2xx_opaque_sign_message(
                         attributes,
                         key_buffer,
@@ -721,6 +722,7 @@ static inline psa_status_t psa_driver_wrapper_verify_message(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
             return( ele_s2xx_opaque_verify_message(
                         attributes,
                         key_buffer,
@@ -1006,6 +1008,7 @@ static inline psa_status_t psa_driver_wrapper_sign_hash(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
             return( ele_s2xx_opaque_sign_hash( attributes,
                                                key_buffer,
                                                key_buffer_size,
@@ -1266,6 +1269,7 @@ static inline psa_status_t psa_driver_wrapper_verify_hash(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
             return( ele_s2xx_opaque_verify_hash( attributes,
                                                  key_buffer,
                                                  key_buffer_size,
@@ -1575,6 +1579,7 @@ static inline psa_status_t psa_driver_wrapper_get_key_buffer_size_from_key_data(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
         case PSA_CRYPTO_LOCATION_S200_DATA_STORAGE:
             *key_buffer_size = ele_s2xx_opaque_size_function( attributes,
                                                  data,
@@ -1767,6 +1772,12 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
                 attributes, key_buffer, key_buffer_size, key_buffer_length );
             break;
 #endif /* PSA_CRYPTO_DRIVER_CAAM */
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
+            status = ele_s2xx_opaque_generate_key(
+                attributes, key_buffer, key_buffer_size, key_buffer_length );
+            break;
+#endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
         default:
@@ -1809,6 +1820,7 @@ static inline psa_status_t psa_driver_wrapper_destroy_key(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
             status = ele_s2xx_opaque_destroy_key(
                 attributes, key_buffer, key_buffer_size);
             break;
@@ -1988,6 +2000,7 @@ static inline psa_status_t psa_driver_wrapper_import_key(
 #endif  /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if (defined(PSA_CRYPTO_DRIVER_ELE_S2XX) )
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
         case PSA_CRYPTO_LOCATION_S200_DATA_STORAGE:
             return( ele_s2xx_opaque_import_key
             (attributes,
@@ -2088,6 +2101,7 @@ static inline psa_status_t psa_driver_wrapper_export_key(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if (defined(PSA_CRYPTO_DRIVER_ELE_S2XX) )
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
         case PSA_CRYPTO_LOCATION_S200_DATA_STORAGE:
             return( ele_s2xx_opaque_export_key
             (attributes,
@@ -2437,6 +2451,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
             return ( ele_s2xx_opaque_cipher_encrypt( attributes,
                                                      key_buffer,
                                                      key_buffer_size,
@@ -2720,6 +2735,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_decrypt(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
            return ( ele_s2xx_opaque_cipher_decrypt( attributes,
                                                     key_buffer,
                                                     key_buffer_size,
@@ -3953,6 +3969,7 @@ static inline psa_status_t psa_driver_wrapper_aead_encrypt(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
             status = ele_s2xx_opaque_aead_encrypt(
                          attributes, key_buffer, key_buffer_size,
                          alg,
@@ -4134,6 +4151,7 @@ static inline psa_status_t psa_driver_wrapper_aead_decrypt(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
             status = ele_s2xx_opaque_aead_decrypt(
                          attributes, key_buffer, key_buffer_size,
                          alg,
@@ -4885,6 +4903,7 @@ static inline psa_status_t psa_driver_wrapper_mac_compute(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
             status = ele_s2xx_opaque_mac_compute(
                 attributes, key_buffer, key_buffer_size, alg,
                 input, input_length,
@@ -5718,6 +5737,7 @@ static inline psa_status_t psa_driver_wrapper_key_agreement(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
             return( ele_s2xx_opaque_key_agreement( attributes,
                          key_buffer,
                          key_buffer_size,
