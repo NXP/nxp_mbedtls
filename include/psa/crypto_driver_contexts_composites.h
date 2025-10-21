@@ -144,6 +144,9 @@ typedef union {
 #if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
     ele_hseb_transparent_mac_operation_t transparent_ele_hseb_driver_ctx;
 #endif
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+    sgi_mac_operation_t sgi_driver_ctx;
+#endif
 } psa_driver_mac_context_t;
 
 typedef union {
@@ -161,6 +164,9 @@ typedef union {
 #endif
 #if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
     ele_hseb_transparent_aead_operation_t transparent_ele_hseb_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+    sgi_aead_operation_t sgi_driver_ctx;
 #endif
 } psa_driver_aead_context_t;
 
