@@ -522,7 +522,7 @@ static inline psa_status_t psa_driver_wrapper_sign_message(
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
         case PSA_CRYPTO_CAAM_LOCATION:
-            status = caam_common_asymmetric_sign_message(PSA_CRYPTO_DRIVER_CAAM_OPAQUE,
+            status = caam_common_asymmetric_sign_message((mcux_psa_caam_key_type_t)PSA_CRYPTO_DRIVER_CAAM_OPAQUE,
                         attributes,
                         key_buffer,
                         key_buffer_size,
@@ -741,7 +741,7 @@ static inline psa_status_t psa_driver_wrapper_verify_message(
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
         case PSA_CRYPTO_CAAM_LOCATION:
             return (caam_common_asymmetric_verify_message(
-                        PSA_CRYPTO_DRIVER_CAAM_OPAQUE,
+                        (mcux_psa_caam_key_type_t)PSA_CRYPTO_DRIVER_CAAM_OPAQUE,
                         attributes,
                         key_buffer,
                         key_buffer_size,
@@ -1021,7 +1021,7 @@ static inline psa_status_t psa_driver_wrapper_sign_hash(
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
         case PSA_CRYPTO_CAAM_LOCATION:
-            return (caam_common_asymmetric_sign_hash(PSA_CRYPTO_DRIVER_CAAM_OPAQUE, attributes,
+            return (caam_common_asymmetric_sign_hash((mcux_psa_caam_key_type_t)PSA_CRYPTO_DRIVER_CAAM_OPAQUE, attributes,
                                             key_buffer,
                                             key_buffer_size,
                                             alg,
@@ -1281,7 +1281,7 @@ static inline psa_status_t psa_driver_wrapper_verify_hash(
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
         case PSA_CRYPTO_CAAM_LOCATION:
-            return (caam_common_asymmetric_verify_hash( PSA_CRYPTO_DRIVER_CAAM_OPAQUE,
+            return (caam_common_asymmetric_verify_hash( (mcux_psa_caam_key_type_t)PSA_CRYPTO_DRIVER_CAAM_OPAQUE,
                                                  attributes,
                                                  key_buffer,
                                                  key_buffer_size,
@@ -1768,7 +1768,7 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
         case PSA_CRYPTO_CAAM_LOCATION:
-            status = caam_common_generate_key(PSA_CRYPTO_DRIVER_CAAM_OPAQUE,
+            status = caam_common_generate_key((mcux_psa_caam_key_type_t)PSA_CRYPTO_DRIVER_CAAM_OPAQUE,
                 attributes, key_buffer, key_buffer_size, key_buffer_length );
             break;
 #endif /* PSA_CRYPTO_DRIVER_CAAM */
@@ -2466,7 +2466,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt(
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
         case PSA_CRYPTO_CAAM_LOCATION:
-            return (caam_common_cipher_encrypt(PSA_CRYPTO_DRIVER_CAAM_OPAQUE, attributes,
+            return (caam_common_cipher_encrypt((mcux_psa_caam_key_type_t)PSA_CRYPTO_DRIVER_CAAM_OPAQUE, attributes,
                                          key_buffer,
                                          key_buffer_size,
                                          alg,
@@ -2748,7 +2748,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_decrypt(
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
         case PSA_CRYPTO_CAAM_LOCATION:
-            return (caam_common_cipher_decrypt(PSA_CRYPTO_DRIVER_CAAM_OPAQUE, attributes,
+            return (caam_common_cipher_decrypt((mcux_psa_caam_key_type_t)PSA_CRYPTO_DRIVER_CAAM_OPAQUE, attributes,
                                                      key_buffer,
                                                      key_buffer_size,
                                                      alg,
@@ -3982,7 +3982,7 @@ static inline psa_status_t psa_driver_wrapper_aead_encrypt(
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
         case PSA_CRYPTO_CAAM_LOCATION:
-            status = caam_common_aead_encrypt(PSA_CRYPTO_DRIVER_CAAM_OPAQUE,
+            status = caam_common_aead_encrypt((mcux_psa_caam_key_type_t)PSA_CRYPTO_DRIVER_CAAM_OPAQUE,
                          attributes, key_buffer, key_buffer_size,
                          alg,
                          nonce, nonce_length,
@@ -4164,7 +4164,7 @@ static inline psa_status_t psa_driver_wrapper_aead_decrypt(
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
         case PSA_CRYPTO_CAAM_LOCATION:
-            status = caam_common_aead_decrypt(PSA_CRYPTO_DRIVER_CAAM_OPAQUE,
+            status = caam_common_aead_decrypt((mcux_psa_caam_key_type_t)PSA_CRYPTO_DRIVER_CAAM_OPAQUE,
                          attributes, key_buffer, key_buffer_size,
                          alg,
                          nonce, nonce_length,
@@ -5480,7 +5480,7 @@ static inline psa_status_t psa_driver_wrapper_asymmetric_encrypt(
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
         case PSA_CRYPTO_CAAM_LOCATION:
-            return caam_common_asymmetric_encrypt(PSA_CRYPTO_DRIVER_CAAM_OPAQUE, attributes,
+            return caam_common_asymmetric_encrypt((mcux_psa_caam_key_type_t)PSA_CRYPTO_DRIVER_CAAM_OPAQUE, attributes,
                         key_buffer, key_buffer_size, alg, input, input_length,
                         salt, salt_length, output, output_size,
                         output_length );
@@ -5581,7 +5581,7 @@ static inline psa_status_t psa_driver_wrapper_asymmetric_decrypt(
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
         case PSA_CRYPTO_CAAM_LOCATION:
-            return caam_common_asymmetric_decrypt(PSA_CRYPTO_DRIVER_CAAM_OPAQUE, attributes,
+            return caam_common_asymmetric_decrypt((mcux_psa_caam_key_type_t)PSA_CRYPTO_DRIVER_CAAM_OPAQUE, attributes,
                         key_buffer, key_buffer_size, alg, input, input_length,
                         salt, salt_length, output, output_size,
                         output_length );
