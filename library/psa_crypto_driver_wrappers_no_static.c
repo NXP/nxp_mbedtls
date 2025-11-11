@@ -61,16 +61,7 @@
 #endif
 #include "cc3xx.h"
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
-/* Headers for els_pkc opaque driver */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-#include "els_pkc_driver.h"
 
-#endif
-/* Headers for els_pkc transparent driver */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-#include "els_pkc_driver.h"
-
-#endif
 /* END-driver headers */
 
 /* Auto-generated values depending on which drivers are registered.
@@ -88,10 +79,6 @@ enum {
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
     PSA_CRYPTO_CC3XX_DRIVER_ID,
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
-#if defined (PSA_CRYPTO_DRIVER_ELS_PKC)
-    ELS_PKC_OPAQUE_DRIVER_ID,
-    ELS_PKC_TRANSPARENT_DRIVER_ID,
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 };
 
 /* END-driver id */
@@ -160,16 +147,6 @@ psa_status_t psa_driver_wrapper_get_key_buffer_size(
                                                               key_buffer_size);
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
 
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:
-            *key_buffer_size = els_pkc_opaque_size_function_key_buff_size( 
-                               psa_get_key_id(attributes));
-            return( ( *key_buffer_size != 0 ) ?
-                    PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
         default:
             (void)key_type;
             (void)key_bits;
@@ -258,19 +235,6 @@ psa_status_t psa_driver_wrapper_export_public_key(
 #endif
 
 
-#if (defined(PSA_CRYPTO_DRIVER_ELS_PKC) )
-            status = els_pkc_transparent_export_public_key
-                (attributes,
-                                key_buffer,
-                                key_buffer_size,
-                                data,
-                                data_size,
-                                data_length
-            );
-
-            if( status != PSA_ERROR_NOT_SUPPORTED )
-                return( status );
-#endif
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
             /* Fell through, meaning no accelerator supports this operation */
             return( psa_export_public_key_internal( attributes,
@@ -296,20 +260,6 @@ psa_status_t psa_driver_wrapper_export_public_key(
 #endif
 
 
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:
-            return( els_pkc_opaque_export_public_key
-            (attributes,
-                            key_buffer,
-                            key_buffer_size,
-                            data,
-                            data_size,
-                            data_length
-        ));
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             /* Key is declared with a lifetime not known to us */
@@ -347,19 +297,7 @@ psa_status_t psa_driver_wrapper_get_builtin_key(
                         attributes,
                         key_buffer, key_buffer_size, key_buffer_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
-#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_DATA:
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:
-        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:
-            return( els_pkc_opaque_get_builtin_key
-            (slot_number,
-                            attributes,
-                            key_buffer,
-                            key_buffer_size,
-                            key_buffer_length
-        ));
-#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             (void) slot_number;
