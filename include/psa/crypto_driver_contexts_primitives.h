@@ -45,10 +45,6 @@
 #include "els_pkc_crypto_primitives.h"
 #endif
 
-#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
-#include "ele_s4xx_crypto_primitives.h"
-#endif
-
 #if defined(PSA_CRYPTO_DRIVER_TEST)
 
 #if defined(MBEDTLS_TEST_LIBTESTDRIVER1) && \
@@ -114,9 +110,6 @@ typedef union {
 #endif
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
     els_pkc_hash_operation_t els_pkc_driver_ctx;
-#endif
-#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
-    ele_s4xx_hash_operation_t ele_driver_ctx;
 #endif
 } psa_driver_hash_context_t;
 
