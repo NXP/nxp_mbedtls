@@ -1,3 +1,0 @@
-Bugfix
-   * Fix mbedtls_base64_decode() accepting invalid inputs with 4n+1 digits
-     (the last digit was ignored).
