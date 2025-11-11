@@ -86,9 +86,7 @@ component_test_gcc15_opt () {
     scripts/config.py full
     # Until https://github.com/Mbed-TLS/mbedtls/issues/9814 is fixed,
     # disable the new problematic optimization.
-    # Also disable a warning that we don't yet comply to.
-    make CC="/usr/local/gcc-15/bin/gcc-15" CFLAGS="-O2 -Wall -Wextra -Werror -fzero-init-padding-bits=unions -Wno-error=unterminated-string-initialization"
-    make test
+    test_build_opt 'full config' "/usr/local/gcc-15/bin/gcc-15 -fzero-init-padding-bits=unions" -O2
 }
 
 component_test_gcc_earliest_opt () {
