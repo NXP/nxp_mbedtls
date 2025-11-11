@@ -29,6 +29,10 @@
 /* Include the context structure definitions for those drivers that were
  * declared during the autogeneration process. */
 
+#if defined(PSA_CRYPTO_DRIVER_DCP)
+#include "dcp_crypto_primitives.h"
+#endif /* PSA_CRYPTO_DRIVER_DCP */
+
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
 #include "cc3xx_crypto_primitives_private.h"
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
@@ -97,6 +101,9 @@ typedef union {
     mbedtls_psa_hash_operation_t mbedtls_ctx;
 #if defined(PSA_CRYPTO_DRIVER_TEST)
     mbedtls_transparent_test_driver_hash_operation_t test_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_DCP)
+    mcux_dcp_hash_operation_t dcp_driver_ctx;
 #endif
 #if defined(PSA_CRYPTO_DRIVER_CC3XX)
     cc3xx_hash_operation_t cc3xx_driver_ctx;
