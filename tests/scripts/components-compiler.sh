@@ -73,11 +73,12 @@ support_test_gcc_latest_opt () {
 }
 
 # Prepare for a non-regression for https://github.com/Mbed-TLS/mbedtls/issues/9814 :
-# test with GCC 15.
+# test with GCC 15 (initially, a snapshot, since GCC 15 isn't released yet
+# at the time of writing).
 # Eventually, $GCC_LATEST will be GCC 15 or above, and we can remove this
 # separate component.
 # For the time being, we don't make $GCC_LATEST be GCC 15 on the CI
-# platform, because that would break branches where #9814 isn't fixed yet.
+# platform, because that would break branches where #9814 isn'f fixed yet.
 support_test_gcc15_drivers_opt () {
     if type gcc-15 >/dev/null 2>/dev/null; then
         GCC_15=gcc-15
@@ -97,8 +98,7 @@ component_test_gcc15_drivers_opt () {
     # Until https://github.com/Mbed-TLS/mbedtls/issues/9814 is fixed,
     # disable the new problematic optimization.
     loc_cflags="${loc_cflags} -fzero-init-padding-bits=unions"
-    # Also allow a warning that we don't yet comply to.
-    # https://github.com/Mbed-TLS/mbedtls/issues/9944
+    # Also disable a warning that we don't yet comply to.
     loc_cflags="${loc_cflags} -Wno-error=unterminated-string-initialization"
 
     make CC=$GCC_15 CFLAGS="${loc_cflags}" LDFLAGS="$ASAN_CFLAGS"
