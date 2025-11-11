@@ -6849,7 +6849,7 @@ static int tls_prf_generic(mbedtls_md_type_t md_type,
 MBEDTLS_CHECK_RETURN_CRITICAL
 static int tls_prf_generic(mbedtls_md_type_t md_type,
                            const unsigned char *secret, size_t slen,
-                           const char *label, size_t label_len,
+                           const char *label,
                            const unsigned char *random, size_t rlen,
                            unsigned char *dstbuf, size_t dlen)
 {
@@ -6870,14 +6870,14 @@ static int tls_prf_generic(mbedtls_md_type_t md_type,
 
     md_len = mbedtls_md_get_size(md_info);
 
-    tmp_len = md_len + label_len + rlen;
+    tmp_len = md_len + strlen(label) + rlen;
     tmp = mbedtls_calloc(1, tmp_len);
     if (tmp == NULL) {
         ret = MBEDTLS_ERR_SSL_ALLOC_FAILED;
         goto exit;
     }
 
-    nb = label_len;
+    nb = strlen(label);
     memcpy(tmp + md_len, label, nb);
     memcpy(tmp + md_len + nb, random, rlen);
     nb += rlen;
