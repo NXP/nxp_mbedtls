@@ -347,7 +347,11 @@ int main(void)
     "                        in the form of base64 code (serialize option\n"   \
     "                        must be set)\n"                                   \
     "                         default: \"\" (do nothing)\n"                    \
-    "                         option: a file path\n"
+    "                         option: a file path\n" \
+    "    exp_label=%%s       Label to input into TLS-Exporter\n" \
+    "                         default: None (don't try to export a key)\n" \
+    "    exp_len=%%d         Length of key to extract from TLS-Exporter \n" \
+    "                         default: 20\n"
 #else
 #define USAGE_SERIALIZATION ""
 #endif
@@ -376,16 +380,6 @@ int main(void)
 #else
 #define USAGE_TLS1_3_KEY_EXCHANGE_MODES ""
 #endif /* MBEDTLS_SSL_PROTO_TLS1_3 */
-
-#if defined(MBEDTLS_SSL_KEYING_MATERIAL_EXPORT)
-#define USAGE_EXPORT \
-    "    exp_label=%%s       Label to input into TLS-Exporter\n" \
-    "                         default: None (don't try to export a key)\n" \
-    "    exp_len=%%d         Length of key to extract from TLS-Exporter \n" \
-    "                         default: 20\n"
-#else
-#define USAGE_EXPORT ""
-#endif /* defined(MBEDTLS_SSL_KEYING_MATERIAL_EXPORT) */
 
 /* USAGE is arbitrarily split to stay under the portable string literal
  * length limit: 4095 bytes in C99. */
@@ -477,7 +471,6 @@ int main(void)
     "                                otherwise. The expansion of the macro\n" \
     "                                is printed if it is defined\n"           \
     USAGE_SERIALIZATION                                                       \
-    USAGE_EXPORT                                                              \
     "\n"
 
 /*
@@ -2581,7 +2574,7 @@ usage:
     }
 #endif /* MBEDTLS_SSL_DTLS_CONNECTION_ID */
 
-#if defined(MBEDTLS_SSL_KEYING_MATERIAL_EXPORT)
+#if defined(MBEDTLS_SSL_CONTEXT_SERIALIZATION)
     if (opt.exp_label != NULL && opt.exp_len > 0) {
         unsigned char *exported_key = calloc((size_t) opt.exp_len, sizeof(unsigned int));
         if (exported_key == NULL) {
@@ -2604,7 +2597,7 @@ usage:
         mbedtls_printf("\n\n");
         fflush(stdout);
     }
-#endif /* defined(MBEDTLS_SSL_KEYING_MATERIAL_EXPORT) */
+#endif /* defined(MBEDTLS_SSL_CONTEXT_SERIALIZATION) */
 
     /*
      * 6. Write the GET request
