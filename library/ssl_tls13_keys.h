@@ -60,9 +60,8 @@ extern const struct mbedtls_ssl_tls13_labels_struct mbedtls_ssl_tls13_labels;
     mbedtls_ssl_tls13_labels.LABEL,              \
     MBEDTLS_SSL_TLS1_3_LBL_LEN(LABEL)
 
-/* Maximum length of the label field in the HkdfLabel struct defined in
- * RFC 8446, Section 7.1, excluding the "tls13 " prefix. */
-#define MBEDTLS_SSL_TLS1_3_HKDF_LABEL_MAX_LABEL_LEN 249
+#define MBEDTLS_SSL_TLS1_3_KEY_SCHEDULE_MAX_LABEL_LEN  \
+    sizeof(union mbedtls_ssl_tls13_labels_union)
 
 /* The maximum length of HKDF contexts used in the TLS 1.3 standard.
  * Since contexts are always hashes of message transcripts, this can
