@@ -497,14 +497,6 @@ exit:
 #endif
     }
 
-    mbedtls_x509write_csr_free(&req);
-    mbedtls_pk_free(&key);
-    mbedtls_ctr_drbg_free(&ctr_drbg);
-    mbedtls_entropy_free(&entropy);
-#if defined(MBEDTLS_USE_PSA_CRYPTO)
-    mbedtls_psa_crypto_free();
-#endif /* MBEDTLS_USE_PSA_CRYPTO */
-
     cur = opt.san_list;
     while (cur != NULL) {
         mbedtls_x509_san_list *next = cur->next;
@@ -521,6 +513,22 @@ exit:
         mbedtls_free(cur);
         cur = next;
     }
+
+    mbedtls_x509write_csr_free(&req);
+    mbedtls_pk_free(&key);
+    mbedtls_ctr_drbg_free(&ctr_drbg);
+    mbedtls_entropy_free(&entropy);
+#if defined(MBEDTLS_USE_PSA_CRYPTO)
+    mbedtls_psa_crypto_free();
+#endif /* MBEDTLS_USE_PSA_CRYPTO */
+
+    cur = opt.san_list;
+    while (cur != NULL) {
+        prev = cur;
+        cur = cur->next;
+        mbedtls_free(prev);
+    }
+
 
     mbedtls_exit(exit_code);
 }
