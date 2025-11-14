@@ -1,8 +1,8 @@
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.template)
     mcux_component_version(${mbedtls3x_version})
-    mcux_add_configuration(
-        CC  "-DMBEDTLS_CONFIG_FILE=\\\"mcux_mbedtls_config.h\\\""
+    mcux_add_macro(
+        "-DMBEDTLS_CONFIG_FILE=\\\"mcux_mbedtls_config.h\\\""
     )
     mcux_add_source(
         SOURCES port/mcux_mbedtls_config.h
@@ -20,8 +20,8 @@ endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.config)
     mcux_component_version(${mbedtls3x_version})
-    mcux_add_configuration(
-        CC  "-DMBEDTLS_CONFIG_FILE=\\\"mcux_mbedtls_config.h\\\""
+    mcux_add_macro(
+        "-DMBEDTLS_CONFIG_FILE=\\\"mcux_mbedtls_config.h\\\""
     )
     mcux_add_source(
         SOURCES port/mcux_mbedtls_config.h
@@ -37,8 +37,8 @@ endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.port.psa_crypto_config)
     mcux_component_version(${mbedtls3x_version})
-    mcux_add_configuration(
-        CC  "-DMBEDTLS_CONFIG_FILE=\\\"mcux_mbedtls_psa_crypto_config.h\\\""
+    mcux_add_macro(
+        "-DMBEDTLS_CONFIG_FILE=\\\"mcux_mbedtls_psa_crypto_config.h\\\""
     )
     mcux_add_source(
         SOURCES port/mcux_mbedtls_psa_crypto_config.h
@@ -192,8 +192,8 @@ endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto_storage_fatfs)
     mcux_component_version(${mbedtls3x_version})
-    mcux_add_configuration(
-        CC  "-DMBEDTLS_PSA_ITS_FILE_FATFS"
+    mcux_add_macro(
+        "-DMBEDTLS_PSA_ITS_FILE_FATFS"
     )
     mcux_add_source(
         SOURCES port/psa_its/psa_its_fatfs.c
@@ -211,8 +211,8 @@ endif()
 
 if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto_storage_ram)
     mcux_component_version(${mbedtls3x_version})
-    mcux_add_configuration(
-        CC  "-DMBEDTLS_PSA_ITS_RAM"
+    mcux_add_macro(
+        "-DMBEDTLS_PSA_ITS_RAM"
     )
     mcux_add_source(
         SOURCES port/psa_its/psa_its_ram.c
@@ -230,6 +230,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa)
     mcux_component_version(${mbedtls3x_version})
     mcux_add_armgcc_configuration(
         CC  "-fomit-frame-pointer"
+        CX  "-fomit-frame-pointer"
     )
 
     # Suppress warnings generated from upstream code
