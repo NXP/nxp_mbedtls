@@ -147,6 +147,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.tests)
                 tests/include/test/psa_test_wrappers.h
                 tests/include/test/ssl_helpers.h
                 tests/src/certs.c
+                tests/src/test_certs.h
                 tests/src/psa_test_wrappers.c
                 tests/src/test_helpers/ssl_helpers.c
         BASE_PATH ${SdkRootDirPath}/middleware/mbedtls3x/
@@ -165,6 +166,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.tests_certs_only)
     mcux_add_source(
         SOURCES tests/include/test/certs.h
                 tests/src/certs.c
+                tests/src/test_certs.h
         BASE_PATH ${SdkRootDirPath}/middleware/mbedtls3x/
     )
     mcux_add_include(
