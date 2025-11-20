@@ -231,6 +231,13 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa)
     mcux_add_armgcc_configuration(
         CC  "-fomit-frame-pointer"
     )
+
+    # Suppress warnings generated from upstream code
+    mcux_add_iar_configuration(
+        CC "--diag_suppress=Pe111,Pe546,Pe550"
+        CX "--diag_suppress=Pe111,Pe546,Pe550"
+    )
+
     mcux_add_source(
         SOURCES include/mbedtls/aes.h
                 include/mbedtls/aria.h
