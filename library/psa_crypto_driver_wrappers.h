@@ -3367,7 +3367,7 @@ static inline psa_status_t psa_driver_wrapper_hash_compute(
             hash_length);
     return status;
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
-#if defined(PSA_CRYPTO_DRIVER_DCP)
+#if defined(PSA_CRYPTO_DRIVER_DCP) && defined(PSA_CRYPTO_DRIVER_DCP_ENFORCE_HASH)
     status = dcp_hash_compute(alg, input, input_length, hash, hash_size,
                               hash_length);
     if( status != PSA_ERROR_NOT_SUPPORTED )
@@ -3456,7 +3456,7 @@ static inline psa_status_t psa_driver_wrapper_hash_setup(
     return( status );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 
-#if defined(PSA_CRYPTO_DRIVER_DCP)
+#if defined(PSA_CRYPTO_DRIVER_DCP) && defined(PSA_CRYPTO_DRIVER_DCP_ENFORCE_HASH)
     status = dcp_hash_setup( &operation->ctx.dcp_driver_ctx, alg );
     if( status == PSA_SUCCESS )
         operation->id = DCP_TRANSPARENT_DRIVER_ID;
@@ -3566,7 +3566,7 @@ static inline psa_status_t psa_driver_wrapper_hash_clone(
 
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 
-#if defined(PSA_CRYPTO_DRIVER_DCP)
+#if defined(PSA_CRYPTO_DRIVER_DCP) && defined(PSA_CRYPTO_DRIVER_DCP_ENFORCE_HASH)
         case DCP_TRANSPARENT_DRIVER_ID:
             target_operation->id = DCP_TRANSPARENT_DRIVER_ID;
             return( dcp_hash_clone( &source_operation->ctx.dcp_driver_ctx,
@@ -3644,7 +3644,7 @@ static inline psa_status_t psa_driver_wrapper_hash_update(
                         &operation->ctx.cc3xx_driver_ctx,
                         input, input_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
-#if defined(PSA_CRYPTO_DRIVER_DCP)
+#if defined(PSA_CRYPTO_DRIVER_DCP) && defined(PSA_CRYPTO_DRIVER_DCP_ENFORCE_HASH)
         case DCP_TRANSPARENT_DRIVER_ID:
             return( dcp_hash_update( &operation->ctx.dcp_driver_ctx,
                                      input, input_length ) );
@@ -3716,7 +3716,7 @@ static inline psa_status_t psa_driver_wrapper_hash_finish(
                         &operation->ctx.cc3xx_driver_ctx,
                         hash, hash_size, hash_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
-#if defined(PSA_CRYPTO_DRIVER_DCP)
+#if defined(PSA_CRYPTO_DRIVER_DCP) && defined(PSA_CRYPTO_DRIVER_DCP_ENFORCE_HASH)
         case DCP_TRANSPARENT_DRIVER_ID:
             return( dcp_hash_finish( &operation->ctx.dcp_driver_ctx,
                                      hash, hash_size, hash_length ) );
@@ -3783,7 +3783,7 @@ static inline psa_status_t psa_driver_wrapper_hash_abort(
             return( cc3xx_hash_abort(
                         &operation->ctx.cc3xx_driver_ctx ) );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
-#if defined(PSA_CRYPTO_DRIVER_DCP)
+#if defined(PSA_CRYPTO_DRIVER_DCP) && defined(PSA_CRYPTO_DRIVER_DCP_ENFORCE_HASH)
         case DCP_TRANSPARENT_DRIVER_ID:
             return( dcp_hash_abort( &operation->ctx.dcp_driver_ctx ) );
 #endif /* PSA_CRYPTO_DRIVER_DCP */
