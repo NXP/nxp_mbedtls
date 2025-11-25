@@ -215,7 +215,7 @@ psa_status_t psa_driver_wrapper_get_key_buffer_size(
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
 
 #if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
-        case 0x000001:
+        case PSA_CRYPTO_ELE_S4XX_LOCATION:
             *key_buffer_size = ele_s4xx_opaque_size_function(key_type,
                                                            key_bits );
             return( ( *key_buffer_size != 0 ) ?
@@ -393,7 +393,7 @@ psa_status_t psa_driver_wrapper_export_public_key(
 
 
 #if (defined(PSA_CRYPTO_DRIVER_ELE_S4XX) )
-        case 0x000001:
+        case PSA_CRYPTO_ELE_S4XX_LOCATION:
             return( ele_s4xx_opaque_export_public_key
             (attributes,
                             key_buffer,
