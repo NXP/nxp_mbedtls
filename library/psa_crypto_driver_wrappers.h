@@ -4234,6 +4234,17 @@ static inline psa_status_t psa_driver_wrapper_aead_encrypt_setup(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+            operation->id = SGI_TRANSPARENT_DRIVER_ID;
+            status = sgi_aead_encrypt_setup(
+                        &operation->ctx.sgi_driver_ctx,
+                        attributes, key_buffer, key_buffer_size,
+                        alg );
+
+            /* Declared with fallback == true */
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
             /* Fell through, meaning no accelerator supports this operation */
@@ -4324,6 +4335,18 @@ static inline psa_status_t psa_driver_wrapper_aead_decrypt_setup(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+            operation->id = SGI_TRANSPARENT_DRIVER_ID;
+            status = sgi_aead_decrypt_setup(
+                        &operation->ctx.sgi_driver_ctx,
+                        attributes,
+                        key_buffer, key_buffer_size,
+                        alg );
+
+            /* Declared with fallback == true */
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
             /* Fell through, meaning no accelerator supports this operation */
@@ -4405,6 +4428,13 @@ static inline psa_status_t psa_driver_wrapper_aead_set_nonce(
                          &operation->ctx.opaque_els_pkc_driver_ctx,
                          nonce, nonce_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case SGI_TRANSPARENT_DRIVER_ID:
+            return( sgi_aead_set_nonce(
+                         &operation->ctx.sgi_driver_ctx,
+                         nonce, nonce_length ) );
+
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
     }
 
@@ -4457,6 +4487,12 @@ static inline psa_status_t psa_driver_wrapper_aead_set_lengths(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         ad_length, plaintext_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case SGI_TRANSPARENT_DRIVER_ID:
+            return( sgi_aead_set_lengths(
+                        &operation->ctx.sgi_driver_ctx,
+                        ad_length, plaintext_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
     }
 
@@ -4509,6 +4545,12 @@ static inline psa_status_t psa_driver_wrapper_aead_update_ad(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         input, input_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case SGI_TRANSPARENT_DRIVER_ID:
+            return( sgi_aead_update_ad(
+                        &operation->ctx.sgi_driver_ctx,
+                        input, input_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
     }
 
@@ -4569,6 +4611,13 @@ static inline psa_status_t psa_driver_wrapper_aead_update(
                         input, input_length, output, output_size,
                         output_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case SGI_TRANSPARENT_DRIVER_ID:
+            return( sgi_aead_update(
+                        &operation->ctx.sgi_driver_ctx,
+                        input, input_length, output, output_size,
+                        output_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
     }
 
@@ -4634,6 +4683,13 @@ static inline psa_status_t psa_driver_wrapper_aead_finish(
                         ciphertext, ciphertext_size,
                         ciphertext_length, tag, tag_size, tag_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case SGI_TRANSPARENT_DRIVER_ID:
+            return( sgi_aead_finish(
+                        &operation->ctx.sgi_driver_ctx,
+                        ciphertext, ciphertext_size,
+                        ciphertext_length, tag, tag_size, tag_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
     }
 
@@ -4719,6 +4775,13 @@ static inline psa_status_t psa_driver_wrapper_aead_verify(
                         plaintext, plaintext_size,
                         plaintext_length, tag, tag_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case SGI_TRANSPARENT_DRIVER_ID:
+            return( sgi_aead_verify(
+                        &operation->ctx.sgi_driver_ctx,
+                        plaintext, plaintext_size,
+                        plaintext_length, tag, tag_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
     }
 
@@ -4766,6 +4829,11 @@ static inline psa_status_t psa_driver_wrapper_aead_abort(
             return( els_pkc_opaque_aead_abort(
                &operation->ctx.opaque_els_pkc_driver_ctx ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case SGI_TRANSPARENT_DRIVER_ID:
+            return( sgi_aead_abort(
+               &operation->ctx.sgi_driver_ctx ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
     }
 
@@ -5002,6 +5070,19 @@ static inline psa_status_t psa_driver_wrapper_mac_sign_setup(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+            status = sgi_mac_sign_setup(
+                &operation->ctx.sgi_driver_ctx,
+                attributes,
+                key_buffer, key_buffer_size,
+                alg );
+            /* Declared with fallback == true */
+            if( status == PSA_SUCCESS )
+                operation->id = SGI_TRANSPARENT_DRIVER_ID;
+
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 #if defined(MBEDTLS_PSA_BUILTIN_MAC)
             /* Fell through, meaning no accelerator supports this operation */
@@ -5129,6 +5210,19 @@ static inline psa_status_t psa_driver_wrapper_mac_verify_setup(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+            status = sgi_mac_verify_setup(
+                &operation->ctx.sgi_driver_ctx,
+                attributes,
+                key_buffer, key_buffer_size,
+                alg );
+            /* Declared with fallback == true */
+            if( status == PSA_SUCCESS )
+                operation->id = SGI_TRANSPARENT_DRIVER_ID;
+
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 #if defined(MBEDTLS_PSA_BUILTIN_MAC)
             /* Fell through, meaning no accelerator supports this operation */
@@ -5234,6 +5328,12 @@ static inline psa_status_t psa_driver_wrapper_mac_update(
                         &operation->ctx.transparent_ele_s2xx_driver_ctx,
                         input, input_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case SGI_TRANSPARENT_DRIVER_ID:
+            return( sgi_mac_update(
+                        &operation->ctx.sgi_driver_ctx,
+                        input, input_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             (void) input;
@@ -5290,6 +5390,12 @@ static inline psa_status_t psa_driver_wrapper_mac_sign_finish(
                         &operation->ctx.transparent_ele_s2xx_driver_ctx,
                         mac, mac_size, mac_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case SGI_TRANSPARENT_DRIVER_ID:
+            return( sgi_mac_sign_finish(
+                        &operation->ctx.sgi_driver_ctx,
+                        mac, mac_size, mac_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             (void) mac;
@@ -5347,6 +5453,12 @@ static inline psa_status_t psa_driver_wrapper_mac_verify_finish(
                         &operation->ctx.transparent_ele_s2xx_driver_ctx,
                         mac, mac_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case SGI_TRANSPARENT_DRIVER_ID:
+            return( sgi_mac_verify_finish(
+                        &operation->ctx.sgi_driver_ctx,
+                        mac, mac_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             (void) mac;
@@ -5392,6 +5504,11 @@ static inline psa_status_t psa_driver_wrapper_mac_abort(
             return( ele_s2xx_transparent_mac_abort(
                         &operation->ctx.transparent_ele_s2xx_driver_ctx ) );
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case SGI_TRANSPARENT_DRIVER_ID:
+            return( sgi_mac_abort(
+                        &operation->ctx.sgi_driver_ctx ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             return( PSA_ERROR_INVALID_ARGUMENT );
