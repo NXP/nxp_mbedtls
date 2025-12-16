@@ -346,6 +346,19 @@ psa_status_t psa_driver_wrapper_export_public_key(
 
 
 
+#if (defined(PSA_CRYPTO_DRIVER_ELE_S2XX) )
+            status = ele_s2xx_transparent_export_public_key
+                (attributes,
+                                key_buffer,
+                                key_buffer_size,
+                                data,
+                                data_size,
+                                data_length
+            );
+
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif
 
 
 #if (defined(PSA_CRYPTO_DRIVER_ELS_PKC) )

@@ -5,5 +5,12 @@
     "headers": [
         "ele_s2xx.h"
     ],
-    "capabilities": []
+    "capabilities": [
+        {
+            "_comment": "The S2XX transparent driver supports export_public_key",
+            "mbedtls/c_condition":    "defined(PSA_CRYPTO_DRIVER_ELE_S2XX)",
+            "entry_points": ["export_public_key"],
+            "fallback": true
+        }
+    ]
 }
