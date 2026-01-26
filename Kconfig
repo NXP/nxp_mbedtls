@@ -1,10 +1,12 @@
 menu "Mbed TLS 3.x"
     config MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa
         bool "Crypto (No PSA)"
+        imply MCUX_COMPONENT_middleware.mbedtls3x
 
     config MCUX_COMPONENT_middleware.mbedtls3x.crypto
         bool "Crypto"
         select MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa
+        imply MCUX_COMPONENT_middleware.mbedtls3x
 
     config MCUX_COMPONENT_middleware.mbedtls3x.x509
         bool "X.509"
