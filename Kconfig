@@ -54,6 +54,7 @@ menu "Mbed TLS 3.x"
             bool "Mbed TLS configuration header files"
 
         config MCUX_COMPONENT_middleware.mbedtls3x.port.psa_crypto_config
+            default true if MCUX_COMPONENT_middleware.mbedtls3x
             bool "PSA configuration header files"
 
         config MCUX_COMPONENT_middleware.mbedtls3x.port.only_accelerator_config

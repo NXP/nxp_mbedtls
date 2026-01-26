@@ -445,6 +445,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa)
     )
     mcux_add_include(
         INCLUDES include
+                 include/mbedtls
                  library
         BASE_PATH ${SdkRootDirPath}/middleware/mbedtls3x/
     )
