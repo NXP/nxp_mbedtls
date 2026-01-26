@@ -36,6 +36,8 @@ menu "Mbed TLS 3.x"
         select MCUX_COMPONENT_middleware.mbedtls3x.crypto
         select MCUX_COMPONENT_middleware.mbedtls3x.ssl
         select MCUX_COMPONENT_middleware.mbedtls3x.x509
+        imply MCUX_COMPONENT_middleware.mbedtls3x.port.config
+        imply MCUX_COMPONENT_middleware.mbedtls3x.port.psa_crypto_config
 
     config MCUX_COMPONENT_middleware.mbedtls3x.tests
         bool "Tests"
