@@ -120,6 +120,11 @@
 #include "sgi.h"
 
 #endif
+/* Headers for pkc transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_PKC)
+#include "pkc.h"
+
+#endif
 
 /* END-driver headers */
 
@@ -147,6 +152,7 @@
 #define HASHCRYPT_TRANSPARENT_DRIVER_ID (18)
 #define CASPER_TRANSPARENT_DRIVER_ID (19)
 #define SGI_TRANSPARENT_DRIVER_ID (20)
+#define PKC_TRANSPARENT_DRIVER_ID (21)
 
 /* END-driver id */
 
