@@ -121,6 +121,11 @@
 #include "sgi.h"
 
 #endif
+/* Headers for pkc transparent driver */
+#if defined(PSA_CRYPTO_DRIVER_PKC)
+#include "pkc.h"
+
+#endif
 
 /* END-driver headers */
 
@@ -148,6 +153,7 @@
 #define HASHCRYPT_TRANSPARENT_DRIVER_ID (18)
 #define CASPER_TRANSPARENT_DRIVER_ID (19)
 #define SGI_TRANSPARENT_DRIVER_ID (20)
+#define PKC_TRANSPARENT_DRIVER_ID (21)
 
 /* END-driver id */
 
@@ -265,6 +271,11 @@ static inline psa_status_t psa_driver_wrapper_init( void )
     if (status != PSA_SUCCESS)
         return ( status );
 #endif
+#if defined(PSA_CRYPTO_DRIVER_PKC)
+    status = psa_pkc_init();
+    if (status != PSA_SUCCESS)
+        return ( status );
+#endif
 
     (void) status;
     return( PSA_SUCCESS );
@@ -327,6 +338,9 @@ static inline void psa_driver_wrapper_free( void )
 
 #if defined(PSA_CRYPTO_DRIVER_SGI)
     (void)psa_sgi_transparent_free();
+#endif
+#if defined(PSA_CRYPTO_DRIVER_PKC)
+    (void)psa_pkc_deinit();
 #endif
 
 }
@@ -952,6 +966,20 @@ static inline psa_status_t psa_driver_wrapper_sign_hash(
                     return( status );
             }
 #endif /* PSA_CRYPTO_DRIVER_CASPER */
+#if defined(PSA_CRYPTO_DRIVER_PKC)
+            status = pkc_sign_hash(
+                        attributes,
+                        key_buffer,
+                        key_buffer_size,
+                        alg,
+                        hash,
+                        hash_length,
+                        signature,
+                        signature_size,
+                        signature_length );
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_PKC */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
             /* Fell through, meaning no accelerator supports this operation */
             return( psa_sign_hash_builtin( attributes,
@@ -1217,6 +1245,20 @@ static inline psa_status_t psa_driver_wrapper_verify_hash(
                     return( status );
             }
 #endif /* PSA_CRYPTO_DRIVER_CASPER */
+#if defined(PSA_CRYPTO_DRIVER_PKC)
+            status = pkc_verify_hash(
+                         attributes,
+                         key_buffer,
+                         key_buffer_size,
+                         alg,
+                         hash,
+                         hash_length,
+                         signature,
+                         signature_length );
+            /* Declared with fallback == true */
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_PKC */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
             return( psa_verify_hash_builtin( attributes,
@@ -1733,6 +1775,13 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
                         break;
                 }
 #endif /* PSA_CRYPTO_DRIVER_CASPER */
+#if defined(PSA_CRYPTO_DRIVER_PKC)
+                status = pkc_generate_key(attributes, key_buffer, key_buffer_size,
+                    key_buffer_length );
+                /* Declared with fallback == true */
+                if( status != PSA_ERROR_NOT_SUPPORTED )
+                    break;
+#endif /* PSA_CRYPTO_DRIVER_PKC */
             }
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
@@ -1948,6 +1997,7 @@ static inline psa_status_t psa_driver_wrapper_import_key(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif
+
 
 
 
@@ -5815,6 +5865,17 @@ static inline psa_status_t psa_driver_wrapper_key_agreement(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#if defined(PSA_CRYPTO_DRIVER_PKC)
+            status = pkc_key_agreement( attributes,
+                                          key_buffer,
+                                          key_buffer_size,
+                                          alg,
+                                          peer_key,
+                                          peer_key_length,
+                                          shared_secret,
+                                          shared_secret_size,
+                                          shared_secret_length);
+#endif /* PSA_CRYPTO_DRIVER_PKC */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
             /* Software Fallback */
