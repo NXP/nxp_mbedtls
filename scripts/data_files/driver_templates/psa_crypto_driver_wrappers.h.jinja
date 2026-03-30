@@ -2035,6 +2035,20 @@ target_key_buffer_length
 {% with nest_indent=8 %}
 {% include "OS-template-opaque.jinja" -%}
 {% endwith -%}
+
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE:
+        case PSA_CRYPTO_LOCATION_S200_KEY_STORAGE_NON_EL2GO:
+            return( ele_s2xx_opaque_copy_key
+            (attributes,
+                            source_key,
+                            source_key_length,
+                            target_key_buffer,
+                            target_key_buffer_size,
+                            target_key_buffer_length
+        ));
+#endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             (void)source_key;
