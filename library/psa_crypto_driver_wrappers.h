@@ -2226,6 +2226,18 @@ static inline psa_status_t psa_driver_wrapper_copy_key(
         ));
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 
+#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
+        case PSA_CRYPTO_ELS_PKC_LOCATION_S50_RFC3394_STORAGE:
+            return( els_pkc_opaque_copy_key
+            (attributes,
+                            source_key,
+                            source_key_length,
+                            target_key_buffer,
+                            target_key_buffer_size,
+                            target_key_buffer_length
+        ));
+#endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             (void)source_key;
