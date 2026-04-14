@@ -45,6 +45,9 @@
 #include "els_pkc_crypto_primitives.h"
 #endif
 
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+#include "sgi_crypto_primitives.h"
+#endif
 #if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
 #include "ele_s4xx_crypto_primitives.h"
 #endif
@@ -115,6 +118,9 @@ typedef union {
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
     els_pkc_hash_operation_t els_pkc_driver_ctx;
 #endif
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+    mcux_sgi_hash_operation_t sgi_driver_ctx;
+#endif
 #if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
     ele_s4xx_hash_operation_t ele_driver_ctx;
 #endif
@@ -133,6 +139,9 @@ typedef union {
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
     els_pkc_transparent_cipher_operation_t transparent_els_pkc_driver_ctx;
     els_pkc_opaque_cipher_operation_t opaque_els_pkc_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+    sgi_cipher_operation_t sgi_driver_ctx;
 #endif
 } psa_driver_cipher_context_t;
 
