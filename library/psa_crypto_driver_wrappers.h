@@ -1725,14 +1725,6 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
                 }
 
 #endif /* MBEDTLS_PSA_P256M_DRIVER_ENABLED */
-#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
-                status = ele_s4xx_transparent_generate_key(
-                    attributes, key_buffer, key_buffer_size,
-                    key_buffer_length );
-                /* Declared with fallback == true */
-                if( status != PSA_ERROR_NOT_SUPPORTED )
-                    break;
-#endif /* PSA_CRYPTO_DRIVER_ELE_S4XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
                 status = els_pkc_transparent_generate_key(
                     attributes, key_buffer, key_buffer_size,
@@ -2902,7 +2894,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt_setup(
                 alg );
             /* Declared with fallback == true */
             if( status == PSA_SUCCESS )
-                operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;
+                operation->id = ELS_PKC_TRANSPARENT_DRIVER_ID;
 
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
@@ -2979,7 +2971,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt_setup(
                 alg );
 
             if( status == PSA_SUCCESS )
-                operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;
+                operation->id = ELS_PKC_OPAQUE_DRIVER_ID;
 
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
@@ -3047,7 +3039,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_decrypt_setup(
                 alg );
             /* Declared with fallback == true */
             if( status == PSA_SUCCESS )
-                operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;
+                operation->id = ELS_PKC_TRANSPARENT_DRIVER_ID;
 
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
@@ -3124,7 +3116,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_decrypt_setup(
                          alg );
 
             if( status == PSA_SUCCESS )
-                operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;
+                operation->id = ELS_PKC_OPAQUE_DRIVER_ID;
 
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
@@ -3173,12 +3165,12 @@ static inline psa_status_t psa_driver_wrapper_cipher_set_iv(
                         iv, iv_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_cipher_set_iv(
                         &operation->ctx.transparent_els_pkc_driver_ctx,
                         iv, iv_length ) );
 
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_cipher_set_iv(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         iv, iv_length ) );
@@ -3246,13 +3238,13 @@ static inline psa_status_t psa_driver_wrapper_cipher_update(
                         output, output_size, output_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_cipher_update(
                         &operation->ctx.transparent_els_pkc_driver_ctx,
                         input, input_length,
                         output, output_size, output_length ) );
 
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_cipher_update(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         input, input_length,
@@ -3319,12 +3311,12 @@ static inline psa_status_t psa_driver_wrapper_cipher_finish(
                         output, output_size, output_length ) );
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_cipher_finish(
                         &operation->ctx.transparent_els_pkc_driver_ctx,
                         output, output_size, output_length ) );
 
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_cipher_finish(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         output, output_size, output_length ) );
@@ -3391,11 +3383,11 @@ static inline psa_status_t psa_driver_wrapper_cipher_abort(
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return els_pkc_transparent_cipher_abort(
                          &operation->ctx.transparent_els_pkc_driver_ctx );
 
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return els_pkc_opaque_cipher_abort(
                          &operation->ctx.opaque_els_pkc_driver_ctx );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
@@ -3559,7 +3551,7 @@ static inline psa_status_t psa_driver_wrapper_hash_setup(
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
     status = els_pkc_transparent_hash_setup( &operation->ctx.els_pkc_driver_ctx, alg );
     if( status == PSA_SUCCESS )
-        operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;
+        operation->id = ELS_PKC_TRANSPARENT_DRIVER_ID;
 
     if( status != PSA_ERROR_NOT_SUPPORTED )
         return( status );
@@ -3660,8 +3652,8 @@ static inline psa_status_t psa_driver_wrapper_hash_clone(
                                     &target_operation->ctx.ele_driver_ctx ) );
 #endif
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
-            target_operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
+            target_operation->id = ELS_PKC_TRANSPARENT_DRIVER_ID;
             return( els_pkc_transparent_hash_clone( &source_operation->ctx.els_pkc_driver_ctx,
                                     &target_operation->ctx.els_pkc_driver_ctx ) );
 #endif
@@ -3735,7 +3727,7 @@ static inline psa_status_t psa_driver_wrapper_hash_update(
                                      input, input_length ) );
 #endif
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_hash_update( &operation->ctx.els_pkc_driver_ctx,
                                      input, input_length ) );
 #endif
@@ -3807,7 +3799,7 @@ static inline psa_status_t psa_driver_wrapper_hash_finish(
                                      hash, hash_size, hash_length ) );
 #endif
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_hash_finish( &operation->ctx.els_pkc_driver_ctx,
                                      hash, hash_size, hash_length ) );
 #endif
@@ -3871,7 +3863,7 @@ static inline psa_status_t psa_driver_wrapper_hash_abort(
             return( ele_s4xx_transparent_hash_abort( &operation->ctx.ele_driver_ctx ) );
 #endif
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_hash_abort( &operation->ctx.els_pkc_driver_ctx ) );
 #endif
 #if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
@@ -4299,7 +4291,7 @@ static inline psa_status_t psa_driver_wrapper_aead_encrypt_setup(
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-            operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;
+            operation->id = ELS_PKC_TRANSPARENT_DRIVER_ID;
             status = els_pkc_transparent_aead_encrypt_setup(
                         &operation->ctx.transparent_els_pkc_driver_ctx,
                         attributes, key_buffer, key_buffer_size,
@@ -4339,7 +4331,7 @@ static inline psa_status_t psa_driver_wrapper_aead_encrypt_setup(
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_RFC3394_STORAGE:
-            operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;
+            operation->id = ELS_PKC_OPAQUE_DRIVER_ID;
             status = els_pkc_opaque_aead_encrypt_setup(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         attributes, key_buffer, key_buffer_size,
@@ -4399,7 +4391,7 @@ static inline psa_status_t psa_driver_wrapper_aead_decrypt_setup(
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-            operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;
+            operation->id = ELS_PKC_TRANSPARENT_DRIVER_ID;
             status = els_pkc_transparent_aead_decrypt_setup(
                         &operation->ctx.transparent_els_pkc_driver_ctx,
                         attributes,
@@ -4442,7 +4434,7 @@ static inline psa_status_t psa_driver_wrapper_aead_decrypt_setup(
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_RFC3394_STORAGE:
-            operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;
+            operation->id = ELS_PKC_OPAQUE_DRIVER_ID;
             status = els_pkc_opaque_aead_decrypt_setup(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         attributes,
@@ -4492,13 +4484,13 @@ static inline psa_status_t psa_driver_wrapper_aead_set_nonce(
                         nonce, nonce_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_aead_set_nonce(
                          &operation->ctx.transparent_els_pkc_driver_ctx,
                          nonce, nonce_length ) );
 
         /* Add cases for opaque driver here */
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_aead_set_nonce(
                          &operation->ctx.opaque_els_pkc_driver_ctx,
                          nonce, nonce_length ) );
@@ -4551,13 +4543,13 @@ static inline psa_status_t psa_driver_wrapper_aead_set_lengths(
                     ad_length, plaintext_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_aead_set_lengths(
                         &operation->ctx.transparent_els_pkc_driver_ctx,
                         ad_length, plaintext_length ) );
 
         /* Add cases for opaque driver here */
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_aead_set_lengths(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         ad_length, plaintext_length ) );
@@ -4609,13 +4601,13 @@ static inline psa_status_t psa_driver_wrapper_aead_update_ad(
                     input, input_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_aead_update_ad(
                         &operation->ctx.transparent_els_pkc_driver_ctx,
                         input, input_length ) );
 
         /* Add cases for opaque driver here */
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_aead_update_ad(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         input, input_length ) );
@@ -4673,14 +4665,14 @@ static inline psa_status_t psa_driver_wrapper_aead_update(
                     output_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_aead_update(
                         &operation->ctx.transparent_els_pkc_driver_ctx,
                         input, input_length, output, output_size,
                         output_length ) );
 
         /* Add cases for opaque driver here */
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_aead_update(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         input, input_length, output, output_size,
@@ -4745,14 +4737,14 @@ static inline psa_status_t psa_driver_wrapper_aead_finish(
                     ciphertext_length, tag, tag_size, tag_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_aead_finish(
                         &operation->ctx.transparent_els_pkc_driver_ctx,
                         ciphertext, ciphertext_size,
                         ciphertext_length, tag, tag_size, tag_length ) );
 
         /* Add cases for opaque driver here */
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_aead_finish(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         ciphertext, ciphertext_size,
@@ -4837,14 +4829,14 @@ static inline psa_status_t psa_driver_wrapper_aead_verify(
                     plaintext_length, tag, tag_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_aead_verify(
                         &operation->ctx.transparent_els_pkc_driver_ctx,
                         plaintext, plaintext_size,
                         plaintext_length, tag, tag_length ) );
 
         /* Add cases for opaque driver here */
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_aead_verify(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         plaintext, plaintext_size,
@@ -4895,12 +4887,12 @@ static inline psa_status_t psa_driver_wrapper_aead_abort(
                     &operation->ctx.cc3xx_driver_ctx ) );
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_aead_abort(
                &operation->ctx.transparent_els_pkc_driver_ctx ) );
 
         /* Add cases for opaque driver here */
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_aead_abort(
                &operation->ctx.opaque_els_pkc_driver_ctx ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
@@ -5127,7 +5119,7 @@ static inline psa_status_t psa_driver_wrapper_mac_sign_setup(
                 alg );
             /* Declared with fallback == true */
             if( status == PSA_SUCCESS )
-                operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;
+                operation->id = ELS_PKC_TRANSPARENT_DRIVER_ID;
 
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
@@ -5201,7 +5193,7 @@ static inline psa_status_t psa_driver_wrapper_mac_sign_setup(
                 alg );
 
             if( status == PSA_SUCCESS )
-                operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;
+                operation->id = ELS_PKC_OPAQUE_DRIVER_ID;
 
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
@@ -5267,7 +5259,7 @@ static inline psa_status_t psa_driver_wrapper_mac_verify_setup(
                 alg );
             /* Declared with fallback == true */
             if( status == PSA_SUCCESS )
-                operation->id = PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID;
+                operation->id = ELS_PKC_TRANSPARENT_DRIVER_ID;
 
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
@@ -5341,7 +5333,7 @@ static inline psa_status_t psa_driver_wrapper_mac_verify_setup(
                 alg );
 
             if( status == PSA_SUCCESS )
-                operation->id = PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID;
+                operation->id = ELS_PKC_OPAQUE_DRIVER_ID;
 
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
@@ -5387,12 +5379,12 @@ static inline psa_status_t psa_driver_wrapper_mac_update(
             return(cc3xx_mac_update(&operation->ctx.cc3xx_driver_ctx, input, input_length));
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_mac_update(
                         &operation->ctx.transparent_els_pkc_driver_ctx,
                         input, input_length ) );
 
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_mac_update(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         input, input_length ) );
@@ -5449,12 +5441,12 @@ static inline psa_status_t psa_driver_wrapper_mac_sign_finish(
                         mac, mac_size, mac_length));
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_mac_sign_finish(
                         &operation->ctx.transparent_els_pkc_driver_ctx,
                         mac, mac_size, mac_length ) );
 
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_mac_sign_finish(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         mac, mac_size, mac_length ) );
@@ -5512,12 +5504,12 @@ static inline psa_status_t psa_driver_wrapper_mac_verify_finish(
                         mac, mac_length));
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_mac_verify_finish(
                         &operation->ctx.transparent_els_pkc_driver_ctx,
                         mac, mac_length ) );
 
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_mac_verify_finish(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         mac, mac_length ) );
@@ -5566,11 +5558,11 @@ static inline psa_status_t psa_driver_wrapper_mac_abort(
             return(cc3xx_mac_abort(&operation->ctx.cc3xx_driver_ctx));
 #endif /* PSA_CRYPTO_DRIVER_CC3XX */
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
-        case PSA_CRYPTO_ELS_PKC_TRANSPARENT_DRIVER_ID:
+        case ELS_PKC_TRANSPARENT_DRIVER_ID:
             return( els_pkc_transparent_mac_abort(
                         &operation->ctx.transparent_els_pkc_driver_ctx ) );
 
-        case PSA_CRYPTO_ELS_PKC_OPAQUE_DRIVER_ID:
+        case ELS_PKC_OPAQUE_DRIVER_ID:
             return( els_pkc_opaque_mac_abort(
                         &operation->ctx.opaque_els_pkc_driver_ctx ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
