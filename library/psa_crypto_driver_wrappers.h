@@ -5124,6 +5124,19 @@ static inline psa_status_t psa_driver_wrapper_mac_sign_setup(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+            status = ele_hseb_transparent_mac_sign_setup(
+                &operation->ctx.transparent_ele_hseb_driver_ctx,
+                attributes,
+                key_buffer, key_buffer_size,
+                alg );
+            /* Declared with fallback == true */
+            if( status == PSA_SUCCESS )
+                operation->id = ELE_HSEB_TRANSPARENT_DRIVER_ID;
+
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_ELE_HSEB */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
             status = ele_s2xx_transparent_mac_sign_setup(
                 &operation->ctx.transparent_ele_s2xx_driver_ctx,
@@ -5264,6 +5277,19 @@ static inline psa_status_t psa_driver_wrapper_mac_verify_setup(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+            status = ele_hseb_transparent_mac_verify_setup(
+                &operation->ctx.transparent_ele_hseb_driver_ctx,
+                attributes,
+                key_buffer, key_buffer_size,
+                alg );
+            /* Declared with fallback == true */
+            if( status == PSA_SUCCESS )
+                operation->id = ELE_HSEB_TRANSPARENT_DRIVER_ID;
+
+            if( status != PSA_ERROR_NOT_SUPPORTED )
+                return( status );
+#endif /* PSA_CRYPTO_DRIVER_ELE_HSEB */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
             status = ele_s2xx_transparent_mac_verify_setup(
                 &operation->ctx.transparent_ele_s2xx_driver_ctx,
@@ -5389,6 +5415,12 @@ static inline psa_status_t psa_driver_wrapper_mac_update(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         input, input_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+        case ELE_HSEB_TRANSPARENT_DRIVER_ID:
+            return( ele_hseb_transparent_mac_update(
+                        &operation->ctx.transparent_ele_hseb_driver_ctx,
+                        input, input_length ) );
+#endif /* PSA_CRYPTO_DRIVER_ELE_HSEB */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case ELE_S2XX_TRANSPARENT_DRIVER_ID:
             return( ele_s2xx_transparent_mac_update(
@@ -5451,6 +5483,12 @@ static inline psa_status_t psa_driver_wrapper_mac_sign_finish(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         mac, mac_size, mac_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+        case ELE_HSEB_TRANSPARENT_DRIVER_ID:
+            return( ele_hseb_transparent_mac_sign_finish(
+                        &operation->ctx.transparent_ele_hseb_driver_ctx,
+                        mac, mac_size, mac_length ) );
+#endif /* PSA_CRYPTO_DRIVER_ELE_HSEB */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case ELE_S2XX_TRANSPARENT_DRIVER_ID:
             return( ele_s2xx_transparent_mac_sign_finish(
@@ -5514,6 +5552,12 @@ static inline psa_status_t psa_driver_wrapper_mac_verify_finish(
                         &operation->ctx.opaque_els_pkc_driver_ctx,
                         mac, mac_length ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+        case ELE_HSEB_TRANSPARENT_DRIVER_ID:
+            return( ele_hseb_transparent_mac_verify_finish(
+                        &operation->ctx.transparent_ele_hseb_driver_ctx,
+                        mac, mac_length ) );
+#endif /* PSA_CRYPTO_DRIVER_ELE_HSEB */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case ELE_S2XX_TRANSPARENT_DRIVER_ID:
             return( ele_s2xx_transparent_mac_verify_finish(
@@ -5566,6 +5610,11 @@ static inline psa_status_t psa_driver_wrapper_mac_abort(
             return( els_pkc_opaque_mac_abort(
                         &operation->ctx.opaque_els_pkc_driver_ctx ) );
 #endif /* PSA_CRYPTO_DRIVER_ELS_PKC */
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+        case ELE_HSEB_TRANSPARENT_DRIVER_ID:
+            return( ele_hseb_transparent_mac_abort(
+                        &operation->ctx.transparent_ele_hseb_driver_ctx ) );
+#endif /* PSA_CRYPTO_DRIVER_ELE_HSEB */
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
         case ELE_S2XX_TRANSPARENT_DRIVER_ID:
             return( ele_s2xx_transparent_mac_abort(
