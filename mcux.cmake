@@ -355,6 +355,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa)
                 library/chachapoly.c
                 library/check_crypto_config.h
                 library/cipher.c
+                library/cipher_invasive.h
                 library/cipher_wrap.c
                 library/cipher_wrap.h
                 library/cmac.c
@@ -420,6 +421,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa)
                 library/psa_crypto_its.h
                 library/psa_crypto_mac.h
                 library/psa_crypto_pake.h
+                library/psa_crypto_random.h
                 library/psa_crypto_random_impl.h
                 library/psa_crypto_rsa.h
                 library/psa_crypto_se.h
@@ -437,6 +439,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto.no_psa)
                 library/sha256.c
                 library/sha512.c
                 library/threading.c
+                library/threading_internal.h
                 library/timing.c
                 library/version.c
                 library/version_features.c
@@ -463,6 +466,7 @@ if(CONFIG_MCUX_COMPONENT_middleware.mbedtls3x.crypto)
                 library/psa_crypto_hash.c
                 library/psa_crypto_mac.c
                 library/psa_crypto_pake.c
+                library/psa_crypto_random.c
                 library/psa_crypto_rsa.c
                 library/psa_crypto_se.c
                 library/psa_crypto_slot_management.c

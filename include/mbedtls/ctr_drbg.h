@@ -184,7 +184,7 @@ typedef struct mbedtls_ctr_drbg_psa_context {
  */
 typedef struct mbedtls_ctr_drbg_context {
     unsigned char MBEDTLS_PRIVATE(counter)[16];  /*!< The counter (V). */
-    int MBEDTLS_PRIVATE(reseed_counter);         /*!< The reseed counter.
+    int reseed_counter;                          /*!< The reseed counter.
                                                   * This is the number of requests that have
                                                   * been made since the last (re)seeding.
                                                   * Before the initial seeding, this field
@@ -199,7 +199,7 @@ typedef struct mbedtls_ctr_drbg_context {
                                                     each random generation. */
     size_t MBEDTLS_PRIVATE(entropy_len);         /*!< The amount of entropy grabbed on each
                                                     seed or reseed operation, in bytes. */
-    int MBEDTLS_PRIVATE(reseed_interval);        /*!< The reseed interval.
+    int reseed_interval;                         /*!< The reseed interval.
                                                   * This is the maximum number of requests
                                                   * that can be made between reseedings. */
 
