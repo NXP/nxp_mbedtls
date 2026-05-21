@@ -132,10 +132,10 @@ if(GEN_FILES)
             ${CMAKE_CURRENT_SOURCE_DIR}/..
         COMMAND
             "${MBEDTLS_PYTHON_EXECUTABLE}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/../framework/scripts/generate_tls_handshake_tests.py"
+            "${PROJECT_SOURCE_DIR}/scripts/generate_tls_handshake_tests.py"
         DEPENDS
             ${CMAKE_CURRENT_SOURCE_DIR}/../framework/scripts/mbedtls_framework/tls_test_case.py
-            ${CMAKE_CURRENT_SOURCE_DIR}/../framework/scripts/generate_tls_handshake_tests.py
+            ${PROJECT_SOURCE_DIR}/scripts/generate_tls_handshake_tests.py
     )
     add_custom_target(handshake-generated.sh
         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/opt-testcases/handshake-generated.sh)
@@ -336,6 +336,7 @@ function(add_test_suite suite_name)
     # files are automatically included because the library targets declare
     # them as PUBLIC.
     target_include_directories(test_suite_${data_name}
+        PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/include
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../framework/tests/include
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../library)
