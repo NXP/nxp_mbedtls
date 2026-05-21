@@ -175,6 +175,17 @@ static inline psa_status_t psa_driver_wrapper_init( void )
 {
     psa_status_t status = PSA_ERROR_CORRUPTION_DETECTED;
 
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+    status = psa_sgi_transparent_init();
+    if (status != PSA_SUCCESS)
+        return ( status );
+#endif
+#if defined(PSA_CRYPTO_DRIVER_PKC)
+    status = psa_pkc_init();
+    if (status != PSA_SUCCESS)
+        return ( status );
+#endif
+
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
     status = tfm_builtin_key_loader_init();
     if (status != PSA_SUCCESS)
@@ -265,17 +276,6 @@ static inline psa_status_t psa_driver_wrapper_init( void )
         return ( status );
 #endif /* PSA_CRYPTO_DRIVER_CASPER */
 
-
-#if defined(PSA_CRYPTO_DRIVER_SGI)
-    status = psa_sgi_transparent_init();
-    if (status != PSA_SUCCESS)
-        return ( status );
-#endif
-#if defined(PSA_CRYPTO_DRIVER_PKC)
-    status = psa_pkc_init();
-    if (status != PSA_SUCCESS)
-        return ( status );
-#endif
 
     (void) status;
     return( PSA_SUCCESS );
