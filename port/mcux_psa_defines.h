@@ -21,6 +21,10 @@
 #include "mcux_psa_s2xx_key_locations.h"
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+#include "mcux_psa_sgi_opaque_key_locations.h"
+#endif /* PSA_CRYPTO_DRIVER_SGI */
+
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
 #define PSA_CRYPTO_CAAM_LOCATION 			0x000001
 #endif /* PSA_CRYPTO_DRIVER_CAAM */

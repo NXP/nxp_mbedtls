@@ -258,6 +258,13 @@ psa_status_t psa_driver_wrapper_get_key_buffer_size(
             break;
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
 
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case PSA_CRYPTO_SGI_LOCATION_DUK_BLOB_STORAGE:
+            *key_buffer_size = sgi_opaque_get_key_buffer_size( attributes );
+            return( ( *key_buffer_size != 0 ) ?
+                    PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
+
         default:
             (void)key_type;
             (void)key_bits;
@@ -464,6 +471,17 @@ psa_status_t psa_driver_wrapper_export_public_key(
                             data_length
         ));
 #endif /* PSA_CRYPTO_DRIVER_CAAM */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case PSA_CRYPTO_SGI_LOCATION_DUK_BLOB_STORAGE:
+            return( sgi_opaque_export_public_key(
+                            attributes,
+                            key_buffer,
+                            key_buffer_size,
+                            data,
+                            data_size,
+                            data_length
+        ));
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             /* Key is declared with a lifetime not known to us */

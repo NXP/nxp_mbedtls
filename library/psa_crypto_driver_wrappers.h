@@ -1059,6 +1059,20 @@ static inline psa_status_t psa_driver_wrapper_sign_hash(
                                             signature_size,
                                             signature_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CAAM */
+#if defined(PSA_CRYPTO_DRIVER_SGI) && defined(PSA_CRYPTO_DRIVER_PKC)
+        case PSA_CRYPTO_SGI_LOCATION_DUK_BLOB_STORAGE:
+            /* Keys at this location are stored as plaintext in ITS at runtime,
+             * so we can call the transparent PKC driver directly. */
+            return( pkc_sign_hash( attributes,
+                                   key_buffer,
+                                   key_buffer_size,
+                                   alg,
+                                   hash,
+                                   hash_length,
+                                   signature,
+                                   signature_size,
+                                   signature_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI && PSA_CRYPTO_DRIVER_PKC */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             /* Key is declared with a lifetime not known to us */
@@ -1333,6 +1347,19 @@ static inline psa_status_t psa_driver_wrapper_verify_hash(
                                                  signature,
                                                  signature_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CAAM */
+#if defined(PSA_CRYPTO_DRIVER_SGI) && defined(PSA_CRYPTO_DRIVER_PKC)
+        case PSA_CRYPTO_SGI_LOCATION_DUK_BLOB_STORAGE:
+            /* Keys at this location are stored as plaintext in ITS at runtime,
+             * so we can call the transparent PKC driver directly. */
+            return( pkc_verify_hash( attributes,
+                                     key_buffer,
+                                     key_buffer_size,
+                                     alg,
+                                     hash,
+                                     hash_length,
+                                     signature,
+                                     signature_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI && PSA_CRYPTO_DRIVER_PKC */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             /* Key is declared with a lifetime not known to us */
@@ -1629,6 +1656,14 @@ static inline psa_status_t psa_driver_wrapper_get_key_buffer_size_from_key_data(
             return( ( *key_buffer_size != 0 ) ?
                     PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case PSA_CRYPTO_SGI_LOCATION_DUK_BLOB_STORAGE:
+            *key_buffer_size = sgi_opaque_size_function( attributes,
+                                                 data,
+                                                 data_length);
+            return( ( *key_buffer_size != 0 ) ?
+                    PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 
         default:
             (void)key_type;
@@ -1819,6 +1854,12 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
                 attributes, key_buffer, key_buffer_size, key_buffer_length );
             break;
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case PSA_CRYPTO_SGI_LOCATION_DUK_BLOB_STORAGE:
+            status = sgi_opaque_generate_key(
+                attributes, key_buffer, key_buffer_size, key_buffer_length );
+            break;
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
         default:
@@ -2054,6 +2095,18 @@ static inline psa_status_t psa_driver_wrapper_import_key(
                             bits
         ));
 #endif  /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case PSA_CRYPTO_SGI_LOCATION_DUK_BLOB_STORAGE:
+            return( sgi_opaque_import_key(
+                            attributes,
+                            data,
+                            data_length,
+                            key_buffer,
+                            key_buffer_size,
+                            key_buffer_length,
+                            bits
+        ));
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             (void)status;
@@ -2154,6 +2207,17 @@ static inline psa_status_t psa_driver_wrapper_export_key(
                             data_length
         ));
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case PSA_CRYPTO_SGI_LOCATION_DUK_BLOB_STORAGE:
+            return( sgi_opaque_export_key(
+                            attributes,
+                            key_buffer,
+                            key_buffer_size,
+                            data,
+                            data_size,
+                            data_length
+        ));
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             /* Key is declared with a lifetime not known to us */
@@ -2545,6 +2609,22 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt(
                                          output_size,
                                          output_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CAAM */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case PSA_CRYPTO_SGI_LOCATION_DUK_BLOB_STORAGE:
+            /* Keys at this location are stored as plaintext in ITS at runtime,
+             * so we can call the transparent SGI cipher driver directly. */
+            return( sgi_transparent_cipher_encrypt( attributes,
+                                         key_buffer,
+                                         key_buffer_size,
+                                         alg,
+                                         iv,
+                                         iv_length,
+                                         input,
+                                         input_length,
+                                         output,
+                                         output_size,
+                                         output_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
         default:
@@ -2825,6 +2905,20 @@ static inline psa_status_t psa_driver_wrapper_cipher_decrypt(
                                                      output_size,
                                                      output_length ) );
 #endif /* PSA_CRYPTO_DRIVER_CAAM */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case PSA_CRYPTO_SGI_LOCATION_DUK_BLOB_STORAGE:
+            /* Keys at this location are stored as plaintext in ITS at runtime,
+             * so we can call the transparent SGI cipher driver directly. */
+            return( sgi_transparent_cipher_decrypt( attributes,
+                                         key_buffer,
+                                         key_buffer_size,
+                                         alg,
+                                         input,
+                                         input_length,
+                                         output,
+                                         output_size,
+                                         output_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
         default:
@@ -4071,6 +4165,18 @@ static inline psa_status_t psa_driver_wrapper_aead_encrypt(
 
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_CAAM */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case PSA_CRYPTO_SGI_LOCATION_DUK_BLOB_STORAGE:
+            /* Keys at this location are stored as plaintext in ITS at runtime,
+             * so we can call the transparent SGI AEAD driver directly. */
+            return( sgi_aead_encrypt(
+                         attributes, key_buffer, key_buffer_size,
+                         alg,
+                         nonce, nonce_length,
+                         additional_data, additional_data_length,
+                         plaintext, plaintext_length,
+                         ciphertext, ciphertext_size, ciphertext_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
         default:
@@ -4265,6 +4371,18 @@ static inline psa_status_t psa_driver_wrapper_aead_decrypt(
 
             return( status );
 #endif /* PSA_CRYPTO_DRIVER_CAAM */
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+        case PSA_CRYPTO_SGI_LOCATION_DUK_BLOB_STORAGE:
+            /* Keys at this location are stored as plaintext in ITS at runtime,
+             * so we can call the transparent SGI AEAD driver directly. */
+            return( sgi_aead_decrypt(
+                         attributes, key_buffer, key_buffer_size,
+                         alg,
+                         nonce, nonce_length,
+                         additional_data, additional_data_length,
+                         ciphertext, ciphertext_length,
+                         plaintext, plaintext_size, plaintext_length ) );
+#endif /* PSA_CRYPTO_DRIVER_SGI */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
         default:
