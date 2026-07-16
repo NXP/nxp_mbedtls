@@ -1664,6 +1664,14 @@ static inline psa_status_t psa_driver_wrapper_get_key_buffer_size_from_key_data(
             return( ( *key_buffer_size != 0 ) ?
                     PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
 #endif /* PSA_CRYPTO_DRIVER_SGI */
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+        case PSA_KEY_LOCATION_ELE_HSEB:
+            *key_buffer_size = ele_hseb_opaque_size_function( attributes,
+                                                 data,
+                                                 data_length);
+            return( ( *key_buffer_size != 0 ) ?
+                    PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
+#endif /* PSA_CRYPTO_DRIVER_ELE_HSEB */
 
         default:
             (void)key_type;
@@ -1860,6 +1868,12 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
                 attributes, key_buffer, key_buffer_size, key_buffer_length );
             break;
 #endif /* PSA_CRYPTO_DRIVER_SGI */
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+        case PSA_KEY_LOCATION_ELE_HSEB:
+            status = ele_hseb_opaque_generate_key(
+                attributes, key_buffer, key_buffer_size, key_buffer_length );
+            break;
+#endif /* PSA_CRYPTO_DRIVER_ELE_HSEB */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 
         default:
@@ -1907,6 +1921,12 @@ static inline psa_status_t psa_driver_wrapper_destroy_key(
                 attributes, key_buffer, key_buffer_size);
             break;
 #endif /* PSA_CRYPTO_DRIVER_ELE_S2XX */
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+        case PSA_KEY_LOCATION_ELE_HSEB:
+            status = ele_hseb_opaque_destroy_key(
+                attributes, key_buffer, key_buffer_size);
+            break;
+#endif /* PSA_CRYPTO_DRIVER_ELE_HSEB */
 #if defined(PSA_CRYPTO_DRIVER_CAAM)
         case PSA_CRYPTO_CAAM_LOCATION:
             status = caam_common_destroy_key(
@@ -2107,6 +2127,18 @@ static inline psa_status_t psa_driver_wrapper_import_key(
                             bits
         ));
 #endif /* PSA_CRYPTO_DRIVER_SGI */
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+        case PSA_KEY_LOCATION_ELE_HSEB:
+            return( ele_hseb_opaque_import_key(
+                            attributes,
+                            data,
+                            data_length,
+                            key_buffer,
+                            key_buffer_size,
+                            key_buffer_length,
+                            bits
+        ));
+#endif /* PSA_CRYPTO_DRIVER_ELE_HSEB */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             (void)status;

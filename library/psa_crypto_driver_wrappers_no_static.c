@@ -235,7 +235,7 @@ psa_status_t psa_driver_wrapper_get_key_buffer_size(
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_BLOB_STORAGE:
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_KEY_GEN_STORAGE:
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_RFC3394_STORAGE:
-            *key_buffer_size = els_pkc_opaque_size_function_key_buff_size( 
+            *key_buffer_size = els_pkc_opaque_size_function_key_buff_size(
                                                                 attributes);
             return( ( *key_buffer_size != 0 ) ?
                     PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
@@ -264,6 +264,13 @@ psa_status_t psa_driver_wrapper_get_key_buffer_size(
             return( ( *key_buffer_size != 0 ) ?
                     PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
 #endif /* PSA_CRYPTO_DRIVER_SGI */
+
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+        case PSA_KEY_LOCATION_ELE_HSEB:
+            *key_buffer_size = ele_hseb_opaque_get_key_buffer_size( attributes );
+            return( ( *key_buffer_size != 0 ) ?
+                    PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
+#endif /* PSA_CRYPTO_DRIVER_ELE_HSEB */
 
         default:
             (void)key_type;
@@ -482,6 +489,17 @@ psa_status_t psa_driver_wrapper_export_public_key(
                             data_length
         ));
 #endif /* PSA_CRYPTO_DRIVER_SGI */
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+        case PSA_KEY_LOCATION_ELE_HSEB:
+            return( ele_hseb_opaque_export_public_key(
+                            attributes,
+                            key_buffer,
+                            key_buffer_size,
+                            data,
+                            data_size,
+                            data_length
+        ));
+#endif /* PSA_CRYPTO_DRIVER_ELE_HSEB */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
         default:
             /* Key is declared with a lifetime not known to us */
