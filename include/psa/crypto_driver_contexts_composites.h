@@ -30,8 +30,20 @@
 /* Include the context structure definitions for those drivers that were
  * declared during the autogeneration process. */
 
+#if defined(PSA_CRYPTO_DRIVER_CC3XX)
+#include "cc3xx_crypto_primitives_private.h"
+#endif
+
 #if defined(MBEDTLS_TEST_LIBTESTDRIVER1)
 #include <libtestdriver1/include/psa/crypto.h>
+#endif
+
+#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
+#include "els_pkc_crypto_composites.h"
+#endif
+
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+#include "ele_hseb_crypto_composites.h"
 #endif
 
 #if defined(PSA_CRYPTO_DRIVER_TEST)
@@ -118,6 +130,23 @@ typedef union {
     mbedtls_transparent_test_driver_mac_operation_t transparent_test_driver_ctx;
     mbedtls_opaque_test_driver_mac_operation_t opaque_test_driver_ctx;
 #endif
+#if defined(PSA_CRYPTO_DRIVER_CC3XX)
+    cc3xx_mac_operation_t cc3xx_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
+    els_pkc_transparent_mac_operation_t transparent_els_pkc_driver_ctx;
+    els_pkc_opaque_mac_operation_t opaque_els_pkc_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
+    ele_s2xx_transparent_mac_operation_t transparent_ele_s2xx_driver_ctx;
+    ele_s2xx_opaque_mac_operation_t opaque_ele_s2xx_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+    ele_hseb_transparent_mac_operation_t transparent_ele_hseb_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+    sgi_mac_operation_t sgi_driver_ctx;
+#endif
 } psa_driver_mac_context_t;
 
 typedef union {
@@ -125,6 +154,19 @@ typedef union {
     mbedtls_psa_aead_operation_t mbedtls_ctx;
 #if defined(PSA_CRYPTO_DRIVER_TEST)
     mbedtls_transparent_test_driver_aead_operation_t transparent_test_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_CC3XX)
+    cc3xx_aead_operation_t cc3xx_driver_ctx;
+#endif /* PSA_CRYPTO_DRIVER_CC3XX */
+#if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
+    els_pkc_transparent_aead_operation_t transparent_els_pkc_driver_ctx;
+    els_pkc_opaque_aead_operation_t opaque_els_pkc_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
+    ele_hseb_transparent_aead_operation_t transparent_ele_hseb_driver_ctx;
+#endif
+#if defined(PSA_CRYPTO_DRIVER_SGI)
+    sgi_aead_operation_t sgi_driver_ctx;
 #endif
 } psa_driver_aead_context_t;
 
