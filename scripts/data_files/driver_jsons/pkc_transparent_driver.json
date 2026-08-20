@@ -3,5 +3,12 @@
     "type":         "transparent",
     "mbedtls/h_condition":   "defined(PSA_CRYPTO_DRIVER_PKC)",
     "headers":      ["pkc.h"],
-    "capabilities": []
+    "capabilities": [
+        {
+            "_comment": "The PKC transparent driver supports export_public_key",
+            "mbedtls/c_condition":    "defined(PSA_CRYPTO_DRIVER_PKC)",
+            "entry_points": ["export_public_key"],
+            "fallback": true
+        }
+    ]
 }
