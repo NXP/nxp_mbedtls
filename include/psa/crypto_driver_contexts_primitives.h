@@ -172,6 +172,7 @@ typedef union {
 #endif
 #if defined(PSA_CRYPTO_DRIVER_ELE_HSEB)
     ele_hseb_transparent_cipher_operation_t transparent_ele_hseb_driver_ctx;
+    ele_hseb_opaque_cipher_operation_t opaque_ele_hseb_driver_ctx;
 #endif
 #if defined(PSA_CRYPTO_DRIVER_SGI)
     sgi_cipher_operation_t sgi_driver_ctx;
