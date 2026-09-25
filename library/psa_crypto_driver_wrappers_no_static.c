@@ -76,13 +76,13 @@
 
 #endif
 /* Headers for ele_s4xx opaque driver */
-#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
-#include "ele_s4xx.h"
+#if defined(PSA_CRYPTO_DRIVER_ELE_S1XX_4XX)
+#include "ele_s1xx_4xx.h"
 
 #endif
 /* Headers for ele_s4xx transparent driver */
-#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
-#include "ele_s4xx.h"
+#if defined(PSA_CRYPTO_DRIVER_ELE_S1XX_4XX)
+#include "ele_s1xx_4xx.h"
 
 #endif
 /* Headers for els_pkc opaque driver */
@@ -144,8 +144,8 @@
 #define ELE_HSEB_OPAQUE_DRIVER_ID (10)
 #define ELE_S2XX_OPAQUE_DRIVER_ID (11)
 #define ELE_S2XX_TRANSPARENT_DRIVER_ID (12)
-#define ELE_S4XX_OPAQUE_DRIVER_ID (13)
-#define ELE_S4XX_TRANSPARENT_DRIVER_ID (14)
+#define ELE_S1XX_4XX_OPAQUE_DRIVER_ID (13)
+#define ELE_S1XX_4XX_TRANSPARENT_DRIVER_ID (14)
 #define ELS_PKC_OPAQUE_DRIVER_ID (15)
 #define ELS_PKC_TRANSPARENT_DRIVER_ID (16)
 #define CAAM_OPAQUE_DRIVER_ID (17)
@@ -221,14 +221,14 @@ psa_status_t psa_driver_wrapper_get_key_buffer_size(
                                                               key_buffer_size);
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
 
-#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
-        case PSA_CRYPTO_ELE_S4XX_LOCATION:
-            *key_buffer_size = ele_s4xx_opaque_size_function(key_type,
+#if defined(PSA_CRYPTO_DRIVER_ELE_S1XX_4XX)
+        case PSA_CRYPTO_ELE_S1XX_4XX_LOCATION:
+            *key_buffer_size = ele_s1xx_4xx_opaque_size_function(key_type,
                                                            key_bits );
             return( ( *key_buffer_size != 0 ) ?
                     PSA_SUCCESS : PSA_ERROR_NOT_SUPPORTED );
             break;
-#endif /* PSA_CRYPTO_DRIVER_ELE_S4XX */
+#endif /* PSA_CRYPTO_DRIVER_ELE_S1XX_4XX */
 
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
         case PSA_CRYPTO_ELS_PKC_LOCATION_S50_ENC_STORAGE_KEY:
@@ -440,9 +440,9 @@ psa_status_t psa_driver_wrapper_export_public_key(
 #endif
 
 
-#if (defined(PSA_CRYPTO_DRIVER_ELE_S4XX) )
-        case PSA_CRYPTO_ELE_S4XX_LOCATION:
-            return( ele_s4xx_opaque_export_public_key
+#if (defined(PSA_CRYPTO_DRIVER_ELE_S1XX_4XX) )
+        case PSA_CRYPTO_ELE_S1XX_4XX_LOCATION:
+            return( ele_s1xx_4xx_opaque_export_public_key
             (attributes,
                             key_buffer,
                             key_buffer_size,

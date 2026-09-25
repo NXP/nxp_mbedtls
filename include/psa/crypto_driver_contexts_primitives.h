@@ -45,8 +45,8 @@
 #include "ele_s2xx_crypto_primitives.h"
 #endif
 
-#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
-#include "ele_s4xx_crypto_primitives.h"
+#if defined(PSA_CRYPTO_DRIVER_ELE_S1XX_4XX)
+#include "ele_s1xx_4xx_crypto_primitives.h"
 #endif
 
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
@@ -136,8 +136,8 @@ typedef union {
 #if defined(PSA_CRYPTO_DRIVER_ELE_S2XX)
     ele_s2xx_hash_operation_t ele_driver_ctx;
 #endif
-#if defined(PSA_CRYPTO_DRIVER_ELE_S4XX)
-    ele_s4xx_hash_operation_t ele_driver_ctx;
+#if defined(PSA_CRYPTO_DRIVER_ELE_S1XX_4XX)
+    ele_s1xx_4xx_hash_operation_t ele_driver_ctx;
 #endif
 #if defined(PSA_CRYPTO_DRIVER_ELS_PKC)
     els_pkc_hash_operation_t els_pkc_driver_ctx;
