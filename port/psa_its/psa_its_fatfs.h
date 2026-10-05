@@ -14,7 +14,7 @@
  */
 
 #include "psa/crypto.h"
-#include "mcux_psa_s4xx_common_init.h"
+#include "mcux_psa_s1xx_4xx_common_init.h"
 
 #ifdef __cplusplus
 extern "C" {
